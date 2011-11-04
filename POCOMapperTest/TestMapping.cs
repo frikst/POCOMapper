@@ -10,7 +10,7 @@ namespace POCOMapperTest
 	{
 		private TestMapping()
 		{
-			//CreateMap<Test1, Test2>();
+			CreateMap<Test1, Test2>();
 		}
 
 		public static MappingImplementation Instance

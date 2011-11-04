@@ -43,6 +43,8 @@
     <Compile Include="commonMappings\EnumerableToArray.cs" />
     <Compile Include="commonMappings\EnumerableToEnumerable.cs" />
     <Compile Include="commonMappings\EnumerableToList.cs" />
+    <Compile Include="commonMappings\ObjectToObject.cs" />
+    <Compile Include="CompiledMapping.cs" />
     <Compile Include="MappingDefinition.cs" />
     <Compile Include="IMapping.cs" />
     <Compile Include="MappingImplementation.cs" />

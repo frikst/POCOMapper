@@ -6,35 +6,17 @@ using System.Reflection;
 
 namespace POCOMapper.commonMappings
 {
-	public class EnumerableToEnumerable<TFrom, TTo> : IMapping<TFrom, TTo>
+	public class EnumerableToEnumerable<TFrom, TTo> : CompiledMapping<TFrom, TTo>
 		where TFrom : class
 		where TTo : class
 	{
-		private Func<TFrom, TTo> aFnc;
-		private readonly MappingImplementation aMapping;
-
 		public EnumerableToEnumerable(MappingImplementation mapping)
+			: base(mapping)
 		{
-			this.aFnc = null;
-			this.aMapping = mapping;
+
 		}
 
-		#region Implementation of IMapping<in TFrom,out TTo>
-
-		public TTo Map(TFrom from)
-		{
-			if (from == null)
-				return null;
-
-			if (this.aFnc == null)
-				this.aFnc = this.Compile();
-
-			return this.aFnc(from);
-		}
-
-		#endregion
-
-		private Func<TFrom, TTo> Compile()
+		protected override Func<TFrom, TTo> Compile()
 		{
 			Type itemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 			Type itemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
@@ -45,7 +27,7 @@ namespace POCOMapper.commonMappings
 
 			if (itemFrom != itemTo)
 			{
-				IMapping itemMapping = this.aMapping.GetMapping(itemFrom, itemTo);
+				IMapping itemMapping = this.Mapping.GetMapping(itemFrom, itemTo);
 
 				return Expression.Lambda<Func<TFrom, TTo>>(
 					Expression.New(constructTo,

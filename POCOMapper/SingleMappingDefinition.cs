@@ -1,4 +1,5 @@
 ﻿using System;
+using POCOMapper.commonMappings;
 
 namespace POCOMapper
 {
@@ -15,7 +16,7 @@ namespace POCOMapper
 
 		internal override IMapping CreateMapping(MappingImplementation allMappings)
 		{
-			return null;
+			return new ObjectToObject<TFrom, TTo>(allMappings);
 		}
 
 		internal override Type From

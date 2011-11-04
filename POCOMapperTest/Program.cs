@@ -15,7 +15,7 @@ namespace O2OMapperTest
 
 			HashSet<int> o = map.Map(new int[] { 1, 2, 3 });
 
-
+			Test2 o2 = TestMapping.Instance.Map<Test1, Test2>(new Test1());
 		}
 	}
 }
