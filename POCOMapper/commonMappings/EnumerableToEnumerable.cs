@@ -38,15 +38,15 @@ namespace POCOMapper.commonMappings
 		{
 			Type itemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 			Type itemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
-			ParameterExpression from = Expression.Parameter(itemFrom, "from");
-			ParameterExpression item = Expression.Parameter(itemFrom, "item");
-
-			IMapping itemMapping = this.aMapping.GetMapping(itemFrom, itemTo);
+			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
+			ParameterExpression item = Expression.Parameter(typeof(TTo), "item");
 
 			ConstructorInfo constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(itemTo) });
 
 			if (itemFrom != itemTo)
 			{
+				IMapping itemMapping = this.aMapping.GetMapping(itemFrom, itemTo);
+
 				return Expression.Lambda<Func<TFrom, TTo>>(
 					Expression.New(constructTo,
 						Expression.Call(null, typeof(Enumerable).GetMethod("Select", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemFrom, itemTo),

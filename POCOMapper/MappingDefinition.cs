@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace POCOMapper
 {
-	public class MappingDefinition
+	public abstract class MappingDefinition
 	{
-		private List<SingleMappingDefinition> aMappingDefinitions;
+		private static readonly Dictionary<Type, MappingImplementation> aMappings = new Dictionary<Type,MappingImplementation>();
+
+		private readonly List<SingleMappingDefinition> aMappingDefinitions;
 		private bool aFinished;
 
 		protected MappingDefinition()
@@ -22,6 +25,23 @@ namespace POCOMapper
 			SingleMappingDefinition<TFrom, TTo> mappingDefinitionDef = new SingleMappingDefinition<TFrom, TTo>();
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
+		}
+
+		protected static MappingImplementation GetInstance<TMappingDefinition>()
+		{
+			MappingImplementation ret;
+
+			Type mapDefType = typeof(TMappingDefinition);
+
+			if (aMappings.TryGetValue(mapDefType, out ret))
+				return ret;
+
+			ConstructorInfo ci = mapDefType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { }, null);
+			ret = new MappingImplementation(((MappingDefinition) ci.Invoke(null)).aMappingDefinitions);
+
+			aMappings[mapDefType] = ret;
+
+			return ret;
 		}
 	}
 }

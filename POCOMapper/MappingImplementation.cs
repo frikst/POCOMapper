@@ -42,19 +42,19 @@ namespace POCOMapper
 			{
 				if (toIsArray)
 				{
-					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToArray<,>).MakeGenericType(from, to));
+					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToArray<,>).MakeGenericType(from, to), this);
 					this.aMappings[key] = mapping;
 					return mapping;
 				}
 				else if (toIsList)
 				{
-					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToList<,>).MakeGenericType(from, to));
+					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToList<,>).MakeGenericType(from, to), this);
 					this.aMappings[key] = mapping;
 					return mapping;
 				}
 				else
 				{
-					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToEnumerable<,>).MakeGenericType(from, to));
+					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToEnumerable<,>).MakeGenericType(from, to), this);
 					this.aMappings[key] = mapping;
 					return mapping;
 				}
