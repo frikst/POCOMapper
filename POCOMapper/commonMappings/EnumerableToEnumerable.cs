@@ -6,14 +6,14 @@ using System.Reflection;
 
 namespace POCOMapper.commonMappings
 {
-	public class EnumerableToArray<TFrom, TTo> : IMapping<TFrom, TTo>
+	public class EnumerableToEnumerable<TFrom, TTo> : IMapping<TFrom, TTo>
 		where TFrom : class
 		where TTo : class
 	{
 		private Func<TFrom, TTo> aFnc;
 		private readonly MappingImplementation aMapping;
 
-		public EnumerableToArray(MappingImplementation mapping)
+		public EnumerableToEnumerable(MappingImplementation mapping)
 		{
 			this.aFnc = null;
 			this.aMapping = mapping;
@@ -37,16 +37,18 @@ namespace POCOMapper.commonMappings
 		private Func<TFrom, TTo> Compile()
 		{
 			Type itemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
-			Type itemTo = typeof(TTo).GetElementType();
+			Type itemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 			ParameterExpression from = Expression.Parameter(itemFrom, "from");
 			ParameterExpression item = Expression.Parameter(itemFrom, "item");
 
 			IMapping itemMapping = this.aMapping.GetMapping(itemFrom, itemTo);
 
+			ConstructorInfo constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(itemTo) });
+
 			if (itemFrom != itemTo)
 			{
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToArray", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemTo),
+					Expression.New(constructTo,
 						Expression.Call(null, typeof(Enumerable).GetMethod("Select", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemFrom, itemTo),
 							from,
 							Expression.Lambda(
@@ -65,7 +67,7 @@ namespace POCOMapper.commonMappings
 			else
 			{
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToArray").MakeGenericMethod(itemTo),
+					Expression.New(constructTo,
 						from
 					),
 					from

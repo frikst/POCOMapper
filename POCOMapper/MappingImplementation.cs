@@ -35,18 +35,32 @@ namespace POCOMapper
 
 			bool fromIsEnum = from.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 			bool toIsEnum = to.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			bool toIsArray = to.IsArray;
+			bool toIsList = to.IsGenericType && to.GetGenericTypeDefinition() == typeof(List<>);
 
 			if (fromIsEnum && toIsEnum)
 			{
-				if (to.IsArray)
+				if (toIsArray)
 				{
 					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToArray<,>).MakeGenericType(from, to));
 					this.aMappings[key] = mapping;
 					return mapping;
 				}
+				else if (toIsList)
+				{
+					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToList<,>).MakeGenericType(from, to));
+					this.aMappings[key] = mapping;
+					return mapping;
+				}
+				else
+				{
+					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToEnumerable<,>).MakeGenericType(from, to));
+					this.aMappings[key] = mapping;
+					return mapping;
+				}
 			}
 
-
+			throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", from.Name, to.Name));
 		}
 
 		public IMapping<TFrom, TTo> GetMapping<TFrom, TTo>()

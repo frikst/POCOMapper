@@ -6,14 +6,14 @@ using System.Reflection;
 
 namespace POCOMapper.commonMappings
 {
-	public class EnumerableToArray<TFrom, TTo> : IMapping<TFrom, TTo>
+	public class EnumerableToList<TFrom, TTo> : IMapping<TFrom, TTo>
 		where TFrom : class
 		where TTo : class
 	{
 		private Func<TFrom, TTo> aFnc;
 		private readonly MappingImplementation aMapping;
 
-		public EnumerableToArray(MappingImplementation mapping)
+		public EnumerableToList(MappingImplementation mapping)
 		{
 			this.aFnc = null;
 			this.aMapping = mapping;
@@ -37,7 +37,7 @@ namespace POCOMapper.commonMappings
 		private Func<TFrom, TTo> Compile()
 		{
 			Type itemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
-			Type itemTo = typeof(TTo).GetElementType();
+			Type itemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 			ParameterExpression from = Expression.Parameter(itemFrom, "from");
 			ParameterExpression item = Expression.Parameter(itemFrom, "item");
 
@@ -46,7 +46,7 @@ namespace POCOMapper.commonMappings
 			if (itemFrom != itemTo)
 			{
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToArray", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemTo),
+					Expression.Call(null, typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemTo),
 						Expression.Call(null, typeof(Enumerable).GetMethod("Select", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemFrom, itemTo),
 							from,
 							Expression.Lambda(
