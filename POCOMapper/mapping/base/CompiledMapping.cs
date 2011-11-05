@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using POCOMapper.definition;
 
-namespace POCOMapper
+namespace POCOMapper.mapping.@base
 {
 	public abstract class CompiledMapping<TFrom, TTo> : IMapping<TFrom, TTo>
 	{

@@ -1,4 +1,4 @@
-﻿namespace POCOMapper
+﻿namespace POCOMapper.mapping.@base
 {
 	public interface IMapping
 	{

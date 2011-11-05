@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using POCOMapper;
-using POCOMapperTest;
+using POCOMapper.mapping.@base;
 
-namespace O2OMapperTest
+namespace POCOMapperTest
 {
 	class Program
 	{

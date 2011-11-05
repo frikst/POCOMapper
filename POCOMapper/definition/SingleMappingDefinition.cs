@@ -1,7 +1,8 @@
 ﻿using System;
-using POCOMapper.commonMappings;
+using POCOMapper.mapping.@base;
+using POCOMapper.mapping.common;
 
-namespace POCOMapper
+namespace POCOMapper.definition
 {
 	public abstract class SingleMappingDefinition
 	{

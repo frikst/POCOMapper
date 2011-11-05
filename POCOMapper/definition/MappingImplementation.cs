@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using POCOMapper.commonMappings;
 using POCOMapper.conventions;
+using POCOMapper.mapping.@base;
+using POCOMapper.mapping.collection;
 
-namespace POCOMapper
+namespace POCOMapper.definition
 {
 	public class MappingImplementation
 	{

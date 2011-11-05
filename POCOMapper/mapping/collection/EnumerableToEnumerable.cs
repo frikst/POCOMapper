@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using POCOMapper.definition;
+using POCOMapper.mapping.@base;
 
-namespace POCOMapper.commonMappings
+namespace POCOMapper.mapping.collection
 {
-	public class EnumerableToList<TFrom, TTo> : CompiledMapping<TFrom, TTo>
+	public class EnumerableToEnumerable<TFrom, TTo> : CompiledMapping<TFrom, TTo>
+		where TFrom : class
+		where TTo : class
 	{
-		public EnumerableToList(MappingImplementation mapping)
+		public EnumerableToEnumerable(MappingImplementation mapping)
 			: base(mapping)
 		{
 
@@ -21,12 +25,14 @@ namespace POCOMapper.commonMappings
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression item = Expression.Parameter(typeof(TTo), "item");
 
+			ConstructorInfo constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(itemTo) });
+
 			if (itemFrom != itemTo)
 			{
 				IMapping itemMapping = this.Mapping.GetMapping(itemFrom, itemTo);
 
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemTo),
+					Expression.New(constructTo,
 						Expression.Call(null, typeof(Enumerable).GetMethod("Select", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemFrom, itemTo),
 							from,
 							Expression.Lambda(
@@ -45,7 +51,7 @@ namespace POCOMapper.commonMappings
 			else
 			{
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToList").MakeGenericMethod(itemTo),
+					Expression.New(constructTo,
 						from
 					),
 					from

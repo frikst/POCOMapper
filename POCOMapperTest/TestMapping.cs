@@ -1,5 +1,5 @@
-﻿using POCOMapper;
-using POCOMapper.conventions;
+﻿using POCOMapper.conventions;
+using POCOMapper.definition;
 
 namespace POCOMapperTest
 {

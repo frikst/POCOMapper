@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using POCOMapper.conventions;
 
-namespace POCOMapper
+namespace POCOMapper.definition
 {
 	public abstract class MappingDefinition
 	{

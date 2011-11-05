@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
+using POCOMapper.conventions;
+using POCOMapper.definition;
+using POCOMapper.mapping.@base;
 
-namespace POCOMapper.commonMappings
+namespace POCOMapper.mapping.common
 {
 	public class ObjectToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>
 	{

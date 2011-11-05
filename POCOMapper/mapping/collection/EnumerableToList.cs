@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using POCOMapper.definition;
+using POCOMapper.mapping.@base;
 
-namespace POCOMapper.commonMappings
+namespace POCOMapper.mapping.collection
 {
-	public class EnumerableToArray<TFrom, TTo> : CompiledMapping<TFrom, TTo>
-		where TFrom : class
-		where TTo : class
+	public class EnumerableToList<TFrom, TTo> : CompiledMapping<TFrom, TTo>
 	{
-		public EnumerableToArray(MappingImplementation mapping)
+		public EnumerableToList(MappingImplementation mapping)
 			: base(mapping)
 		{
 
@@ -19,7 +19,7 @@ namespace POCOMapper.commonMappings
 		protected override Func<TFrom, TTo> Compile()
 		{
 			Type itemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
-			Type itemTo = typeof(TTo).GetElementType();
+			Type itemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression item = Expression.Parameter(typeof(TTo), "item");
 
@@ -28,7 +28,7 @@ namespace POCOMapper.commonMappings
 				IMapping itemMapping = this.Mapping.GetMapping(itemFrom, itemTo);
 
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToArray", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemTo),
+					Expression.Call(null, typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemTo),
 						Expression.Call(null, typeof(Enumerable).GetMethod("Select", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemFrom, itemTo),
 							from,
 							Expression.Lambda(
@@ -47,7 +47,7 @@ namespace POCOMapper.commonMappings
 			else
 			{
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToArray").MakeGenericMethod(itemTo),
+					Expression.Call(null, typeof(Enumerable).GetMethod("ToList").MakeGenericMethod(itemTo),
 						from
 					),
 					from
