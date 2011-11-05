@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using POCOMapper.conventions;
 
 namespace POCOMapper
 {
@@ -15,7 +16,13 @@ namespace POCOMapper
 		{
 			this.aMappingDefinitions = new List<SingleMappingDefinition>();
 			this.aFinished = false;
+
+			this.FromConventions = new Conventions();
+			this.ToConventions = new Conventions();
 		}
+
+		protected Conventions FromConventions { get; private set; }
+		protected Conventions ToConventions { get; private set; }
 
 		protected SingleMappingDefinition<TFrom, TTo> CreateMap<TFrom, TTo>()
 		{
@@ -37,7 +44,10 @@ namespace POCOMapper
 				return ret;
 
 			ConstructorInfo ci = mapDefType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { }, null);
-			ret = new MappingImplementation(((MappingDefinition) ci.Invoke(null)).aMappingDefinitions);
+			MappingDefinition definition = (MappingDefinition) ci.Invoke(null);
+			definition.aFinished = true;
+
+			ret = new MappingImplementation(definition.aMappingDefinitions, definition.FromConventions, definition.ToConventions);
 
 			aMappings[mapDefType] = ret;
 

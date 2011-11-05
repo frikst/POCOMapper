@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using POCOMapper;
+﻿using POCOMapper;
+using POCOMapper.conventions;
 
 namespace POCOMapperTest
 {
@@ -11,6 +8,12 @@ namespace POCOMapperTest
 		private TestMapping()
 		{
 			CreateMap<Test1, Test2>();
+
+			FromConventions
+				.SetAttributeConvention(new Prefix("a", new BigCammelCase()));
+
+			ToConventions
+				.SetAttributeConvention(new Prefix("a", new BigCammelCase()));
 		}
 
 		public static MappingImplementation Instance

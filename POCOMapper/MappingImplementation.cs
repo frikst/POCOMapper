@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using POCOMapper.commonMappings;
+using POCOMapper.conventions;
 
 namespace POCOMapper
 {
@@ -10,14 +11,20 @@ namespace POCOMapper
 		private Dictionary<Tuple<Type, Type>, IMapping> aMappings;
 		private Dictionary<Tuple<Type, Type>, SingleMappingDefinition> aMappingDefinitions;
 
-		internal MappingImplementation(IEnumerable<SingleMappingDefinition> mappingDefinitions)
+		internal MappingImplementation(IEnumerable<SingleMappingDefinition> mappingDefinitions, Conventions fromConventions, Conventions toConventions)
 		{
 			this.aMappings = new Dictionary<Tuple<Type, Type>, IMapping>();
 			this.aMappingDefinitions = new Dictionary<Tuple<Type, Type>, SingleMappingDefinition>();
 
 			foreach (SingleMappingDefinition def in mappingDefinitions)
 				this.aMappingDefinitions[new Tuple<Type, Type>(def.From, def.To)] = def;
+
+			this.FromConventions = fromConventions;
+			this.ToConventions = toConventions;
 		}
+
+		internal Conventions FromConventions { get; private set; }
+		internal Conventions ToConventions { get; private set; }
 
 		public IMapping GetMapping(Type from, Type to)
 		{
@@ -60,7 +67,7 @@ namespace POCOMapper
 				}
 			}
 
-			throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", from.Name, to.Name));
+			return null;
 		}
 
 		public IMapping<TFrom, TTo> GetMapping<TFrom, TTo>()
@@ -70,7 +77,12 @@ namespace POCOMapper
 
 		public TTo Map<TFrom, TTo>(TFrom from)
 		{
-			return this.GetMapping<TFrom, TTo>().Map(from);
+			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
+
+			if (mapping == null)
+				throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", typeof(TFrom).Name, typeof(TTo).Name));
+
+			return mapping.Map(from);
 		}
 	}
 }

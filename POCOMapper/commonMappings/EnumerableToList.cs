@@ -45,7 +45,7 @@ namespace POCOMapper.commonMappings
 			else
 			{
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToArray").MakeGenericMethod(itemTo),
+					Expression.Call(null, typeof(Enumerable).GetMethod("ToList").MakeGenericMethod(itemTo),
 						from
 					),
 					from

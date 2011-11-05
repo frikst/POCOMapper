@@ -45,11 +45,17 @@
     <Compile Include="commonMappings\EnumerableToList.cs" />
     <Compile Include="commonMappings\ObjectToObject.cs" />
     <Compile Include="CompiledMapping.cs" />
+    <Compile Include="conventions\BigCammelCase.cs" />
+    <Compile Include="conventions\Conventions.cs" />
+    <Compile Include="conventions\ISymbolParser.cs" />
+    <Compile Include="conventions\Prefix.cs" />
+    <Compile Include="conventions\Suffix.cs" />
     <Compile Include="MappingDefinition.cs" />
     <Compile Include="IMapping.cs" />
     <Compile Include="MappingImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleMappingDefinition.cs" />
+    <Compile Include="Symbol.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
