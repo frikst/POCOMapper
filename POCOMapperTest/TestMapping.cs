@@ -8,6 +8,7 @@ namespace POCOMapperTest
 		private TestMapping()
 		{
 			CreateMap<Test1, Test2>();
+			CreateMap<Test1Child, Test2Child>();
 
 			FromConventions
 				.SetAttributeConvention(new Prefix("a", new BigCammelCase()));

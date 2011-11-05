@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using POCOMapper.definition;
 
 namespace POCOMapper.mapping.@base
@@ -27,13 +28,17 @@ namespace POCOMapper.mapping.@base
 				return default(TTo);
 
 			if (this.aFnc == null)
-				this.aFnc = this.Compile();
+			{
+				Expression<Func<TFrom, TTo>> expression = this.Compile();
+				Console.WriteLine(expression);
+				this.aFnc = expression.Compile();
+			}
 
 			return this.aFnc(from);
 		}
 
 		#endregion
 
-		protected abstract Func<TFrom, TTo> Compile();
+		protected abstract Expression<Func<TFrom, TTo>> Compile();
 	}
 }

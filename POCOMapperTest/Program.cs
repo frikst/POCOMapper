@@ -18,19 +18,37 @@ namespace POCOMapperTest
 			var mapping2 = TestMapping.Instance.GetMapping<Test1, Test2>();
 
 			var x = DateTime.Now;
+			Test1 t = new Test1();
 
 			for (int i = 0; i < 1000000; i++)
-				mapping2.Map(new Test1());
+				mapping2.Map(t);
+
+			Console.WriteLine((DateTime.Now - x).TotalMilliseconds);
+			x = DateTime.Now;
+
+			for (int i = 0; i < 1000000; i++)
+			{
+				Test2 ret = new Test2 { aVal1 = t.Val1, Val2 = t.GetVal2() };
+				ret.SetVal3(t.aVal3.Select(obj => obj == null ? null : new Test2Child { Name = obj.aName }).ToList());
+			}
+
+			Console.WriteLine((DateTime.Now - x).TotalMilliseconds);
+
+			int[] a = new int[1000];
+			x = DateTime.Now;
+
+			for (int i = 0; i < 100000; i++)
+			{
+				a.ToArray();
+			}
 
 			Console.WriteLine((DateTime.Now - x).TotalMilliseconds);
 
 			x = DateTime.Now;
 
-			for (int i = 0; i < 1000000; i++)
+			for (int i = 0; i < 100000; i++)
 			{
-				Test1 t = new Test1();
-				Test2 ret = new Test2 { aVal1 = t.Val1, Val2 = t.GetVal2() };
-				ret.SetVal3(t.aVal3.ToList());
+				a.Select(obj=>obj).ToArray();
 			}
 
 			Console.WriteLine((DateTime.Now - x).TotalMilliseconds);

@@ -8,11 +8,16 @@ namespace POCOMapperTest
 
 		public string Val2 { get; set; }
 
-		private List<int> XXX;
+		private List<Test2Child> XXX;
 
-		public void SetVal3(List<int> param)
+		public void SetVal3(List<Test2Child> param)
 		{
 			this.XXX = param;
 		}
+	}
+
+	public class Test2Child
+	{
+		public string Name { get; set; }
 	}
 }

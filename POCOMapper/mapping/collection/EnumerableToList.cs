@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using POCOMapper.definition;
+using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
 
 namespace POCOMapper.mapping.collection
@@ -16,33 +17,32 @@ namespace POCOMapper.mapping.collection
 
 		}
 
-		protected override Func<TFrom, TTo> Compile()
+		protected override Expression<Func<TFrom, TTo>> Compile()
 		{
 			Type itemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 			Type itemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
-			ParameterExpression item = Expression.Parameter(typeof(TTo), "item");
+			ParameterExpression item = Expression.Parameter(itemFrom, "item");
 
 			if (itemFrom != itemTo)
 			{
 				IMapping itemMapping = this.Mapping.GetMapping(itemFrom, itemTo);
 
+				Delegate mapMethod = Delegate.CreateDelegate(
+					typeof(Func<,>).MakeGenericType(itemFrom, itemTo),
+					itemMapping,
+					typeof(IMapping<,>).MakeGenericType(itemFrom, itemTo).GetMethod("Map")
+				);
+
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemTo),
-						Expression.Call(null, typeof(Enumerable).GetMethod("Select", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(itemFrom, itemTo),
+					Expression.Call(null, LinqMethods.ToList.MakeGenericMethod(itemTo),
+						Expression.Call(null, LinqMethods.Select.MakeGenericMethod(itemFrom, itemTo),
 							from,
-							Expression.Lambda(
-								Expression.Call(
-									Expression.Constant(itemMapping),
-									typeof(IMapping<,>).MakeGenericType(itemFrom, itemTo).GetMethod("Map"),
-									item
-								),
-								item
-							)
+							Expression.Constant(mapMethod)
 						)
 					),
 					from
-				).Compile();
+				);
 			}
 			else
 			{
@@ -51,7 +51,7 @@ namespace POCOMapper.mapping.collection
 						from
 					),
 					from
-				).Compile();
+				);
 			}
 		}
 	}

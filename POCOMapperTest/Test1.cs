@@ -17,6 +17,11 @@ namespace POCOMapperTest
 			return "hello from 2";
 		}
 
-		public int[] aVal3 = new int[] { 1, 2, 3 };
+		public Test1Child[] aVal3 = new Test1Child[] { new Test1Child { aName = "Hi" }, null, new Test1Child { aName = "Hello" } };
+	}
+
+	public class Test1Child
+	{
+		public string aName;
 	}
 }
