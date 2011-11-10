@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using POCOMapper.definition;
+using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
 
 namespace POCOMapper.mapping.common
@@ -31,6 +32,8 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Func<TFrom, TTo>> Compile()
 		{
+			MethodInfo getTypeMethod = typeof(object).GetMethod("GetType", BindingFlags.Public | BindingFlags.Instance);
+
 			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();
 
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
@@ -43,6 +46,13 @@ namespace POCOMapper.mapping.common
 					new ParameterExpression[] { to },
 					Expression.Block(
 						allConversions.Select(x => this.MakeIfConvertStatement(x.Item1, x.Item2, x.Item3, from, to, mappingEnd))
+					),
+					Expression.Throw(
+						Expression.New(
+							typeof(UnknownMapping).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
+							Expression.Call(from, getTypeMethod),
+							Expression.Constant(typeof(TTo))
+						)
 					),
 					Expression.Label(mappingEnd),
 					to

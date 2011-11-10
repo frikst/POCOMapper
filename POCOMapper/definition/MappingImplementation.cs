@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using POCOMapper.conventions;
+using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.collection;
 
@@ -79,6 +80,9 @@ namespace POCOMapper.definition
 		public TTo Map<TFrom, TTo>(TFrom from)
 		{
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
+
+			if (mapping == null)
+				throw new UnknownMapping(typeof(TFrom), typeof(TTo));
 
 			if (mapping == null)
 				throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", typeof(TFrom).Name, typeof(TTo).Name));

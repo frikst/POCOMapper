@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="exceptions\UnknownMapping.cs" />
     <Compile Include="internal\LinqMethods.cs" />
     <Compile Include="mapping\collection\EnumerableToArray.cs" />
     <Compile Include="mapping\collection\EnumerableToEnumerable.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="definition\SingleMappingDefinition.cs" />
     <Compile Include="conventions\Symbol.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

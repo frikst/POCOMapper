@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.definition;
+using POCOMapper.exceptions;
 
 namespace POCOMapper.Test
 {
@@ -70,8 +71,18 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void SubFrom4FailTest()
 		{
-			To ret = Mapping.Instance.Map<From, To>(new SubFrom4());
-			Assert.IsNull(ret);
+			bool error = false;
+			try
+			{
+				To ret = Mapping.Instance.Map<From, To>(new SubFrom4());
+			}
+			catch (UnknownMapping e)
+			{
+				error = true;
+				Assert.AreEqual(typeof(SubFrom4), e.From);
+				Assert.AreEqual(typeof(To), e.To);
+			}
+			Assert.IsTrue(error, "Should throw the UnknownMapping exception");
 		}
 	}
 }
