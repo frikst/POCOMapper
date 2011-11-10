@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCOMapper", "POCOMapper\POCOMapper.csproj", "{908E1833-28EA-4D71-8425-157A34E0A283}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCOMapperTest", "POCOMapperTest\POCOMapperTest.csproj", "{3C199707-6582-4F62-BA2A-6DA42221050E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCOMapper.Test", "POCOMapper.Test\POCOMapper.Test.csproj", "{909A4948-D5FF-4623-B820-8F341AB90797}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -29,16 +29,16 @@ Global
 		{908E1833-28EA-4D71-8425-157A34E0A283}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{908E1833-28EA-4D71-8425-157A34E0A283}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{908E1833-28EA-4D71-8425-157A34E0A283}.Release|x86.ActiveCfg = Release|Any CPU
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Debug|x86.ActiveCfg = Debug|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Debug|x86.Build.0 = Debug|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Release|Any CPU.ActiveCfg = Release|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Release|Mixed Platforms.Build.0 = Release|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Release|x86.ActiveCfg = Release|x86
-		{3C199707-6582-4F62-BA2A-6DA42221050E}.Release|x86.Build.0 = Release|x86
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{909A4948-D5FF-4623-B820-8F341AB90797}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
