@@ -54,6 +54,7 @@
     <Compile Include="definition\MappingDefinition.cs" />
     <Compile Include="mapping\base\IMapping.cs" />
     <Compile Include="definition\MappingImplementation.cs" />
+    <Compile Include="mapping\common\SubClassToObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="definition\SingleMappingDefinition.cs" />
     <Compile Include="conventions\Symbol.cs" />
