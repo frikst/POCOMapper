@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NoAttributesMapping.cs" />
+    <Compile Include="SubClassAttributes.cs" />
     <Compile Include="SubClassMapping.cs" />
   </ItemGroup>
   <ItemGroup>

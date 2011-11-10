@@ -50,21 +50,21 @@ namespace POCOMapper.Test
 		public void SubFrom1ToSubTo1Test()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom1());
-			Assert.AreEqual(ret.GetType(), typeof(SubTo1));
+			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
 		[TestMethod]
 		public void SubFrom2ToSubTo1Test()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom2());
-			Assert.AreEqual(ret.GetType(), typeof(SubTo1));
+			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
 		[TestMethod]
 		public void SubFrom3ToSubTo2Test()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom3());
-			Assert.AreEqual(ret.GetType(), typeof(SubTo2));
+			Assert.AreEqual(typeof(SubTo2), ret.GetType());
 		}
 
 		[TestMethod]
