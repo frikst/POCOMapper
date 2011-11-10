@@ -30,7 +30,6 @@ namespace POCOMapper.mapping.@base
 			if (this.aFnc == null)
 			{
 				Expression<Func<TFrom, TTo>> expression = this.Compile();
-				Console.WriteLine(expression);
 				this.aFnc = expression.Compile();
 			}
 
