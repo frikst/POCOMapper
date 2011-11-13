@@ -49,11 +49,21 @@ namespace POCOMapper.Test
 		}
 
 		[TestMethod]
-		public void TestMethod1()
+		public void MappingTest()
 		{
 			SubTo to = Mapping.Instance.Map<SubFrom, SubTo>(new SubFrom());
 			Assert.AreEqual("from", to.Value);
 			Assert.AreEqual("from2", to.Value2);
+		}
+
+		[TestMethod]
+		public void ToStringTest()
+		{
+			string correct = "ObjectToObject`2<SubFrom, SubTo>\n    GetValue2 => Value2 (null)\n    GetValue => Value (null)\n";
+
+			string mappingToString = Mapping.Instance.MappingToString<SubFrom, SubTo>();
+
+			Assert.AreEqual(correct, mappingToString);
 		}
 	}
 }

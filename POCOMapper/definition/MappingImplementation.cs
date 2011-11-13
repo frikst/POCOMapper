@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using POCOMapper.conventions;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
@@ -88,6 +89,57 @@ namespace POCOMapper.definition
 				throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", typeof(TFrom).Name, typeof(TTo).Name));
 
 			return mapping.Map(from);
+		}
+
+		private void MappingToString(IMapping mapping, StringBuilder output, int level)
+		{
+			string indent = string.Concat(Enumerable.Range(0, level).Select(x => "    "));
+
+			if (mapping == null)
+			{
+				output.Append("(null)\n");
+			}
+			else
+			{
+				Type mappingType = mapping.GetType();
+				output.Append(mappingType.Name);
+
+				if (mappingType.IsGenericType)
+				{
+					bool begining = true;
+					output.Append("<");
+
+					foreach (Type genericArgument in mappingType.GetGenericArguments())
+					{
+						if (!begining)
+							output.Append(", ");
+						output.Append(genericArgument.Name);
+						begining = false;
+					}
+
+					output.Append(">");
+				}
+
+				output.Append("\n");
+
+				foreach (Tuple<string, IMapping> child in mapping.Children)
+				{
+					output.Append(indent);
+					output.Append(child.Item1);
+					output.Append(" ");
+
+					this.MappingToString(child.Item2, output, level + 1);
+				}
+			}
+		}
+
+		public string MappingToString<TFrom, TTo>()
+		{
+			StringBuilder output = new StringBuilder();
+
+			this.MappingToString(this.GetMapping<TFrom, TTo>(), output, 1);
+
+			return output.ToString();
 		}
 	}
 }

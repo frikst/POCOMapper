@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using POCOMapper.definition;
 
@@ -35,6 +36,12 @@ namespace POCOMapper.mapping.@base
 
 			return this.aFnc(from);
 		}
+
+		#region Implementation of IMapping
+
+		public abstract IEnumerable<Tuple<string, IMapping>> Children { get; }
+
+		#endregion
 
 		#endregion
 

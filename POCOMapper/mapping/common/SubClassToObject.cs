@@ -30,6 +30,15 @@ namespace POCOMapper.mapping.common
 
 		#region Overrides of CompiledMapping<TFrom,TTo>
 
+		public override IEnumerable<Tuple<string, IMapping>> Children
+		{
+			get
+			{
+				foreach (var mapping in this.GetConversions())
+					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.Item1.Name, mapping.Item2.Name), mapping.Item3);
+			}
+		}
+
 		protected override Expression<Func<TFrom, TTo>> Compile()
 		{
 			MethodInfo getTypeMethod = typeof(object).GetMethod("GetType", BindingFlags.Public | BindingFlags.Instance);

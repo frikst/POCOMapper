@@ -17,6 +17,15 @@ namespace POCOMapper.mapping.common
 
 		}
 
+		public override IEnumerable<Tuple<string, IMapping>> Children
+		{
+			get
+			{
+				foreach (var mapping in PairMembers(this.GetFromGetters(), this.GetToSetters()))
+					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.Item1.Name, mapping.Item2.Name), mapping.Item3);
+			}
+		}
+
 		protected override Expression<Func<TFrom, TTo>> Compile()
 		{
 			IEnumerable<Tuple<MemberInfo, MemberInfo, IMapping, Type, Type>> pairs = PairMembers(this.GetFromGetters(), this.GetToSetters());

@@ -39,5 +39,15 @@ namespace POCOMapper.Test
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 		}
+
+		[TestMethod]
+		public void ToStringTest()
+		{
+			string correct = "ObjectToObject`2<From, To>\n";
+
+			string mappingToString = Mapping.Instance.MappingToString<From, To>();
+
+			Assert.AreEqual(correct, mappingToString);
+		}
 	}
 }
