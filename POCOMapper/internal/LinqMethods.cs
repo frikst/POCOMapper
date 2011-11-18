@@ -3,19 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
 namespace POCOMapper.@internal
 {
 	internal static class LinqMethods
 	{
-		public static readonly MethodInfo ToList = GetLinqMethod(x => x.ToList());
-		public static readonly MethodInfo ToArray = GetLinqMethod(x => x.ToArray());
-		public static readonly MethodInfo Select = GetLinqMethod(x => x.Select(obj => obj));
+		private static readonly MethodInfo aToList = GetLinqMethod(x => x.ToList());
+		private static readonly MethodInfo aToArray = GetLinqMethod(x => x.ToArray());
+		private static readonly MethodInfo aSelect = GetLinqMethod(x => x.Select(obj => obj));
 
 		private static MethodInfo GetLinqMethod<T>(Expression<Func<IEnumerable<int>, T>> expression)
 		{
 			return ((MethodCallExpression)expression.Body).Method.GetGenericMethodDefinition();
+		}
+
+		public static MethodInfo ToList(Type itemType)
+		{
+			return aToList.MakeGenericMethod(itemType);
+		}
+
+		public static MethodInfo ToArray(Type itemType)
+		{
+			return aToArray.MakeGenericMethod(itemType);
+		}
+
+		public static MethodInfo Select(Type itemFrom, Type itemTo)
+		{
+			return aSelect.MakeGenericMethod(itemFrom, itemTo);
 		}
 	}
 }

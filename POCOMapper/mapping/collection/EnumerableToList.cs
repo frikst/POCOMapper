@@ -41,12 +41,12 @@ namespace POCOMapper.mapping.collection
 				Delegate mapMethod = Delegate.CreateDelegate(
 					typeof(Func<,>).MakeGenericType(this.aItemFrom, this.aItemTo),
 					itemMapping,
-					typeof(IMapping<,>).MakeGenericType(this.aItemFrom, this.aItemTo).GetMethod("Map")
+					MappingMethods.Map(this.aItemFrom, this.aItemTo)
 				);
 
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, LinqMethods.ToList.MakeGenericMethod(this.aItemTo),
-						Expression.Call(null, LinqMethods.Select.MakeGenericMethod(this.aItemFrom, this.aItemTo),
+					Expression.Call(null, LinqMethods.ToList(this.aItemTo),
+						Expression.Call(null, LinqMethods.Select(this.aItemFrom, this.aItemTo),
 							from,
 							Expression.Constant(mapMethod)
 						)
@@ -57,7 +57,7 @@ namespace POCOMapper.mapping.collection
 			else
 			{
 				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, typeof(Enumerable).GetMethod("ToList").MakeGenericMethod(this.aItemTo),
+					Expression.Call(null, LinqMethods.ToList(this.aItemTo),
 						from
 					),
 					from

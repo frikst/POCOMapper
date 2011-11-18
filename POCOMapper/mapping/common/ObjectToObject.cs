@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using POCOMapper.conventions;
 using POCOMapper.definition;
+using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
 
 namespace POCOMapper.mapping.common
@@ -162,7 +163,7 @@ namespace POCOMapper.mapping.common
 			if (pair.Item3 != null)
 				ret = Expression.Call(
 					Expression.Constant(pair.Item3),
-					typeof(IMapping<,>).MakeGenericType(pair.Item4, pair.Item5).GetMethod("Map"),
+					MappingMethods.Map(pair.Item4, pair.Item5),
 					ret
 				);
 
