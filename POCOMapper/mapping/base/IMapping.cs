@@ -8,8 +8,9 @@ namespace POCOMapper.mapping.@base
 		IEnumerable<Tuple<string, IMapping>> Children { get; }
 	}
 
-	public interface IMapping<in TFrom, out TTo> : IMapping
+	public interface IMapping<TFrom, TTo> : IMapping
 	{
 		TTo Map(TFrom from);
+		void Synchronize(TFrom from, TTo to);
 	}
 }

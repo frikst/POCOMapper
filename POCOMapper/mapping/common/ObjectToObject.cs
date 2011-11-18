@@ -26,7 +26,7 @@ namespace POCOMapper.mapping.common
 			}
 		}
 
-		protected override Expression<Func<TFrom, TTo>> Compile()
+		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			IEnumerable<Tuple<MemberInfo, MemberInfo, IMapping, Type, Type>> pairs = PairMembers(this.GetFromGetters(), this.GetToSetters());
 
@@ -52,6 +52,11 @@ namespace POCOMapper.mapping.common
 				),
 				from
 			);
+		}
+
+		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
+		{
+			throw new NotImplementedException();
 		}
 
 		protected IEnumerable<Tuple<Symbol, Type, MemberInfo>> GetFromGetters()

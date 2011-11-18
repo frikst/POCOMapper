@@ -30,7 +30,7 @@ namespace POCOMapper.mapping.collection
 			}
 		}
 
-		protected override Expression<Func<TFrom, TTo>> Compile()
+		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 
@@ -63,6 +63,11 @@ namespace POCOMapper.mapping.collection
 					from
 				);
 			}
+		}
+
+		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
+		{
+			throw new NotImplementedException();
 		}
 
 		private IMapping GetMapping()

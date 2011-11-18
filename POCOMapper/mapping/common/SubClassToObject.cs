@@ -39,7 +39,7 @@ namespace POCOMapper.mapping.common
 			}
 		}
 
-		protected override Expression<Func<TFrom, TTo>> Compile()
+		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			MethodInfo getTypeMethod = typeof(object).GetMethod("GetType", BindingFlags.Public | BindingFlags.Instance);
 
@@ -68,6 +68,11 @@ namespace POCOMapper.mapping.common
 				),
 				from
 			);
+		}
+
+		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
+		{
+			throw new NotImplementedException();
 		}
 
 		#endregion

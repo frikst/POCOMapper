@@ -7,12 +7,14 @@ namespace POCOMapper.mapping.@base
 {
 	public abstract class CompiledMapping<TFrom, TTo> : IMapping<TFrom, TTo>
 	{
-		private Func<TFrom, TTo> aFnc;
+		private Func<TFrom, TTo> aMappingFnc;
+		private Action<TFrom, TTo> aSynchronizationFnc;
 		private readonly MappingImplementation aMapping;
 
 		protected CompiledMapping(MappingImplementation mapping)
 		{
-			this.aFnc = null;
+			this.aMappingFnc = null;
+			this.aSynchronizationFnc = null;
 			this.aMapping = mapping;
 		}
 
@@ -28,13 +30,27 @@ namespace POCOMapper.mapping.@base
 			if (object.ReferenceEquals(from, null))
 				return default(TTo);
 
-			if (this.aFnc == null)
+			if (this.aMappingFnc == null)
 			{
-				Expression<Func<TFrom, TTo>> expression = this.Compile();
-				this.aFnc = expression.Compile();
+				Expression<Func<TFrom, TTo>> expression = this.CompileMapping();
+				this.aMappingFnc = expression.Compile();
 			}
 
-			return this.aFnc(from);
+			return this.aMappingFnc(from);
+		}
+
+		public void Synchronize(TFrom from, TTo to)
+		{
+			if (object.ReferenceEquals(from, to))
+				return;
+
+			if (this.aMappingFnc == null)
+			{
+				Expression<Action<TFrom, TTo>> expression = this.CompileSynchronization();
+				this.aSynchronizationFnc = expression.Compile();
+			}
+
+			this.aSynchronizationFnc(from, to);
 		}
 
 		#region Implementation of IMapping
@@ -45,6 +61,7 @@ namespace POCOMapper.mapping.@base
 
 		#endregion
 
-		protected abstract Expression<Func<TFrom, TTo>> Compile();
+		protected abstract Expression<Func<TFrom, TTo>> CompileMapping();
+		protected abstract Expression<Action<TFrom, TTo>> CompileSynchronization();
 	}
 }

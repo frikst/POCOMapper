@@ -91,6 +91,19 @@ namespace POCOMapper.definition
 			return mapping.Map(from);
 		}
 
+		public void Synchronize<TFrom, TTo>(TFrom from, TTo to)
+		{
+			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
+
+			if (mapping == null)
+				throw new UnknownMapping(typeof(TFrom), typeof(TTo));
+
+			if (mapping == null)
+				throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", typeof(TFrom).Name, typeof(TTo).Name));
+
+			mapping.Synchronize(from, to);
+		}
+
 		private void MappingToString(IMapping mapping, StringBuilder output, int level)
 		{
 			string indent = string.Concat(Enumerable.Range(0, level).Select(x => "    "));
