@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using POCOMapper.conventions;
 using POCOMapper.definition;
+using POCOMapper.exceptions;
 using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
 
@@ -36,8 +37,6 @@ namespace POCOMapper.mapping.common
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
 
-			LabelTarget fncEnd = Expression.Label();
-
 			return Expression.Lambda<Func<TFrom, TTo>>(
 				Expression.Block(
 					new ParameterExpression[] { to },
@@ -47,7 +46,7 @@ namespace POCOMapper.mapping.common
 							to,
 							Expression.New(constructor)
 						),
-						this.MakeBlock(pairs.Select(x => this.PairToExpression(x, from, to))),
+						this.MakeBlock(pairs.Select(x => this.PairToMapExpression(x, from, to))),
 						to
 					}
 				),
@@ -57,7 +56,17 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
 		{
-			throw new NotImplementedException();
+			IEnumerable<Tuple<MemberInfo, MemberInfo, IMapping, Type, Type>> pairs = PairMembers(this.GetFromGetters(), this.GetToSetters());
+
+			ConstructorInfo constructor = typeof(TTo).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { }, null);
+
+			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
+			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
+
+			return Expression.Lambda<Action<TFrom, TTo>>(
+				this.MakeBlock(pairs.Select(x => this.PairToSynchronizationExpression(x, from, to))),
+				from, to
+			);
 		}
 
 		protected IEnumerable<Tuple<Symbol, Type, MemberInfo>> GetFromGetters()
@@ -149,7 +158,7 @@ namespace POCOMapper.mapping.common
 			return false;
 		}
 
-		private Expression PairToExpression(Tuple<MemberInfo, MemberInfo, IMapping, Type, Type> pair, ParameterExpression from, ParameterExpression to)
+		private Expression PairToMapExpression(Tuple<MemberInfo, MemberInfo, IMapping, Type, Type> pair, ParameterExpression from, ParameterExpression to)
 		{
 			Expression ret;
 
@@ -173,6 +182,68 @@ namespace POCOMapper.mapping.common
 				ret = Expression.Assign(Expression.Property(to, (PropertyInfo)pair.Item2), ret);
 			else
 				ret = Expression.Assign(Expression.Field(to, (FieldInfo)pair.Item2), ret);
+
+			return ret;
+		}
+
+		private Expression PairToSynchronizationExpression(Tuple<MemberInfo, MemberInfo, IMapping, Type, Type> pair, ParameterExpression from, ParameterExpression to)
+		{
+			Expression ret;
+
+			if (pair.Item1 is MethodInfo)
+				ret = Expression.Call(from, (MethodInfo)pair.Item1);
+			else if (pair.Item1 is PropertyInfo)
+				ret = Expression.Property(from, (PropertyInfo)pair.Item1);
+			else
+				ret = Expression.Field(from, (FieldInfo)pair.Item1);
+
+			if (pair.Item5.IsValueType || pair.Item5.IsAssignableFrom(typeof(string)))
+			{
+				if (pair.Item3 != null)
+					ret = Expression.Call(
+						Expression.Constant(pair.Item3),
+						MappingMethods.Map(pair.Item4, pair.Item5),
+						ret
+					);
+
+				if (pair.Item2 is MethodInfo)
+					ret = Expression.Call(to, (MethodInfo)pair.Item2, ret);
+				else if (pair.Item2 is PropertyInfo)
+					ret = Expression.Assign(Expression.Property(to, (PropertyInfo)pair.Item2), ret);
+				else
+					ret = Expression.Assign(Expression.Field(to, (FieldInfo)pair.Item2), ret);
+			}
+			else
+			{
+				Expression ret2;
+				ParameterExpression tempValue = Expression.Parameter(pair.Item5, "temp");
+
+				if (pair.Item2 is MethodInfo)
+					// TODO: ???
+					throw new InvalidMapping("Cannot synchronize object with setter method mapping destination");
+				else if (pair.Item2 is PropertyInfo)
+					ret2 = Expression.Property(to, (PropertyInfo)pair.Item2);
+				else
+					ret2 = Expression.Field(to, (FieldInfo)pair.Item2);
+
+				if (pair.Item3 == null)
+					// TODO: ???
+					throw new InvalidMapping("Cannot synchronize two reference objects with the same type");
+
+				ret = Expression.Block(
+					new ParameterExpression[] { tempValue },
+					Expression.Assign(tempValue, ret),
+					Expression.IfThenElse(
+						Expression.Equal(tempValue, Expression.Constant(null)),
+						Expression.Assign(ret2, Expression.Constant(null)),
+						Expression.Call(
+							Expression.Constant(pair.Item3),
+							MappingMethods.Synchronize(pair.Item4, pair.Item5),
+							tempValue, ret2
+						)
+					)
+				);
+			}
 
 			return ret;
 		}
