@@ -25,14 +25,14 @@ namespace POCOMapper.Test
 		{
 			private Mapping()
 			{
-				CreateMap<From, To>()
+				Map<From, To>()
 					.MapSubClass<SubFrom1, SubTo1>()
 					.MapSubClass<SubFrom2, SubTo1>()
 					.MapSubClass<SubFrom3, SubTo2>();
 
-				CreateMap<SubFrom1, SubTo1>();
-				CreateMap<SubFrom2, SubTo1>();
-				CreateMap<SubFrom3, SubTo2>();
+				Map<SubFrom1, SubTo1>();
+				Map<SubFrom2, SubTo1>();
+				Map<SubFrom3, SubTo2>();
 			}
 
 			public static MappingImplementation Instance

@@ -12,7 +12,7 @@ namespace POCOMapper.@internal
 		private static readonly MethodInfo aToArray = GetLinqMethod(x => x.ToArray());
 		private static readonly MethodInfo aSelect = GetLinqMethod(x => x.Select(obj => obj));
 
-		private static MethodInfo GetLinqMethod<T>(Expression<Func<IEnumerable<int>, T>> expression)
+		private static MethodInfo GetLinqMethod<TItem>(Expression<Func<IEnumerable<int>, TItem>> expression)
 		{
 			return ((MethodCallExpression)expression.Body).Method.GetGenericMethodDefinition();
 		}

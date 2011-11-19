@@ -5,20 +5,13 @@ using POCOMapper.mapping.common;
 
 namespace POCOMapper.definition
 {
-	public abstract class SingleMappingDefinition
+	public class ClassMappingDefinition<TFrom, TTo> : IMappingDefinition
 	{
-		internal abstract IMapping CreateMapping(MappingImplementation allMappings);
-		internal abstract Type From { get; }
-		internal abstract Type To { get; }
-	}
+		private readonly List<Tuple<Type, Type>> aSubClassMaps = new List<Tuple<Type, Type>>();
 
-	public class SingleMappingDefinition<TFrom, TTo> : SingleMappingDefinition
-	{
-		private List<Tuple<Type, Type>> aSubClassMaps = new List<Tuple<Type, Type>>();
+		#region Implementation of IMappingDefinition
 
-		#region Overrides of SingleMappingDefinition
-
-		internal override IMapping CreateMapping(MappingImplementation allMappings)
+		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
 			IMapping<TFrom, TTo> mapping = new ObjectToObject<TFrom, TTo>(allMappings);
 
@@ -28,19 +21,24 @@ namespace POCOMapper.definition
 			return mapping;
 		}
 
-		internal override Type From
+		Type IMappingDefinition.From
 		{
 			get { return typeof(TFrom); }
 		}
 
-		internal override Type To
+		Type IMappingDefinition.To
 		{
 			get { return typeof(TTo); }
 		}
 
+		MappingType IMappingDefinition.Type
+		{
+			get { return MappingType.ClassMapping; }
+		}
+
 		#endregion
 
-		public SingleMappingDefinition<TFrom, TTo> MapSubClass<TSubFrom, TSubTo>()
+		public ClassMappingDefinition<TFrom, TTo> MapSubClass<TSubFrom, TSubTo>()
 			where TSubFrom : TFrom
 			where TSubTo : TTo
 		{

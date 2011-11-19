@@ -11,16 +11,24 @@ namespace POCOMapper.definition
 {
 	public class MappingImplementation
 	{
+		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aClassMappingDefinitions;
+		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aContainerMappingDefinitions;
 		private Dictionary<Tuple<Type, Type>, IMapping> aMappings;
-		private Dictionary<Tuple<Type, Type>, SingleMappingDefinition> aMappingDefinitions;
 
-		internal MappingImplementation(IEnumerable<SingleMappingDefinition> mappingDefinitions, Conventions fromConventions, Conventions toConventions)
+		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, Conventions fromConventions, Conventions toConventions)
 		{
 			this.aMappings = new Dictionary<Tuple<Type, Type>, IMapping>();
-			this.aMappingDefinitions = new Dictionary<Tuple<Type, Type>, SingleMappingDefinition>();
+			this.aClassMappingDefinitions = new Dictionary<Tuple<Type, Type>, IMappingDefinition>();
+			aContainerMappingDefinitions = new Dictionary<Tuple<Type, Type>, IMappingDefinition>();
 
-			foreach (SingleMappingDefinition def in mappingDefinitions)
-				this.aMappingDefinitions[new Tuple<Type, Type>(def.From, def.To)] = def;
+			foreach (IMappingDefinition def in mappingDefinitions)
+			{
+				if (def.Type == MappingType.ClassMapping)
+					this.aClassMappingDefinitions[new Tuple<Type, Type>(def.From, def.To)] = def;
+				else
+					this.aContainerMappingDefinitions[new Tuple<Type, Type>(def.From, def.To)] = def;
+			}
+
 
 			this.FromConventions = fromConventions;
 			this.ToConventions = toConventions;
@@ -36,37 +44,46 @@ namespace POCOMapper.definition
 			if (this.aMappings.ContainsKey(key))
 				return this.aMappings[key];
 			
-			if (this.aMappingDefinitions.ContainsKey(key))
+			if (this.aClassMappingDefinitions.ContainsKey(key))
 			{
-				IMapping mapping = this.aMappingDefinitions[key].CreateMapping(this);
+				IMapping mapping = this.aClassMappingDefinitions[key].CreateMapping(this, from, to);
 				this.aMappings[key] = mapping;
 				return mapping;
 			}
 
-			bool fromIsEnum = from.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-			bool toIsEnum = to.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-			bool toIsArray = to.IsArray;
-			bool toIsList = to.IsGenericType && to.GetGenericTypeDefinition() == typeof(List<>);
+			bool fromIsEnumerable = from.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			bool toIsEnumerable = to.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
-			if (fromIsEnum && toIsEnum)
+			Type fromType = from.IsArray ? typeof(T[]) : from.GetGenericTypeDefinition().MakeGenericType(typeof(T));
+			Type toType = to.IsArray ? typeof(T[]) : to.GetGenericTypeDefinition().MakeGenericType(typeof(T));
+
+			if (fromIsEnumerable && toIsEnumerable)
 			{
-				if (toIsArray)
+				List<Type> fromPosibilities = new List<Type>();
+				for (Type fromBase = fromType; fromBase != typeof (object); fromBase = fromBase.BaseType)
+					if ((typeof(IEnumerable<T>).IsAssignableFrom(fromBase)))
+						fromPosibilities.Add(fromBase);
+				fromPosibilities.AddRange(fromType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));
+
+				List<Type> toPosibilities = new List<Type>();
+				for (Type toBase = toType; toBase != typeof(object); toBase = toBase.BaseType)
+					if ((typeof(IEnumerable<T>).IsAssignableFrom(toBase)))
+						toPosibilities.Add(toBase);
+				toPosibilities.AddRange(toType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));
+
+				foreach (Type fromBase in fromPosibilities)
 				{
-					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToArray<,>).MakeGenericType(from, to), this);
-					this.aMappings[key] = mapping;
-					return mapping;
-				}
-				else if (toIsList)
-				{
-					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToList<,>).MakeGenericType(from, to), this);
-					this.aMappings[key] = mapping;
-					return mapping;
-				}
-				else
-				{
-					IMapping mapping = (IMapping)Activator.CreateInstance(typeof(EnumerableToEnumerable<,>).MakeGenericType(from, to), this);
-					this.aMappings[key] = mapping;
-					return mapping;
+					foreach (Type toBase in toPosibilities)
+					{
+						Tuple<Type, Type> baseKey = new Tuple<Type, Type>(fromBase, toBase);
+
+						if (aContainerMappingDefinitions.ContainsKey(baseKey))
+						{
+							IMapping mapping = this.aContainerMappingDefinitions[baseKey].CreateMapping(this, from, to);
+							this.aMappings[key] = mapping;
+							return mapping;
+						}
+					}
 				}
 			}
 

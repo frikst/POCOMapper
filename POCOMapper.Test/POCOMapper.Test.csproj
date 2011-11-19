@@ -45,6 +45,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayToArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NoAttributesMapping.cs" />
     <Compile Include="SimpleSynchronization.cs" />

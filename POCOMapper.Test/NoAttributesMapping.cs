@@ -25,7 +25,7 @@ namespace POCOMapper.Test
 		{
 			private Mapping()
 			{
-				CreateMap<From, To>();
+				Map<From, To>();
 			}
 
 			public static MappingImplementation Instance

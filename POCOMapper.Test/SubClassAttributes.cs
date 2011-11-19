@@ -39,7 +39,7 @@ namespace POCOMapper.Test
 		{
 			private Mapping()
 			{
-				CreateMap<SubFrom, SubTo>();
+				Map<SubFrom, SubTo>();
 			}
 
 			public static MappingImplementation Instance

@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="definition\ContainerMappingDefinition.cs" />
+    <Compile Include="definition\IMappingDefinition.cs" />
+    <Compile Include="definition\T.cs" />
     <Compile Include="exceptions\InvalidMapping.cs" />
     <Compile Include="exceptions\UnknownMapping.cs" />
     <Compile Include="internal\LinqMethods.cs" />
@@ -59,7 +62,7 @@
     <Compile Include="definition\MappingImplementation.cs" />
     <Compile Include="mapping\common\SubClassToObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="definition\SingleMappingDefinition.cs" />
+    <Compile Include="definition\ClassMappingDefinition.cs" />
     <Compile Include="conventions\Symbol.cs" />
   </ItemGroup>
   <ItemGroup />

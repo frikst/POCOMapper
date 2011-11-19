@@ -8,26 +8,13 @@ using POCOMapper.definition;
 namespace POCOMapper.Test
 {
 	[TestClass]
-	public class SimpleSynchronization
+	public class ArrayToArray
 	{
-		private class From
-		{
-			public string GetValue()
-			{
-				return "from";
-			}
-		}
-
-		private class To
-		{
-			public string Value { get; set; }
-		}
-
 		private class Mapping : MappingDefinition
 		{
 			private Mapping()
 			{
-				Map<From, To>();
+				
 			}
 
 			public static MappingImplementation Instance
@@ -39,12 +26,11 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void TestMethod1()
 		{
-			From val = new From();
-			To valNew = new To();
-
-			Mapping.Instance.Synchronize(val, valNew);
-
-			Assert.AreEqual(val.GetValue(), valNew.Value);
+			int[] ret = Mapping.Instance.Map<int[], int[]>(new int[] {1, 2, 3});
+			Assert.AreEqual(ret.Length, 3);
+			Assert.AreEqual(ret[0], 1);
+			Assert.AreEqual(ret[1], 2);
+			Assert.AreEqual(ret[2], 3);
 		}
 	}
 }
