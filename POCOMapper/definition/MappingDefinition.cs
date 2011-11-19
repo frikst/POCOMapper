@@ -6,9 +6,10 @@ using POCOMapper.mapping.collection;
 
 namespace POCOMapper.definition
 {
-	public abstract class MappingDefinition
+	public abstract class MappingDefinition<TMapping>
+		where TMapping : MappingDefinition<TMapping>
 	{
-		private static readonly Dictionary<Type, MappingImplementation> aMappings = new Dictionary<Type,MappingImplementation>();
+		private static MappingImplementation aMapping;
 
 		private readonly List<IMappingDefinition> aMappingDefinitions;
 		private bool aFinished;
@@ -54,24 +55,26 @@ namespace POCOMapper.definition
 			return mappingDefinitionDef;
 		}
 
-		protected static MappingImplementation GetInstance<TMappingDefinition>()
+		private static MappingImplementation CreateInstance()
 		{
-			MappingImplementation ret;
-
-			Type mapDefType = typeof(TMappingDefinition);
-
-			if (aMappings.TryGetValue(mapDefType, out ret))
-				return ret;
+			Type mapDefType = typeof(TMapping);
 
 			ConstructorInfo ci = mapDefType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { }, null);
-			MappingDefinition definition = (MappingDefinition) ci.Invoke(null);
+			MappingDefinition<TMapping> definition = (MappingDefinition<TMapping>)ci.Invoke(null);
 			definition.aFinished = true;
 
-			ret = new MappingImplementation(definition.aMappingDefinitions, definition.FromConventions, definition.ToConventions);
+			return new MappingImplementation(definition.aMappingDefinitions, definition.FromConventions, definition.ToConventions);
+		}
 
-			aMappings[mapDefType] = ret;
+		public static MappingImplementation Instance
+		{
+			get
+			{
+				if (aMapping == null)
+					aMapping = CreateInstance();
 
-			return ret;
+				return aMapping;
+			}
 		}
 	}
 }

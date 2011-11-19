@@ -21,7 +21,7 @@ namespace POCOMapper.Test
 		private class SubTo1 : To { }
 		private class SubTo2 : To { }
 
-		private class Mapping : MappingDefinition
+		private class Mapping : MappingDefinition<Mapping>
 		{
 			private Mapping()
 			{
@@ -33,11 +33,6 @@ namespace POCOMapper.Test
 				Map<SubFrom1, SubTo1>();
 				Map<SubFrom2, SubTo1>();
 				Map<SubFrom3, SubTo2>();
-			}
-
-			public static MappingImplementation Instance
-			{
-				get { return GetInstance<Mapping>(); }
 			}
 		}
 

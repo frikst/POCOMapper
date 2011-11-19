@@ -35,16 +35,11 @@ namespace POCOMapper.Test
 			public string Value { get; set; }
 		}
 
-		private class Mapping : MappingDefinition
+		private class Mapping : MappingDefinition<Mapping>
 		{
 			private Mapping()
 			{
 				Map<SubFrom, SubTo>();
-			}
-
-			public static MappingImplementation Instance
-			{
-				get { return GetInstance<Mapping>(); }
 			}
 		}
 

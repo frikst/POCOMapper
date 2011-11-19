@@ -10,16 +10,11 @@ namespace POCOMapper.Test
 	[TestClass]
 	public class ArrayToArray
 	{
-		private class Mapping : MappingDefinition
+		private class Mapping : MappingDefinition<Mapping>
 		{
 			private Mapping()
 			{
 				
-			}
-
-			public static MappingImplementation Instance
-			{
-				get { return GetInstance<Mapping>(); }
 			}
 		}
 

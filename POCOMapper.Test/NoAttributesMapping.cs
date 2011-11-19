@@ -21,16 +21,11 @@ namespace POCOMapper.Test
 
 		}
 
-		private class Mapping : MappingDefinition
+		private class Mapping : MappingDefinition<Mapping>
 		{
 			private Mapping()
 			{
 				Map<From, To>();
-			}
-
-			public static MappingImplementation Instance
-			{
-				get { return GetInstance<Mapping>(); }
 			}
 		}
 
