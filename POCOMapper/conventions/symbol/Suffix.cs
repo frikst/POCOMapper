@@ -1,4 +1,4 @@
-﻿namespace POCOMapper.conventions
+﻿namespace POCOMapper.conventions.symbol
 {
 	public class Suffix : ISymbolParser
 	{

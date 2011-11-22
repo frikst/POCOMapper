@@ -5,7 +5,6 @@ using System.Text;
 using POCOMapper.conventions;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
-using POCOMapper.mapping.collection;
 
 namespace POCOMapper.definition
 {

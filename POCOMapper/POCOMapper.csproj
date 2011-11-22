@@ -53,18 +53,18 @@
     <Compile Include="mapping\collection\EnumerableToList.cs" />
     <Compile Include="mapping\common\ObjectToObject.cs" />
     <Compile Include="mapping\base\CompiledMapping.cs" />
-    <Compile Include="conventions\BigCammelCase.cs" />
+    <Compile Include="conventions\symbol\BigCammelCase.cs" />
     <Compile Include="conventions\Conventions.cs" />
-    <Compile Include="conventions\ISymbolParser.cs" />
-    <Compile Include="conventions\Prefix.cs" />
-    <Compile Include="conventions\Suffix.cs" />
+    <Compile Include="conventions\symbol\ISymbolParser.cs" />
+    <Compile Include="conventions\symbol\Prefix.cs" />
+    <Compile Include="conventions\symbol\Suffix.cs" />
     <Compile Include="definition\MappingDefinition.cs" />
     <Compile Include="mapping\base\IMapping.cs" />
     <Compile Include="definition\MappingImplementation.cs" />
     <Compile Include="mapping\common\SubClassToObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="definition\ClassMappingDefinition.cs" />
-    <Compile Include="conventions\Symbol.cs" />
+    <Compile Include="conventions\symbol\Symbol.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

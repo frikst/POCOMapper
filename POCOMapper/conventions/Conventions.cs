@@ -1,4 +1,6 @@
-﻿namespace POCOMapper.conventions
+﻿using POCOMapper.conventions.symbol;
+
+namespace POCOMapper.conventions
 {
 	public class Conventions
 	{

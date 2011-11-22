@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using POCOMapper.conventions;
+using POCOMapper.conventions.symbol;
 using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;

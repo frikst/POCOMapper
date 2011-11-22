@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace POCOMapper.conventions
+namespace POCOMapper.conventions.symbol
 {
 	public struct Symbol
 	{
