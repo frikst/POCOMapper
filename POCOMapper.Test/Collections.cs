@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.definition;
 
@@ -40,6 +41,16 @@ namespace POCOMapper.Test
 		{
 			HashSet<int> ret = Mapping.Instance.Map<int[], HashSet<int>>(new int[] { 1, 2, 3 });
 			Assert.AreEqual(ret.Count, 3);
+			Assert.IsTrue(ret.Contains(1));
+			Assert.IsTrue(ret.Contains(2));
+			Assert.IsTrue(ret.Contains(3));
+		}
+
+		[TestMethod]
+		public void ToIEnumerable()
+		{
+			IEnumerable<int> ret = Mapping.Instance.Map<int[], IEnumerable<int>>(new int[] { 1, 2, 3 });
+			Assert.AreEqual(ret.Count(), 3);
 			Assert.IsTrue(ret.Contains(1));
 			Assert.IsTrue(ret.Contains(2));
 			Assert.IsTrue(ret.Contains(3));

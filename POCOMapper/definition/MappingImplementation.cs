@@ -50,8 +50,10 @@ namespace POCOMapper.definition
 				return mapping;
 			}
 
-			bool fromIsEnumerable = from.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-			bool toIsEnumerable = to.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			bool fromIsEnumerable = from.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+				|| (from.IsGenericType && from.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			bool toIsEnumerable = to.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+				|| (to.IsGenericType && to.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
 			Type fromType = from.IsArray ? typeof(T[]) : from.GetGenericTypeDefinition().MakeGenericType(typeof(T));
 			Type toType = to.IsArray ? typeof(T[]) : to.GetGenericTypeDefinition().MakeGenericType(typeof(T));
@@ -59,13 +61,13 @@ namespace POCOMapper.definition
 			if (fromIsEnumerable && toIsEnumerable)
 			{
 				List<Type> fromPosibilities = new List<Type>();
-				for (Type fromBase = fromType; fromBase != typeof (object); fromBase = fromBase.BaseType)
+				for (Type fromBase = fromType; fromBase != null; fromBase = fromBase.BaseType)
 					if ((typeof(IEnumerable<T>).IsAssignableFrom(fromBase)))
 						fromPosibilities.Add(fromBase);
 				fromPosibilities.AddRange(fromType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));
 
 				List<Type> toPosibilities = new List<Type>();
-				for (Type toBase = toType; toBase != typeof(object); toBase = toBase.BaseType)
+				for (Type toBase = toType; toBase != null; toBase = toBase.BaseType)
 					if ((typeof(IEnumerable<T>).IsAssignableFrom(toBase)))
 						toPosibilities.Add(toBase);
 				toPosibilities.AddRange(toType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));

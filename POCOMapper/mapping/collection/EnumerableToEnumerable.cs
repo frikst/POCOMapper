@@ -16,12 +16,26 @@ namespace POCOMapper.mapping.collection
 	{
 		private readonly Type aItemFrom;
 		private readonly Type aItemTo;
+		private readonly bool aToIEnumerable;
 
 		public EnumerableToEnumerable(MappingImplementation mapping)
 			: base(mapping)
 		{
-			this.aItemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
-			this.aItemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
+			if (typeof(TFrom).IsGenericType && typeof(TFrom).GetGenericTypeDefinition() == typeof(IEnumerable<>))
+				this.aItemFrom = typeof(TFrom).GetGenericArguments()[0];
+			else
+				this.aItemFrom = typeof(TFrom).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
+
+			if (typeof(TTo).IsGenericType && typeof(TTo).GetGenericTypeDefinition() == typeof(IEnumerable<>))
+			{
+				this.aItemTo = typeof(TTo).GetGenericArguments()[0];
+				this.aToIEnumerable = true;
+			}
+			else
+			{
+				this.aItemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
+				this.aToIEnumerable = false;
+			}
 		}
 
 		public override IEnumerable<Tuple<string, IMapping>> Children
@@ -36,7 +50,12 @@ namespace POCOMapper.mapping.collection
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 
-			ConstructorInfo constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.aItemTo) });
+			ConstructorInfo constructTo;
+
+			if (this.aToIEnumerable)
+				constructTo = typeof(List<>).MakeGenericType(this.aItemTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.aItemTo) });
+			else
+				constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.aItemTo) });
 
 			IMapping itemMapping = this.GetMapping();
 
