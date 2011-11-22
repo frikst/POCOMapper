@@ -51,7 +51,7 @@ namespace POCOMapper.mapping.common
 				Expression.Block(
 					new ParameterExpression[] { to },
 					Expression.Block(
-						allConversions.Select(x => this.MakeIfConvertStatement(x.Item1, x.Item2, x.Item3, from, to, mappingEnd))
+						allConversions.Select(x => this.MakeIfConvertMapStatement(x.Item1, x.Item2, x.Item3, from, to, mappingEnd))
 					),
 					Expression.Throw(
 						Expression.New(
@@ -69,7 +69,29 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
 		{
-			throw new NotImplementedException();
+			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();
+
+			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
+			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
+
+			LabelTarget mappingEnd = Expression.Label();
+
+			return Expression.Lambda<Action<TFrom, TTo>>(
+				Expression.Block(
+					Expression.Block(
+						allConversions.Select(x => this.MakeIfConvertSynchronizeStatement(x.Item1, x.Item2, x.Item3, from, to, mappingEnd))
+					),
+					Expression.Throw(
+						Expression.New(
+							typeof(UnknownMapping).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
+							Expression.Call(from, ObjectMethods.GetType()),
+							Expression.Constant(typeof(TTo))
+						)
+					),
+					Expression.Label(mappingEnd)
+				),
+				from, to
+			);
 		}
 
 		#endregion
@@ -97,7 +119,7 @@ namespace POCOMapper.mapping.common
 
 		#endregion
 
-		private Expression MakeIfConvertStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to, LabelTarget mappingEnd)
+		private Expression MakeIfConvertMapStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to, LabelTarget mappingEnd)
 		{
 			return Expression.IfThen(
 				Expression.Equal(
@@ -112,6 +134,25 @@ namespace POCOMapper.mapping.common
 							MappingMethods.Map(fromType, toType),
 							Expression.Convert(from, fromType)
 						)
+					),
+					Expression.Goto(mappingEnd)
+				)
+			);
+		}
+
+		private Expression MakeIfConvertSynchronizeStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to, LabelTarget mappingEnd)
+		{
+			return Expression.IfThen(
+				Expression.Equal(
+					Expression.Call(from, ObjectMethods.GetType()),
+					Expression.Constant(fromType)
+				),
+				Expression.Block(
+					Expression.Call(
+						Expression.Constant(mapping),
+						MappingMethods.Synchronize(fromType, toType),
+						Expression.Convert(from, fromType),
+						Expression.Convert(to, toType)
 					),
 					Expression.Goto(mappingEnd)
 				)

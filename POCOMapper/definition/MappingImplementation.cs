@@ -55,11 +55,11 @@ namespace POCOMapper.definition
 			bool toIsEnumerable = to.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>))
 				|| (to.IsGenericType && to.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
-			Type fromType = from.IsArray ? typeof(T[]) : from.GetGenericTypeDefinition().MakeGenericType(typeof(T));
-			Type toType = to.IsArray ? typeof(T[]) : to.GetGenericTypeDefinition().MakeGenericType(typeof(T));
-
 			if (fromIsEnumerable && toIsEnumerable)
 			{
+				Type fromType = from.IsArray ? typeof(T[]) : from.GetGenericTypeDefinition().MakeGenericType(typeof(T));
+				Type toType = to.IsArray ? typeof(T[]) : to.GetGenericTypeDefinition().MakeGenericType(typeof(T));
+
 				List<Type> fromPosibilities = new List<Type>();
 				for (Type fromBase = fromType; fromBase != null; fromBase = fromBase.BaseType)
 					if ((typeof(IEnumerable<T>).IsAssignableFrom(fromBase)))

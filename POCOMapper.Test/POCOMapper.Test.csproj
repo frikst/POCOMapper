@@ -55,6 +55,7 @@
     <Compile Include="SimpleSynchronization.cs" />
     <Compile Include="SubClassAttributes.cs" />
     <Compile Include="SubClassMapping.cs" />
+    <Compile Include="SubClassSynchronization.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\POCOMapper\POCOMapper.csproj">
