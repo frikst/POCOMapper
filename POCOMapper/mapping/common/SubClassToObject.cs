@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 using POCOMapper.definition;
 using POCOMapper.exceptions;
+using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
 
 namespace POCOMapper.mapping.common
@@ -41,8 +40,6 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
-			MethodInfo getTypeMethod = typeof(object).GetMethod("GetType", BindingFlags.Public | BindingFlags.Instance);
-
 			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();
 
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
@@ -59,7 +56,7 @@ namespace POCOMapper.mapping.common
 					Expression.Throw(
 						Expression.New(
 							typeof(UnknownMapping).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
-							Expression.Call(from, getTypeMethod),
+							Expression.Call(from, ObjectMethods.GetType()),
 							Expression.Constant(typeof(TTo))
 						)
 					),
@@ -102,12 +99,9 @@ namespace POCOMapper.mapping.common
 
 		private Expression MakeIfConvertStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to, LabelTarget mappingEnd)
 		{
-			MethodInfo getTypeMethod = typeof(object).GetMethod("GetType", BindingFlags.Public | BindingFlags.Instance);
-			MethodInfo mapMethod = typeof(IMapping<,>).MakeGenericType(fromType, toType).GetMethod("Map", BindingFlags.Public | BindingFlags.Instance);
-
 			return Expression.IfThen(
 				Expression.Equal(
-					Expression.Call(from, getTypeMethod),
+					Expression.Call(from, ObjectMethods.GetType()),
 					Expression.Constant(fromType)
 				),
 				Expression.Block(
@@ -115,7 +109,7 @@ namespace POCOMapper.mapping.common
 						to,
 						Expression.Call(
 							Expression.Constant(mapping),
-							mapMethod,
+							MappingMethods.Map(fromType, toType),
 							Expression.Convert(from, fromType)
 						)
 					),

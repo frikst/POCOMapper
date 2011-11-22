@@ -47,6 +47,7 @@
     <Compile Include="exceptions\UnknownMapping.cs" />
     <Compile Include="internal\LinqMethods.cs" />
     <Compile Include="internal\MappingMethods.cs" />
+    <Compile Include="internal\ObjectMethods.cs" />
     <Compile Include="mapping\collection\EnumerableToArray.cs" />
     <Compile Include="mapping\collection\EnumerableToEnumerable.cs" />
     <Compile Include="mapping\collection\EnumerableToList.cs" />
