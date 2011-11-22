@@ -17,6 +17,8 @@ namespace POCOMapper.mapping.common
 
 		}
 
+		#region Overrides of CompiledMapping<TFrom,TTo>
+
 		public override IEnumerable<Tuple<string, IMapping>> Children
 		{
 			get
@@ -74,5 +76,7 @@ namespace POCOMapper.mapping.common
 
 			return Expression.Block(retExpressions);
 		}
+
+		#endregion
 	}
 }

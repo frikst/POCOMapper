@@ -2,7 +2,7 @@
 
 namespace POCOMapper.@internal
 {
-	public static class ObjectMethods
+	internal static class ObjectMethods
 	{
 		private static readonly MethodInfo aGetType = typeof(object).GetMethod("GetType", BindingFlags.Public | BindingFlags.Instance);
 

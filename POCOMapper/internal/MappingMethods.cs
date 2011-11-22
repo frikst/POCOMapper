@@ -4,7 +4,7 @@ using POCOMapper.mapping.@base;
 
 namespace POCOMapper.@internal
 {
-	public static class MappingMethods
+	internal static class MappingMethods
 	{
 		public static MethodInfo Map(Type from, Type to)
 		{

@@ -8,17 +8,25 @@ namespace POCOMapper.definition
 	public class ClassMappingDefinition<TFrom, TTo> : IMappingDefinition
 	{
 		private readonly List<Tuple<Type, Type>> aSubClassMaps = new List<Tuple<Type, Type>>();
+		private Type aMapping;
 
 		#region Implementation of IMappingDefinition
 
 		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
-			IMapping<TFrom, TTo> mapping = new ObjectToObject<TFrom, TTo>(allMappings);
+			if (this.aMapping == null)
+			{
+				IMapping<TFrom, TTo> mapping = new ObjectToObject<TFrom, TTo>(allMappings);
 
-			if (aSubClassMaps.Count > 0)
-				mapping = new SubClassToObject<TFrom, TTo>(allMappings, aSubClassMaps, mapping);
+				if (aSubClassMaps.Count > 0)
+					mapping = new SubClassToObject<TFrom, TTo>(allMappings, aSubClassMaps, mapping);
 
-			return mapping;
+				return mapping;
+			}
+			else
+			{
+				return (IMapping)Activator.CreateInstance(this.aMapping, allMappings);
+			}
 		}
 
 		Type IMappingDefinition.From
@@ -45,6 +53,12 @@ namespace POCOMapper.definition
 			this.aSubClassMaps.Add(new Tuple<Type, Type>(typeof(TSubFrom), typeof(TSubTo)));
 
 			return this;
+		}
+
+		public void Using<TMapping>()
+			where TMapping : IMapping<TFrom, TTo>
+		{
+			this.aMapping = typeof(TMapping);
 		}
 	}
 }

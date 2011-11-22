@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using POCOMapper.conventions;
 using POCOMapper.mapping.collection;
+using POCOMapper.mapping.standard;
 
 namespace POCOMapper.definition
 {
@@ -21,6 +22,21 @@ namespace POCOMapper.definition
 
 			this.FromConventions = new Conventions();
 			this.ToConventions = new Conventions();
+
+			this.DefaultMappings();
+		}
+
+		private void DefaultMappings()
+		{
+			this.Map<int, double>()
+				.Using<Cast<int, double>>();
+			this.Map<double, int>()
+				.Using<Cast<double, int>>();
+
+			this.Map<int, string>()
+				.Using<ToString<int>>();
+			this.Map<string, int>()
+				.Using<Parse<int>>();
 
 			this.ContainerMap<IEnumerable<T>, T[]>()
 				.Using<EnumerableToArray<IEnumerable<T>, T[]>>();
