@@ -8,9 +8,16 @@ namespace POCOMapper.Test
 	{
 		private class From
 		{
+			private string aValue;
+
+			public From(string value)
+			{
+				this.aValue = value;
+			}
+
 			public string GetValue()
 			{
-				return "from";
+				return this.aValue;
 			}
 		}
 
@@ -28,10 +35,45 @@ namespace POCOMapper.Test
 		}
 
 		[TestMethod]
-		public void TestMethod1()
+		public void SyncToEmpty()
 		{
-			From val = new From();
+			From val = new From("test");
 			To valNew = new To();
+
+			Mapping.Instance.Synchronize(val, valNew);
+
+			Assert.AreEqual(val.GetValue(), valNew.Value);
+		}
+
+		[TestMethod]
+		public void SyncToNonEmpty()
+		{
+			From val = new From("test");
+			To valNew = new To();
+			valNew.Value = "hello";
+
+			Mapping.Instance.Synchronize(val, valNew);
+
+			Assert.AreEqual(val.GetValue(), valNew.Value);
+		}
+
+		[TestMethod]
+		public void SyncEmptyToEmpty()
+		{
+			From val = new From(null);
+			To valNew = new To();
+
+			Mapping.Instance.Synchronize(val, valNew);
+
+			Assert.AreEqual(val.GetValue(), valNew.Value);
+		}
+
+		[TestMethod]
+		public void SyncEmptyToNonEmpty()
+		{
+			From val = new From(null);
+			To valNew = new To();
+			valNew.Value = "hello";
 
 			Mapping.Instance.Synchronize(val, valNew);
 
