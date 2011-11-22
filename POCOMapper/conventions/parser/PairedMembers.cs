@@ -7,6 +7,12 @@ namespace POCOMapper.conventions.parser
 {
 	public class PairedMembers
 	{
+		public enum Action
+		{
+			Sync,
+			Map
+		}
+
 		private readonly IMember aFrom;
 		private readonly IMember aTo;
 		private readonly IMapping aMapping;
@@ -33,9 +39,9 @@ namespace POCOMapper.conventions.parser
 			get { return aMapping; }
 		}
 
-		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, bool syncOnly)
+		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action)
 		{
-			if (!syncOnly || this.aTo.Type.IsValueType || this.aTo.Type.IsAssignableFrom(typeof(string)))
+			if (action == Action.Map || this.aTo.Type.IsValueType || this.aTo.Type.IsAssignableFrom(typeof(string)))
 			{
 				Expression ret = this.aFrom.CreateGetterExpression(from);
 

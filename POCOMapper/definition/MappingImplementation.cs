@@ -12,7 +12,7 @@ namespace POCOMapper.definition
 	{
 		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aClassMappingDefinitions;
 		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aContainerMappingDefinitions;
-		private Dictionary<Tuple<Type, Type>, IMapping> aMappings;
+		private readonly Dictionary<Tuple<Type, Type>, IMapping> aMappings;
 
 		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, Conventions fromConventions, Conventions toConventions)
 		{

@@ -8,7 +8,7 @@ namespace POCOMapper.conventions.symbol
 
 		public Symbol Parse(string symbol)
 		{
-			return new Symbol(Regex.Replace(symbol, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim().Split(' '));
+			return new Symbol(Regex.Replace(symbol, "([A-Z])", " $1", RegexOptions.Compiled).Trim().Split(' '));
 		}
 
 		#endregion

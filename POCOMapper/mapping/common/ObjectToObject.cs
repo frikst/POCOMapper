@@ -43,7 +43,7 @@ namespace POCOMapper.mapping.common
 							Expression.New(constructor)
 						),
 						this.MakeBlock(
-							new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo)).Select(x=>x.CreateAssignmentExpression(from, to, false))
+							new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo)).Select(x=>x.CreateAssignmentExpression(from, to, PairedMembers.Action.Map))
 						),
 						to
 					}
@@ -54,14 +54,12 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
 		{
-			ConstructorInfo constructor = typeof(TTo).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { }, null);
-
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
 
 			return Expression.Lambda<Action<TFrom, TTo>>(
 				this.MakeBlock(
-					new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo)).Select(x => x.CreateAssignmentExpression(from, to, true))
+					new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo)).Select(x => x.CreateAssignmentExpression(from, to, PairedMembers.Action.Sync))
 				),
 				from, to
 			);

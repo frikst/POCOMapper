@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
@@ -14,8 +13,8 @@ namespace POCOMapper.mapping.collection
 		where TFrom : class
 		where TTo : class
 	{
-		private Type aItemFrom;
-		private Type aItemTo;
+		private readonly Type aItemFrom;
+		private readonly Type aItemTo;
 
 		public EnumerableToArray(MappingImplementation mapping)
 			: base(mapping)
