@@ -11,10 +11,14 @@ namespace POCOMapper.mapping.common
 {
 	public class ObjectToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>
 	{
+		private readonly IEnumerable<IMember> aFromMembers;
+		private readonly IEnumerable<IMember> aToMembers;
+
 		public ObjectToObject(MappingImplementation mapping)
 			: base(mapping)
 		{
-
+			this.aFromMembers = new MemberIterator(typeof(TFrom), this.Mapping.FromConventions);
+			this.aToMembers = new MemberIterator(typeof(TTo), this.Mapping.ToConventions);
 		}
 
 		#region Overrides of CompiledMapping<TFrom,TTo>
@@ -23,7 +27,7 @@ namespace POCOMapper.mapping.common
 		{
 			get
 			{
-				foreach (var mapping in new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo)))
+				foreach (var mapping in new TypePairParser(this.Mapping, this.aFromMembers, this.aToMembers))
 					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.From.Getter.Name, mapping.To.Setter.Name), mapping.Mapping);
 			}
 		}
@@ -45,7 +49,7 @@ namespace POCOMapper.mapping.common
 							Expression.New(constructor)
 						),
 						this.MakeBlock(
-							new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo)).Select(x=>x.CreateAssignmentExpression(from, to, PairedMembers.Action.Map))
+							new TypePairParser(this.Mapping, this.aFromMembers, this.aToMembers).Select(x=>x.CreateAssignmentExpression(from, to, PairedMembers.Action.Map))
 						),
 						to
 					}
@@ -61,7 +65,7 @@ namespace POCOMapper.mapping.common
 
 			return Expression.Lambda<Action<TFrom, TTo>>(
 				this.MakeBlock(
-					new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo)).Select(x => x.CreateAssignmentExpression(from, to, PairedMembers.Action.Sync))
+					new TypePairParser(this.Mapping, this.aFromMembers, this.aToMembers).Select(x => x.CreateAssignmentExpression(from, to, PairedMembers.Action.Sync))
 				),
 				from, to
 			);

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="conventions\parser\MemberIterator.cs" />
     <Compile Include="conventions\parser\FieldMember.cs" />
     <Compile Include="conventions\parser\IMember.cs" />
     <Compile Include="conventions\parser\MethodMember.cs" />
