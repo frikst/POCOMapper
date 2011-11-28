@@ -57,8 +57,8 @@ namespace POCOMapper.definition
 
 			if (fromIsEnumerable && toIsEnumerable)
 			{
-				Type fromType = from.IsArray ? typeof(T[]) : from.GetGenericTypeDefinition().MakeGenericType(typeof(T));
-				Type toType = to.IsArray ? typeof(T[]) : to.GetGenericTypeDefinition().MakeGenericType(typeof(T));
+				Type fromType = from.IsArray ? typeof(T[]) : from.IsGenericType ? from.GetGenericTypeDefinition().MakeGenericType(typeof(T)) : from;
+				Type toType = to.IsArray ? typeof(T[]) : to.IsGenericType ? to.GetGenericTypeDefinition().MakeGenericType(typeof(T)) : to;
 
 				List<Type> fromPosibilities = new List<Type>();
 				for (Type fromBase = fromType; fromBase != null; fromBase = fromBase.BaseType)
