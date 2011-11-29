@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using POCOMapper.conventions.symbol;
 
-namespace POCOMapper.conventions.parser
+namespace POCOMapper.conventions.members
 {
 	public class MemberIterator : IEnumerable<IMember>
 	{

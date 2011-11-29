@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using POCOMapper.conventions.parser;
+using POCOMapper.conventions.members;
 using POCOMapper.definition;
 using POCOMapper.mapping.@base;
+using POCOMapper.mapping.common.parser;
 
 namespace POCOMapper.mapping.common
 {
 	public class ObjectToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>
 	{
-		private readonly IEnumerable<IMember> aFromMembers;
-		private readonly IEnumerable<IMember> aToMembers;
+		private readonly IEnumerable<PairedMembers> aMemberPairs;
 
 		public ObjectToObject(MappingImplementation mapping)
 			: base(mapping)
 		{
-			this.aFromMembers = new MemberIterator(typeof(TFrom), this.Mapping.FromConventions);
-			this.aToMembers = new MemberIterator(typeof(TTo), this.Mapping.ToConventions);
+			this.aMemberPairs = new TypePairParser(
+				this.Mapping,
+				this.Mapping.FromConventions.GetAllMembers(typeof(TFrom)),
+				this.Mapping.ToConventions.GetAllMembers(typeof(TTo))
+			);
 		}
 
 		#region Overrides of CompiledMapping<TFrom,TTo>
@@ -27,7 +30,7 @@ namespace POCOMapper.mapping.common
 		{
 			get
 			{
-				foreach (var mapping in new TypePairParser(this.Mapping, this.aFromMembers, this.aToMembers))
+				foreach (var mapping in this.aMemberPairs)
 					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.From.Getter.Name, mapping.To.Setter.Name), mapping.Mapping);
 			}
 		}
@@ -49,7 +52,7 @@ namespace POCOMapper.mapping.common
 							Expression.New(constructor)
 						),
 						this.MakeBlock(
-							new TypePairParser(this.Mapping, this.aFromMembers, this.aToMembers).Select(x=>x.CreateAssignmentExpression(from, to, PairedMembers.Action.Map))
+							this.aMemberPairs.Select(x => x.CreateAssignmentExpression(from, to, PairedMembers.Action.Map))
 						),
 						to
 					}
@@ -65,7 +68,7 @@ namespace POCOMapper.mapping.common
 
 			return Expression.Lambda<Action<TFrom, TTo>>(
 				this.MakeBlock(
-					new TypePairParser(this.Mapping, this.aFromMembers, this.aToMembers).Select(x => x.CreateAssignmentExpression(from, to, PairedMembers.Action.Sync))
+					this.aMemberPairs.Select(x => x.CreateAssignmentExpression(from, to, PairedMembers.Action.Sync))
 				),
 				from, to
 			);

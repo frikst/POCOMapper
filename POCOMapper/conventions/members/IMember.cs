@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using POCOMapper.conventions.symbol;
 
-namespace POCOMapper.conventions.parser
+namespace POCOMapper.conventions.members
 {
 	public interface IMember
 	{

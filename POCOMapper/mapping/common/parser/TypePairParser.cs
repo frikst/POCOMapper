@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using POCOMapper.conventions.members;
 using POCOMapper.definition;
 using POCOMapper.mapping.@base;
 
-namespace POCOMapper.conventions.parser
+namespace POCOMapper.mapping.common.parser
 {
 	public class TypePairParser : IEnumerable<PairedMembers>
 	{

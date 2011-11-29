@@ -3,19 +3,21 @@ using System.Linq.Expressions;
 using System.Reflection;
 using POCOMapper.conventions.symbol;
 
-namespace POCOMapper.conventions.parser
+namespace POCOMapper.conventions.members
 {
-	public class PropertyMember : IMember
+	public class MethodMember : IMember
 	{
-		private readonly PropertyInfo aProperty;
+		private readonly MethodInfo aGetMethod;
+		private readonly MethodInfo aSetMethod;
 
-		public PropertyMember(IMember parent, Symbol symbol, PropertyInfo property)
+		public MethodMember(IMember parent, Symbol symbol, MethodInfo getMethod, MethodInfo setMethod)
 		{
 			this.Parent = parent;
 
 			this.Symbol = symbol;
 
-			this.aProperty = property;
+			this.aSetMethod = setMethod;
+			this.aGetMethod = getMethod;
 		}
 
 		#region Implementation of IMember
@@ -26,42 +28,30 @@ namespace POCOMapper.conventions.parser
 
 		public Type Type
 		{
-			get { return this.aProperty.PropertyType; }
+			get { return this.aGetMethod.ReturnType; }
 		}
 
 		public MemberInfo Getter
 		{
-			get
-			{
-				if (this.aProperty.CanRead)
-					return this.aProperty;
-				else
-					return null;
-			}
+			get { return this.aGetMethod; }
 		}
 
 		public MemberInfo Setter
 		{
-			get
-			{
-				if (this.aProperty.CanWrite)
-					return this.aProperty;
-				else
-					return null;
-			}
+			get { return this.aSetMethod; }
 		}
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 		{
 			if (this.Getter != null)
-				return Expression.Property(parentVariable, this.aProperty);
+				return Expression.Call(parentVariable, this.aGetMethod);
 			return null;
 		}
 
 		public Expression CreateSetterExpression(ParameterExpression parentVariable, Expression value)
 		{
 			if (this.Setter != null)
-				return Expression.Assign(Expression.Property(parentVariable, this.aProperty), value);
+				return Expression.Call(parentVariable, this.aSetMethod, value);
 			return null;
 		}
 

@@ -1,9 +1,10 @@
 ﻿using System.Linq.Expressions;
+using POCOMapper.conventions.members;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
 
-namespace POCOMapper.conventions.parser
+namespace POCOMapper.mapping.common.parser
 {
 	public class PairedMembers
 	{
