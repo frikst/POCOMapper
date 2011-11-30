@@ -56,5 +56,12 @@ namespace POCOMapper.conventions.members
 		}
 
 		#endregion
+
+		public override string ToString()
+		{
+			if (this.Parent != null)
+				return string.Format("{0}.[M]{1}", this.Parent, this.Symbol);
+			return string.Format("[M]{0}", this.Symbol);
+		}
 	}
 }

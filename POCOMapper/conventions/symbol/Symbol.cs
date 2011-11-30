@@ -50,6 +50,16 @@ namespace POCOMapper.conventions.symbol
 
 		#endregion
 
+		public override string ToString()
+		{
+			return string.Join("_", this.aParts);
+		}
+
+		public static Symbol operator +(Symbol first, Symbol second)
+		{
+			return new Symbol(first.aParts.Concat(second.aParts));
+		}
+
 		public bool HasPrefix(string prefix)
 		{
 			return this.aParts[0] == prefix;
@@ -57,6 +67,8 @@ namespace POCOMapper.conventions.symbol
 
 		public bool HasPrefix(Symbol prefix)
 		{
+			if (this.aParts.Length < prefix.aParts.Length)
+				return false;
 			foreach (Tuple<string, string> part in Enumerable.Zip(aParts, prefix.aParts, (a, b) => new Tuple<string, string>(a, b)))
 			{
 				if (part.Item1 != part.Item2)

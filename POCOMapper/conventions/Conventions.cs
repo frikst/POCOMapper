@@ -7,7 +7,7 @@ namespace POCOMapper.conventions
 {
 	public class Conventions
 	{
-		private Func<Type, Conventions, IEnumerable<IMember>> aMemberIterator;
+		private Func<Type, Conventions, IMember, IEnumerable<IMember>> aMemberIterator;
 
 		public Conventions()
 		{
@@ -15,16 +15,16 @@ namespace POCOMapper.conventions
 			this.Methods = new BigCammelCase();
 			this.Properties = new BigCammelCase();
 
-			this.aMemberIterator = (type, conventions) => new MemberIterator(type, conventions);
+			this.aMemberIterator = (type, conventions, parent) => new MemberIterator(type, conventions, parent);
 		}
 
 		public ISymbolParser Attributes { get; private set; }
 		public ISymbolParser Methods { get; private set; }
 		public ISymbolParser Properties { get; private set; }
 
-		public IEnumerable<IMember> GetAllMembers(Type type)
+		public IEnumerable<IMember> GetAllMembers(Type type, IMember parent = null)
 		{
-			return this.aMemberIterator(type, this);
+			return this.aMemberIterator(type, this, parent);
 		}
 
 		public Conventions SetAttributeConvention(ISymbolParser parser)
@@ -45,7 +45,7 @@ namespace POCOMapper.conventions
 			return this;
 		}
 
-		public Conventions SetMemberIterator(Func<Type, Conventions, IEnumerable<IMember>> memberIterator)
+		public Conventions SetMemberIterator(Func<Type, Conventions, IMember, IEnumerable<IMember>> memberIterator)
 		{
 			this.aMemberIterator = memberIterator;
 			return this;

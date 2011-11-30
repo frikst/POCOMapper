@@ -10,11 +10,13 @@ namespace POCOMapper.conventions.members
 	{
 		private readonly Type aType;
 		private readonly Conventions aConventions;
+		private readonly IMember aParent;
 
-		public MemberIterator(Type type, Conventions conventions)
+		public MemberIterator(Type type, Conventions conventions, IMember parent)
 		{
 			this.aType = type;
 			this.aConventions = conventions;
+			this.aParent = parent;
 		}
 
 		#region Implementation of IEnumerable
@@ -24,7 +26,7 @@ namespace POCOMapper.conventions.members
 			foreach (FieldInfo field in this.aType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 			{
 				Symbol symbol = this.aConventions.Attributes.Parse(field.Name);
-				yield return new FieldMember(null, symbol, field);
+				yield return new FieldMember(this.aParent, symbol, field);
 			}
 
 			Dictionary<Tuple<Symbol, Type>, MethodInfo[]> methodMembers = new Dictionary<Tuple<Symbol, Type>, MethodInfo[]>();
@@ -53,12 +55,12 @@ namespace POCOMapper.conventions.members
 			}
 
 			foreach (KeyValuePair<Tuple<Symbol, Type>, MethodInfo[]> method in methodMembers)
-				yield return new MethodMember(null, method.Key.Item1, method.Value[0], method.Value[1]);
+				yield return new MethodMember(this.aParent, method.Key.Item1, method.Value[0], method.Value[1]);
 
 			foreach (PropertyInfo property in this.aType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 			{
 				Symbol symbol = this.aConventions.Properties.Parse(property.Name);
-				yield return new PropertyMember(null, symbol, property);
+				yield return new PropertyMember(this.aParent, symbol, property);
 			}
 		}
 
