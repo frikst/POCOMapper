@@ -13,10 +13,10 @@ namespace POCOMapper.mapping.common.parser
 	{
 		private enum Found
 		{
-			none,
-			left,
-			right,
-			full
+			None,
+			Left,
+			Right,
+			Full
 		}
 
 		private readonly MappingImplementation aMapping;
@@ -122,7 +122,7 @@ namespace POCOMapper.mapping.common.parser
 
 			foreach (IMember fromOne in fromAll)
 			{
-				Found found = Found.none;
+				Found found = Found.None;
 				IMember foundMember = null;
 
 				foreach (IMember toOne in toAll)
@@ -131,19 +131,19 @@ namespace POCOMapper.mapping.common.parser
 
 					if (pair != null)
 					{
-						found = Found.full;
+						found = Found.Full;
 
 						yield return pair;
 						break;
 					}
 					else if (fromOne.Symbol.HasPrefix(toOne.Symbol))
 					{
-						found = Found.left;
+						found = Found.Left;
 						foundMember = toOne;
 					}
 					else if (toOne.Symbol.HasPrefix(fromOne.Symbol))
 					{
-						found = Found.right;
+						found = Found.Right;
 						foundMember = toOne;
 					}
 				}
@@ -154,13 +154,13 @@ namespace POCOMapper.mapping.common.parser
 
 					switch (found)
 					{
-						case Found.left:
+						case Found.Left:
 							pair = this.DetectPairLeft(fromOne, foundMember, foundMember.Symbol);
 							if (pair != null)
 								yield return pair;
 
 							break;
-						case Found.right:
+						case Found.Right:
 							pair = this.DetectPairRight(fromOne, foundMember, fromOne.Symbol);
 							if (pair != null)
 								yield return pair;

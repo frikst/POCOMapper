@@ -81,7 +81,7 @@ namespace POCOMapper.mapping.common
 			);
 		}
 
-		private IEnumerable<IMember> GetAllMemberParents(PairedMembers memberPair, Dictionary<IMember, ParameterExpression> temporaryVariables)
+		private IEnumerable<IMember> GetAllMemberParents(PairedMembers memberPair, IDictionary<IMember, ParameterExpression> temporaryVariables)
 		{
 			List<IMember> allParents = new List<IMember>();
 

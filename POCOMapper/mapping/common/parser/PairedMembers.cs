@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using POCOMapper.conventions.members;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
