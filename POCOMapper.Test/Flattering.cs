@@ -38,5 +38,17 @@ namespace POCOMapper.Test
 			Assert.AreEqual("hello", ret.InnerData);
 			Assert.AreEqual("world", ret.Data);
 		}
+
+		[TestMethod]
+		public void FlatteringSynchronizationTest()
+		{
+			To to = new To();
+			From from = new From();
+
+			Mapping.Instance.Synchronize(from, to);
+
+			Assert.AreEqual("hello", to.InnerData);
+			Assert.AreEqual("world", to.Data);
+		}
 	}
 }

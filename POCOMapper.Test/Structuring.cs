@@ -38,5 +38,17 @@ namespace POCOMapper.Test
 			Assert.AreEqual("hello", ret.Inner.Data);
 			Assert.AreEqual("world", ret.Data);
 		}
+
+		[TestMethod]
+		public void StructuringSynchronizationTest()
+		{
+			To to = new To();
+			From from = new From();
+
+			Mapping.Instance.Synchronize(from, to);
+
+			Assert.AreEqual("hello", to.Inner.Data);
+			Assert.AreEqual("world", to.Data);
+		}
 	}
 }

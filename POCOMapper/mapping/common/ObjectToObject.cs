@@ -155,10 +155,27 @@ namespace POCOMapper.mapping.common
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
 
-			// TODO: synchronization with flattering and structuring
+			TemporaryVariables temporaryVariables = new TemporaryVariables(this.aMemberPairs, from, to);
+
 			return Expression.Lambda<Action<TFrom, TTo>>(
-				this.MakeBlock(
-					this.aMemberPairs.Select(x => x.CreateAssignmentExpression(from, to, PairedMembers.Action.Sync))
+				Expression.Block(
+					temporaryVariables.Variables,
+
+					this.MakeBlock(
+						temporaryVariables.InitialAssignments
+					),
+					this.MakeBlock(
+						this.aMemberPairs.Select(
+							x => x.CreateAssignmentExpression(
+								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
+								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
+								PairedMembers.Action.Map
+							)
+						)
+					),
+					this.MakeBlock(
+						temporaryVariables.FinalAssignments
+					)
 				),
 				from, to
 			);

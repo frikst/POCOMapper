@@ -44,7 +44,7 @@ namespace POCOMapper.mapping.@base
 			if (object.ReferenceEquals(from, to))
 				return;
 
-			if (this.aMappingFnc == null)
+			if (this.aSynchronizationFnc == null)
 			{
 				Expression<Action<TFrom, TTo>> expression = this.CompileSynchronization();
 				this.aSynchronizationFnc = expression.Compile();
