@@ -4,22 +4,22 @@ using POCOMapper.definition;
 namespace POCOMapper.Test
 {
 	[TestClass]
-	public class Flattering
+	public class Structuring
 	{
-		private class FromInner
-		{
-			public string Data = "hello";
-		}
-
 		private class From
 		{
-			public FromInner Inner = new FromInner();
+			public string InnerData = "hello";
 			public string Data = "world";
+		}
+
+		private class ToInner
+		{
+			public string Data;
 		}
 
 		private class To
 		{
-			public string InnerData;
+			public ToInner Inner;
 			public string Data;
 		}
 
@@ -32,10 +32,10 @@ namespace POCOMapper.Test
 		}
 
 		[TestMethod]
-		public void FlatteringMapTest()
+		public void StructuringMapTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
-			Assert.AreEqual("hello", ret.InnerData);
+			Assert.AreEqual("hello", ret.Inner.Data);
 			Assert.AreEqual("world", ret.Data);
 		}
 	}

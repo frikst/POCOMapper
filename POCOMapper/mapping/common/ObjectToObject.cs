@@ -37,22 +37,50 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
-			ConstructorInfo constructor = typeof(TTo).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { }, null);
-
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
 
 			Dictionary<IMember, ParameterExpression> temporaryVariables = new Dictionary<IMember, ParameterExpression>();
-			List<Expression> assignments = new List<Expression>();
+			List<Expression> initialAssignments = new List<Expression>();
+			List<Expression> finalAssignments = new List<Expression>();
 
 			foreach (PairedMembers memberPair in aMemberPairs)
-				foreach (IMember parent in GetAllMemberParents(memberPair, temporaryVariables))
-					assignments.Add(
+			{
+				foreach (IMember parent in this.GetAllMemberParents(memberPair.From, temporaryVariables))
+				{
+					ParameterExpression parentVariable = parent.Parent == null ? from : temporaryVariables[parent.Parent];
+					initialAssignments.Add(
 						Expression.Assign(
 							temporaryVariables[parent],
-							parent.CreateGetterExpression(parent.Parent == null ? from : temporaryVariables[parent.Parent])
+							parent.CreateGetterExpression(parentVariable)
 						)
 					);
+				}
+			}
+
+			foreach (PairedMembers memberPair in aMemberPairs)
+			{
+				foreach (IMember parent in this.GetAllMemberParents(memberPair.To, temporaryVariables))
+				{
+					ParameterExpression parentVariable = parent.Parent == null ? to : temporaryVariables[parent.Parent];
+
+					initialAssignments.Add(
+						Expression.Assign(
+							temporaryVariables[parent],
+							Expression.Coalesce(
+								parent.CreateGetterExpression(parentVariable),
+								this.NewExpression(parent.Type)
+							)
+						)
+					);
+					finalAssignments.Add(
+						parent.CreateSetterExpression(
+							parentVariable,
+							temporaryVariables[parent]
+						)
+					);
+				}
+			}
 
 			// TODO: synchronization with structuring
 			return Expression.Lambda<Func<TFrom, TTo>>(
@@ -61,19 +89,22 @@ namespace POCOMapper.mapping.common
 
 					Expression.Assign(
 						to,
-						Expression.New(constructor)
+						this.NewExpression(typeof(TTo))
 					),
 					this.MakeBlock(
-						assignments
+						initialAssignments
 					),
 					this.MakeBlock(
 						this.aMemberPairs.Select(
 							x => x.CreateAssignmentExpression(
 								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
-								to,
+								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
 								PairedMembers.Action.Map
 							)
 						)
+					),
+					this.MakeBlock(
+						finalAssignments
 					),
 					to
 				),
@@ -81,11 +112,11 @@ namespace POCOMapper.mapping.common
 			);
 		}
 
-		private IEnumerable<IMember> GetAllMemberParents(PairedMembers memberPair, IDictionary<IMember, ParameterExpression> temporaryVariables)
+		private IEnumerable<IMember> GetAllMemberParents(IMember member, IDictionary<IMember, ParameterExpression> temporaryVariables)
 		{
 			List<IMember> allParents = new List<IMember>();
 
-			IMember parent = memberPair.From.Parent;
+			IMember parent = member.Parent;
 
 			while (parent != null && !temporaryVariables.ContainsKey(parent))
 			{
@@ -119,6 +150,13 @@ namespace POCOMapper.mapping.common
 				return Expression.Empty();
 
 			return Expression.Block(retExpressions);
+		}
+
+		private Expression NewExpression(Type type)
+		{
+			ConstructorInfo constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { }, null);
+
+			return Expression.New(constructor);
 		}
 
 		#endregion
