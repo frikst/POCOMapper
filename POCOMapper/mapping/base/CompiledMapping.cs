@@ -27,7 +27,7 @@ namespace POCOMapper.mapping.@base
 
 		public TTo Map(TFrom from)
 		{
-			if (ReferenceEquals(from, null))
+			if (object.ReferenceEquals(from, null))
 				return default(TTo);
 
 			if (this.aMappingFnc == null)
@@ -41,7 +41,7 @@ namespace POCOMapper.mapping.@base
 
 		public void Synchronize(TFrom from, TTo to)
 		{
-			if (ReferenceEquals(from, to))
+			if (object.ReferenceEquals(from, to))
 				return;
 
 			if (this.aMappingFnc == null)

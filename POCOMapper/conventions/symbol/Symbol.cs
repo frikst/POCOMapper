@@ -24,7 +24,7 @@ namespace POCOMapper.conventions.symbol
 
 		public override bool Equals(object other)
 		{
-			if (ReferenceEquals(null, other))
+			if (object.ReferenceEquals(null, other))
 				return false;
 
 			if (!(other is Symbol))
