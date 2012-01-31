@@ -75,6 +75,7 @@
     <Compile Include="mapping\base\IMapping.cs" />
     <Compile Include="definition\MappingImplementation.cs" />
     <Compile Include="mapping\common\SubClassToObject.cs" />
+    <Compile Include="mapping\special\Postprocess.cs" />
     <Compile Include="mapping\standard\Cast.cs" />
     <Compile Include="mapping\standard\Parse.cs" />
     <Compile Include="mapping\standard\ToString.cs" />
