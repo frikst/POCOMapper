@@ -6,6 +6,11 @@ using POCOMapper.mapping.special;
 
 namespace POCOMapper.definition
 {
+	/// <summary>
+	/// Class mapping specification definition class.
+	/// </summary>
+	/// <typeparam name="TFrom">Source class.</typeparam>
+	/// <typeparam name="TTo">Destination class.</typeparam>
 	public class ClassMappingDefinition<TFrom, TTo> : IMappingDefinition
 	{
 		private readonly List<Tuple<Type, Type>> aSubClassMaps;
@@ -58,6 +63,12 @@ namespace POCOMapper.definition
 
 		#endregion
 
+		/// <summary>
+		/// Adds subclass mapping.
+		/// </summary>
+		/// <typeparam name="TSubFrom">Source subclass.</typeparam>
+		/// <typeparam name="TSubTo">Destination subclass.</typeparam>
+		/// <returns>The class definition specification object.</returns>
 		public ClassMappingDefinition<TFrom, TTo> MapSubClass<TSubFrom, TSubTo>()
 			where TSubFrom : TFrom
 			where TSubTo : TTo
@@ -67,6 +78,12 @@ namespace POCOMapper.definition
 			return this;
 		}
 
+		/// <summary>
+		/// Adds the entity postprocess delegate. Delegate is called for each entity pair after
+		/// the mapping process is complete.
+		/// </summary>
+		/// <param name="postprocessDelegate">The delegate which should be called after the mapping process.</param>
+		/// <returns>The class definition specification object.</returns>
 		public ClassMappingDefinition<TFrom, TTo> Postprocess(Action<TFrom, TTo> postprocessDelegate)
 		{
 			this.aPostprocessDelegate = postprocessDelegate;
@@ -74,6 +91,11 @@ namespace POCOMapper.definition
 			return this;
 		}
 
+		/// <summary>
+		/// Mapping class specified by the <typeparamref name="TMapping"/> should be used for
+		/// mapping the <typeparamref name="TFrom"/> class to the <typeparamref name="TTo"/> class.
+		/// </summary>
+		/// <typeparam name="TMapping"></typeparam>
 		public void Using<TMapping>()
 			where TMapping : IMapping<TFrom, TTo>
 		{

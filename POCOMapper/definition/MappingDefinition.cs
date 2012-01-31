@@ -7,6 +7,10 @@ using POCOMapper.mapping.standard;
 
 namespace POCOMapper.definition
 {
+	/// <summary>
+	/// Generic singleton container of one set of mappings.
+	/// </summary>
+	/// <typeparam name="TMapping">Descendant class</typeparam>
 	public abstract class MappingDefinition<TMapping>
 		where TMapping : MappingDefinition<TMapping>
 	{
@@ -46,9 +50,22 @@ namespace POCOMapper.definition
 				.Using<EnumerableToEnumerable<IEnumerable<T>, IEnumerable<T>>>();
 		}
 
+		/// <summary>
+		/// Conventions for the source model.
+		/// </summary>
 		protected Conventions FromConventions { get; private set; }
+
+		/// <summary>
+		/// Conventions for the destination model.
+		/// </summary>
 		protected Conventions ToConventions { get; private set; }
 
+		/// <summary>
+		/// Defines the mapping of one instance of the class TFrom onto the instance of the class TTo.
+		/// </summary>
+		/// <typeparam name="TFrom">Class from the source model.</typeparam>
+		/// <typeparam name="TTo">Class from the destination model.</typeparam>
+		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
 		protected ClassMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
 		{
 			if (aFinished)
@@ -59,6 +76,13 @@ namespace POCOMapper.definition
 			return mappingDefinitionDef;
 		}
 
+		/// <summary>
+		/// Defines the mapping of one instance of the container TFrom onto the instance of the container TTo.
+		/// <see cref="POCOMapper.definition.T"/> should be used as the collection item type.
+		/// </summary>
+		/// <typeparam name="TFrom">Class from the source model.</typeparam>
+		/// <typeparam name="TTo">Class from the destination model.</typeparam>
+		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
 		protected ContainerMappingDefinition<TFrom, TTo> ContainerMap<TFrom, TTo>()
 			where TFrom : IEnumerable<T>
 			where TTo : IEnumerable<T>
@@ -71,23 +95,23 @@ namespace POCOMapper.definition
 			return mappingDefinitionDef;
 		}
 
-		private static MappingImplementation CreateInstance()
-		{
-			Type mapDefType = typeof(TMapping);
-
-			ConstructorInfo ci = mapDefType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { }, null);
-			MappingDefinition<TMapping> definition = (MappingDefinition<TMapping>)ci.Invoke(null);
-			definition.aFinished = true;
-
-			return new MappingImplementation(definition.aMappingDefinitions, definition.FromConventions, definition.ToConventions);
-		}
-
+		/// <summary>
+		/// Instance of the singleton. Should be used only on the <see cref="POCOMapper.definition.MappingDefinition{T}"/> descendant.
+		/// </summary>
 		public static MappingImplementation Instance
 		{
 			get
 			{
 				if (aMapping == null)
-					aMapping = CreateInstance();
+				{
+					Type mapDefType = typeof(TMapping);
+
+					ConstructorInfo ci = mapDefType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { }, null);
+					MappingDefinition<TMapping> definition = (MappingDefinition<TMapping>)ci.Invoke(null);
+					definition.aFinished = true;
+
+					aMapping = new MappingImplementation(definition.aMappingDefinitions, definition.FromConventions, definition.ToConventions);
+				}
 
 				return aMapping;
 			}

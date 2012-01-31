@@ -3,6 +3,11 @@ using POCOMapper.mapping.@base;
 
 namespace POCOMapper.definition
 {
+	/// <summary>
+	/// Container mapping specification definition class.
+	/// </summary>
+	/// <typeparam name="TFrom">Source collection.</typeparam>
+	/// <typeparam name="TTo">Destination collection.</typeparam>
 	public class ContainerMappingDefinition<TFrom, TTo> : IMappingDefinition
 	{
 		private Type aMapping;
@@ -32,6 +37,11 @@ namespace POCOMapper.definition
 
 		#endregion
 
+		/// <summary>
+		/// Mapping class specified by the <typeparamref name="TMapping"/> should be used for
+		/// mapping the <typeparamref name="TFrom"/> collection to the <typeparamref name="TTo"/> collection.
+		/// </summary>
+		/// <typeparam name="TMapping"></typeparam>
 		public void Using<TMapping>()
 			where TMapping : IMapping<TFrom, TTo>
 		{

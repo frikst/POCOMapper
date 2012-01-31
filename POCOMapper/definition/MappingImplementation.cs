@@ -8,6 +8,9 @@ using POCOMapper.mapping.@base;
 
 namespace POCOMapper.definition
 {
+	/// <summary>
+	/// One defined and compiled mappings set.
+	/// </summary>
 	public class MappingImplementation
 	{
 		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aClassMappingDefinitions;
@@ -36,6 +39,13 @@ namespace POCOMapper.definition
 		internal Conventions FromConventions { get; private set; }
 		internal Conventions ToConventions { get; private set; }
 
+		/// <summary>
+		/// Finds the mapping from the type specified by the <paramref name="from"/> parameter to the type specified
+		/// by the <paramref name="to"/> parameter.
+		/// </summary>
+		/// <param name="from">Class from the source model.</param>
+		/// <param name="to">Class from the destination model.</param>
+		/// <returns>The mapping specified by the parameters.</returns>
 		public IMapping GetMapping(Type from, Type to)
 		{
 			Tuple<Type, Type> key = new Tuple<Type, Type>(from, to);
@@ -91,11 +101,25 @@ namespace POCOMapper.definition
 			return null;
 		}
 
+		/// <summary>
+		/// Type-safe version of the GetMapping method. Finds the mapping from the type specified by
+		/// the <typeparamref name="TFrom"/> parameter to the type specified by the <typeparamref name="TTo"/> parameter.
+		/// </summary>
+		/// <typeparam name="TFrom">Class from the source model.</typeparam>
+		/// <typeparam name="TTo">Class from the destination model.</typeparam>
+		/// <returns>The mapping specified by the type parameters.</returns>
 		public IMapping<TFrom, TTo> GetMapping<TFrom, TTo>()
 		{
 			return (IMapping<TFrom, TTo>)GetMapping(typeof(TFrom), typeof(TTo));
 		}
 
+		/// <summary>
+		/// Map the instance of the class from the source model onto the new instance of the class from the destination model.
+		/// </summary>
+		/// <typeparam name="TFrom">Class from the source model.</typeparam>
+		/// <typeparam name="TTo">Class from the destination model.</typeparam>
+		/// <param name="from">Instance that should be mapped.</param>
+		/// <returns>New mapped instance.</returns>
 		public TTo Map<TFrom, TTo>(TFrom from)
 		{
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
@@ -109,6 +133,14 @@ namespace POCOMapper.definition
 			return mapping.Map(from);
 		}
 
+		/// <summary>
+		/// Transfer state of the instance specified by the <paramref name="from"/> parameter to the instance specified
+		/// by the <paramref name="to"/> parameter.
+		/// </summary>
+		/// <typeparam name="TFrom">Class from the source model.</typeparam>
+		/// <typeparam name="TTo">Class from the destination model.</typeparam>
+		/// <param name="from">Instance that should be mapped.</param>
+		/// <param name="to">Instance that should have state transfered to.</param>
 		public void Synchronize<TFrom, TTo>(TFrom from, TTo to)
 		{
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
@@ -164,6 +196,12 @@ namespace POCOMapper.definition
 			}
 		}
 
+		/// <summary>
+		/// Builds the debug string of the mapping given mapping.
+		/// </summary>
+		/// <typeparam name="TFrom">Class from the source model.</typeparam>
+		/// <typeparam name="TTo">Class from the destination model.</typeparam>
+		/// <returns></returns>
 		public string MappingToString<TFrom, TTo>()
 		{
 			StringBuilder output = new StringBuilder();
