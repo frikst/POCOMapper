@@ -57,6 +57,9 @@ namespace POCOMapper.mapping.@base
 
 		public abstract IEnumerable<Tuple<string, IMapping>> Children { get; }
 
+		public abstract bool CanSynchronize { get; }
+		public abstract bool CanMap { get; }
+
 		#endregion
 
 		#endregion

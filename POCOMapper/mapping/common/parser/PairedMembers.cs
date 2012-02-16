@@ -42,7 +42,16 @@ namespace POCOMapper.mapping.common.parser
 
 		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action)
 		{
-			if (action == Action.Map || this.aTo.Type.IsValueType || this.aTo.Type.IsAssignableFrom(typeof(string)))
+			if (
+				(
+					action == Action.Map
+					|| this.aTo.Type.IsValueType
+					|| this.aTo.Type.IsAssignableFrom(typeof(string))
+					|| (this.aMapping != null && !this.aMapping.CanSynchronize)
+				) && (
+					this.aMapping == null
+					|| this.aMapping.CanMap
+				))
 			{
 				Expression ret = this.aFrom.CreateGetterExpression(from);
 

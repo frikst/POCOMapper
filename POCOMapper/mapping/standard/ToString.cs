@@ -19,6 +19,16 @@ namespace POCOMapper.mapping.standard
 			get { return Enumerable.Empty<Tuple<string, IMapping>>(); }
 		}
 
+		public bool CanSynchronize
+		{
+			get { return false; }
+		}
+
+		public bool CanMap
+		{
+			get { return true; }
+		}
+
 		#endregion
 
 		#region Implementation of IMapping<TFrom,string>

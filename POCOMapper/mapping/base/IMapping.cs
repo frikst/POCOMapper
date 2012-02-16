@@ -6,6 +6,9 @@ namespace POCOMapper.mapping.@base
 	public interface IMapping
 	{
 		IEnumerable<Tuple<string, IMapping>> Children { get; }
+
+		bool CanSynchronize { get; }
+		bool CanMap { get; }
 	}
 
 	public interface IMapping<TFrom, TTo> : IMapping

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.common;
+using POCOMapper.mapping.common.parser;
 using POCOMapper.mapping.special;
 
 namespace POCOMapper.definition
@@ -16,22 +19,28 @@ namespace POCOMapper.definition
 		private readonly List<Tuple<Type, Type>> aSubClassMaps;
 		private Type aMapping;
 		private Action<TFrom, TTo> aPostprocessDelegate;
-
-		#region Implementation of IMappingDefinition
+		private bool aUseImplicitMappings;
+		private readonly List<IMemberMappingDefinition> aExplicitMappings;
 
 		internal ClassMappingDefinition()
 		{
 			this.aSubClassMaps = new List<Tuple<Type, Type>>();
 			this.aMapping = null;
 			this.aPostprocessDelegate = null;
+			this.aUseImplicitMappings = true;
+			this.aExplicitMappings = new List<IMemberMappingDefinition>();
 		}
+
+		#region Implementation of IMappingDefinition
 
 		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
 			IMapping<TFrom, TTo> mapping;
 			if (this.aMapping == null)
 			{
-				mapping = new ObjectToObject<TFrom, TTo>(allMappings);
+				IEnumerable<PairedMembers> members = this.aExplicitMappings.Select(x => x.CreateMapping(allMappings));
+
+				mapping = new ObjectToObject<TFrom, TTo>(allMappings, members, this.aUseImplicitMappings);
 
 				if (aSubClassMaps.Count > 0)
 					mapping = new SubClassToObject<TFrom, TTo>(allMappings, aSubClassMaps, mapping);
@@ -99,7 +108,48 @@ namespace POCOMapper.definition
 		public void Using<TMapping>()
 			where TMapping : IMapping<TFrom, TTo>
 		{
+			if (this.aExplicitMappings.Count > 0 || this.aSubClassMaps.Count > 0 || !this.aUseImplicitMappings)
+				throw new InvalidMapping("Cannot map using custom mappings when some mapping settings are in use");
 			this.aMapping = typeof(TMapping);
+		}
+
+		/// <summary>
+		/// Marks the mapping to use only explicit column mapping.
+		/// </summary>
+		public ClassMappingDefinition<TFrom, TTo> OnlyExplicit
+		{
+			get
+			{
+				this.aUseImplicitMappings = false;
+				return this;
+			}
+		}
+
+		public ClassMappingDefinition<TFrom, TTo> Member<TFromType, TToType>(string from, string to, Action<MemberMappingDefinition<TFromType, TToType>> mappingDefinition)
+		{
+			MemberMappingDefinition<TFromType, TToType> def = new MemberMappingDefinition<TFromType, TToType>(typeof(TFrom), typeof(TTo), from, to);
+			mappingDefinition(def);
+			this.aExplicitMappings.Add(def);
+
+			return this;
+		}
+
+		public ClassMappingDefinition<TFrom, TTo> MemberFrom<TFromType>(string from, Action<MemberMappingDefinition<TFromType, TTo>> mappingDefinition)
+		{
+			MemberMappingDefinition<TFromType, TTo> def = new MemberMappingDefinition<TFromType, TTo>(typeof(TFrom), typeof(TTo), from, null);
+			mappingDefinition(def);
+			this.aExplicitMappings.Add(def);
+
+			return this;
+		}
+
+		public ClassMappingDefinition<TFrom, TTo> MemberTo<TToType>(string to, Action<MemberMappingDefinition<TFrom, TToType>> mappingDefinition)
+		{
+			MemberMappingDefinition<TFrom, TToType> def = new MemberMappingDefinition<TFrom, TToType>(typeof(TFrom), typeof(TToType), null, to);
+			mappingDefinition(def);
+			this.aExplicitMappings.Add(def);
+
+			return this;
 		}
 	}
 }

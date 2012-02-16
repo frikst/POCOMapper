@@ -25,6 +25,16 @@ namespace POCOMapper.mapping.standard
 			get { return Enumerable.Empty<Tuple<string, IMapping>>(); }
 		}
 
+		public override bool CanSynchronize
+		{
+			get { return false; }
+		}
+
+		public override bool CanMap
+		{
+			get { return true; }
+		}
+
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");

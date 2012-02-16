@@ -93,14 +93,21 @@ namespace POCOMapper.mapping.common
 
 		private readonly IEnumerable<PairedMembers> aMemberPairs;
 
-		public ObjectToObject(MappingImplementation mapping)
+		public ObjectToObject(MappingImplementation mapping, IEnumerable<PairedMembers> explicitPairs, bool implicitMappings)
 			: base(mapping)
 		{
-			this.aMemberPairs = new TypePairParser(
-				this.Mapping,
-				typeof(TFrom),
-				typeof(TTo)
-			).ToList();
+			if (implicitMappings)
+			{
+				this.aMemberPairs = new TypePairParser(
+					this.Mapping,
+					typeof(TFrom),
+					typeof(TTo)
+				).Union(explicitPairs).ToList();
+			}
+			else
+			{
+				this.aMemberPairs = explicitPairs.ToList();
+			}
 		}
 
 		#region Overrides of CompiledMapping<TFrom,TTo>
@@ -110,8 +117,18 @@ namespace POCOMapper.mapping.common
 			get
 			{
 				foreach (var mapping in this.aMemberPairs)
-					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.From.Getter.Name, mapping.To.Setter.Name), mapping.Mapping);
+					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.From.Name, mapping.To.Name), mapping.Mapping);
 			}
+		}
+
+		public override bool CanSynchronize
+		{
+			get { return true; }
+		}
+
+		public override bool CanMap
+		{
+			get { return true; }
 		}
 
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()

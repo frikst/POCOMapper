@@ -127,8 +127,8 @@ namespace POCOMapper.definition
 			if (mapping == null)
 				throw new UnknownMapping(typeof(TFrom), typeof(TTo));
 
-			if (mapping == null)
-				throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", typeof(TFrom).Name, typeof(TTo).Name));
+			if (!mapping.CanMap)
+				throw new CantMap(string.Format("Can't map {0} to {1}, mapping object does not support simple mapping", typeof(TFrom).Name, typeof(TTo).Name));
 
 			return mapping.Map(from);
 		}
@@ -148,8 +148,8 @@ namespace POCOMapper.definition
 			if (mapping == null)
 				throw new UnknownMapping(typeof(TFrom), typeof(TTo));
 
-			if (mapping == null)
-				throw new Exception(string.Format("Unknown mapping from type {0} to type {1}", typeof(TFrom).Name, typeof(TTo).Name));
+			if (!mapping.CanSynchronize)
+				throw new CantMap(string.Format("Can't synchronize {0} to {1}, mapping object does not support synchronization", typeof(TFrom).Name, typeof(TTo).Name));
 
 			mapping.Synchronize(from, to);
 		}

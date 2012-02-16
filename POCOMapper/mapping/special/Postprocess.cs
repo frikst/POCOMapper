@@ -24,6 +24,16 @@ namespace POCOMapper.mapping.special
 			get { return this.aInnerMapping.Children; }
 		}
 
+		public bool CanSynchronize
+		{
+			get { return this.aInnerMapping.CanSynchronize; }
+		}
+
+		public bool CanMap
+		{
+			get { return this.aInnerMapping.CanMap; }
+		}
+
 		#endregion
 
 		#region Implementation of IMapping<TFrom,TTo>

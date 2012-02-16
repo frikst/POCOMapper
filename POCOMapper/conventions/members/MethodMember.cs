@@ -41,6 +41,11 @@ namespace POCOMapper.conventions.members
 			get { return this.aSetMethod; }
 		}
 
+		public string Name
+		{
+			get { return this.Getter.Name; }
+		}
+
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 		{
 			if (this.Getter != null)

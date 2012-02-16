@@ -38,6 +38,16 @@ namespace POCOMapper.mapping.common
 			}
 		}
 
+		public override bool CanSynchronize
+		{
+			get { return true; }
+		}
+
+		public override bool CanMap
+		{
+			get { return true; }
+		}
+
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();

@@ -1,5 +1,6 @@
 ﻿using System;
 using POCOMapper.mapping.@base;
+using POCOMapper.mapping.common.parser;
 
 namespace POCOMapper.definition
 {
@@ -16,5 +17,10 @@ namespace POCOMapper.definition
 		Type To { get; }
 
 		MappingType Type { get; }
+	}
+
+	internal interface IMemberMappingDefinition
+	{
+		PairedMembers CreateMapping(MappingImplementation allMappings);
 	}
 }

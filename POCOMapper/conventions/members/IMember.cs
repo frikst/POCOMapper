@@ -14,6 +14,7 @@ namespace POCOMapper.conventions.members
 
 		MemberInfo Getter { get; }
 		MemberInfo Setter { get; }
+		string Name { get; }
 
 		Expression CreateGetterExpression(ParameterExpression parentVariable);
 		Expression CreateSetterExpression(ParameterExpression parentVariable, Expression value);
