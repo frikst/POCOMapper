@@ -145,7 +145,7 @@ namespace POCOMapper.definition
 
 		public ClassMappingDefinition<TFrom, TTo> MemberTo<TToType>(string to, Action<MemberMappingDefinition<TFrom, TToType>> mappingDefinition)
 		{
-			MemberMappingDefinition<TFrom, TToType> def = new MemberMappingDefinition<TFrom, TToType>(typeof(TFrom), typeof(TToType), null, to);
+			MemberMappingDefinition<TFrom, TToType> def = new MemberMappingDefinition<TFrom, TToType>(typeof(TFrom), typeof(TTo), null, to);
 			mappingDefinition(def);
 			this.aExplicitMappings.Add(def);
 

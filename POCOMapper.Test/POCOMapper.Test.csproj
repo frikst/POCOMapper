@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Collections.cs" />
     <Compile Include="Flattering.cs" />
+    <Compile Include="MemberMapping1toN.cs" />
+    <Compile Include="MemberMappingNto1.cs" />
     <Compile Include="PostprocessTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NoAttributesMapping.cs" />

@@ -8,8 +8,8 @@ namespace POCOMapper.mapping.special
 {
 	public class FuncMapping<TFrom, TTo> : IMapping<TFrom, TTo>
 	{
-		private Func<TFrom, TTo> aMappingFunc;
-		private Action<TFrom, TTo> aMappingAction;
+		private readonly Func<TFrom, TTo> aMappingFunc;
+		private readonly Action<TFrom, TTo> aMappingAction;
 
 		public FuncMapping(Func<TFrom, TTo> mappingFunc)
 		{
