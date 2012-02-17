@@ -80,30 +80,38 @@ namespace POCOMapper.mapping.common.parser
 					// TODO: ???
 					throw new InvalidMapping("Cannot synchronize two reference objects with the same type");
 
+				Expression synchronize = Expression.Call(
+					Expression.Constant(this.aMapping),
+					MappingMethods.Synchronize(this.aFrom.Type, this.aTo.Type),
+					tempFromValue, this.aTo.CreateGetterExpression(to)
+				);
+
+				if (this.aMapping.CanMap)
+					synchronize = Expression.IfThenElse(
+						Expression.Equal(tempToValue, Expression.Constant(null)),
+						this.aTo.CreateSetterExpression(
+							to,
+							Expression.Call(
+								Expression.Constant(this.aMapping),
+								MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
+								tempFromValue
+							)
+						),
+						synchronize
+					);
+
+				if (this.aTo.Setter != null)
+					synchronize = Expression.IfThenElse(
+						Expression.Equal(tempFromValue, Expression.Constant(null)),
+						this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),
+						synchronize
+					);
+
 				return Expression.Block(
 					new ParameterExpression[] { tempFromValue, tempToValue },
 					Expression.Assign(tempFromValue, this.aFrom.CreateGetterExpression(from)),
 					Expression.Assign(tempToValue, this.aTo.CreateGetterExpression(to)),
-					Expression.IfThenElse(
-						Expression.Equal(tempFromValue, Expression.Constant(null)),
-						this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),
-						Expression.IfThenElse(
-							Expression.Equal(tempToValue, Expression.Constant(null)),
-							this.aTo.CreateSetterExpression(
-								to,
-								Expression.Call(
-									Expression.Constant(this.aMapping),
-									MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
-									tempFromValue
-								)
-							),
-							Expression.Call(
-								Expression.Constant(this.aMapping),
-								MappingMethods.Synchronize(this.aFrom.Type, this.aTo.Type),
-								tempFromValue, this.aTo.CreateGetterExpression(to)
-							)
-						)
-					)
+					synchronize
 				);
 			}
 		}

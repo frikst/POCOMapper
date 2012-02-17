@@ -14,7 +14,7 @@ namespace POCOMapper.mapping.common
 	{
 		private class TemporaryVariables
 		{
-			private Dictionary<IMember, ParameterExpression> aTemporaryVariables;
+			private readonly Dictionary<IMember, ParameterExpression> aTemporaryVariables;
 
 			public TemporaryVariables(IEnumerable<PairedMembers> memberPairs, ParameterExpression from, ParameterExpression to)
 			{
@@ -45,18 +45,19 @@ namespace POCOMapper.mapping.common
 						this.InitialAssignments.Add(
 							Expression.Assign(
 								this.aTemporaryVariables[parent],
-								Expression.Coalesce(
+								ObjectToObject<TFrom, TTo>.BetterCoalesce(
 									parent.CreateGetterExpression(parentVariable),
 									ObjectToObject<TFrom, TTo>.NewExpression(parent.Type)
 								)
 							)
 						);
-						this.FinalAssignments.Add(
-							parent.CreateSetterExpression(
-								parentVariable,
-								this.aTemporaryVariables[parent]
-							)
+
+						Expression setterExpression = parent.CreateSetterExpression(
+							parentVariable,
+							this.aTemporaryVariables[parent]
 						);
+						if (setterExpression != null)
+							this.FinalAssignments.Add(setterExpression);
 					}
 				}
 			}
@@ -139,7 +140,9 @@ namespace POCOMapper.mapping.common
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
 
-			TemporaryVariables temporaryVariables = new TemporaryVariables(this.aMemberPairs, from, to);
+			List<PairedMembers> pairedMembers = this.aMemberPairs.ToList();
+
+			TemporaryVariables temporaryVariables = new TemporaryVariables(pairedMembers, from, to);
 
 			return Expression.Lambda<Func<TFrom, TTo>>(
 				Expression.Block(
@@ -153,7 +156,7 @@ namespace POCOMapper.mapping.common
 						temporaryVariables.InitialAssignments
 					),
 					this.MakeBlock(
-						this.aMemberPairs.Select(
+						pairedMembers.Select(
 							x => x.CreateAssignmentExpression(
 								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
 								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
@@ -223,7 +226,22 @@ namespace POCOMapper.mapping.common
 		{
 			ConstructorInfo constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { }, null);
 
+			if (constructor == null)
+				return null;
+
 			return Expression.New(constructor);
+		}
+
+		private static Expression BetterCoalesce(Expression left, Expression right)
+		{
+			if (right == null && left == null)
+				return Expression.Empty();
+			else if (right == null)
+				return left;
+			else if (left == null)
+				return right;
+			else
+				return Expression.Coalesce(left, right);
 		}
 
 		#endregion
