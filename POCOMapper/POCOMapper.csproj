@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="conventions\members\MemberFromNameParser.cs" />
     <Compile Include="conventions\members\MemberIterator.cs" />
     <Compile Include="conventions\members\FieldMember.cs" />
     <Compile Include="conventions\members\IMember.cs" />
