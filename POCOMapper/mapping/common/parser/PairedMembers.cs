@@ -86,7 +86,7 @@ namespace POCOMapper.mapping.common.parser
 					Expression.Assign(tempToValue, this.aTo.CreateGetterExpression(to)),
 					Expression.IfThenElse(
 						Expression.Equal(tempFromValue, Expression.Constant(null)),
-						this.aTo.CreateSetterExpression(to, Expression.Constant(null)),
+						this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),
 						Expression.IfThenElse(
 							Expression.Equal(tempToValue, Expression.Constant(null)),
 							this.aTo.CreateSetterExpression(

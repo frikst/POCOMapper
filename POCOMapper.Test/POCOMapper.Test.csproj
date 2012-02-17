@@ -50,7 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections.cs" />
+    <Compile Include="CompositeStructure.cs" />
+    <Compile Include="ExplicitOnlyMapping.cs" />
     <Compile Include="Flattering.cs" />
+    <Compile Include="ExplicitMemberMapping.cs" />
     <Compile Include="MemberMapping1toN.cs" />
     <Compile Include="MemberMappingNto1.cs" />
     <Compile Include="PostprocessTest.cs" />

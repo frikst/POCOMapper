@@ -102,11 +102,11 @@ namespace POCOMapper.mapping.common
 					this.Mapping,
 					typeof(TFrom),
 					typeof(TTo)
-				).Union(explicitPairs).ToList();
+				).Union(explicitPairs);
 			}
 			else
 			{
-				this.aMemberPairs = explicitPairs.ToList();
+				this.aMemberPairs = explicitPairs;
 			}
 		}
 
@@ -186,7 +186,7 @@ namespace POCOMapper.mapping.common
 							x => x.CreateAssignmentExpression(
 								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
 								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
-								PairedMembers.Action.Map
+								PairedMembers.Action.Sync
 							)
 						)
 					),

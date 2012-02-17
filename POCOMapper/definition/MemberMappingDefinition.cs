@@ -59,7 +59,7 @@ namespace POCOMapper.definition
 			else if (memberFrom.Type == memberTo.Type)
 				mapping = null;
 			else
-				throw new InvalidMapping(string.Format("Member mapping {0} => {1} does not have mapping class specified in the mapping definition", this.aFromName, this.aToName));
+				mapping = allMappings.GetMapping<TFromType, TToType>();
 
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}
