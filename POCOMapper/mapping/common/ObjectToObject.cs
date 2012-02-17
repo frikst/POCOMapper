@@ -92,10 +92,13 @@ namespace POCOMapper.mapping.common
 		}
 
 		private readonly IEnumerable<PairedMembers> aMemberPairs;
+		private readonly Func<TFrom, TTo> aFactoryFunction;
 
-		public ObjectToObject(MappingImplementation mapping, IEnumerable<PairedMembers> explicitPairs, bool implicitMappings)
+		public ObjectToObject(Func<TFrom, TTo> factoryFunction, MappingImplementation mapping, IEnumerable<PairedMembers> explicitPairs, bool implicitMappings)
 			: base(mapping)
 		{
+			this.aFactoryFunction = factoryFunction;
+
 			if (implicitMappings)
 			{
 				this.aMemberPairs = new TypePairParser(
@@ -144,7 +147,7 @@ namespace POCOMapper.mapping.common
 
 					Expression.Assign(
 						to,
-						ObjectToObject<TFrom, TTo>.NewExpression(typeof(TTo))
+						this.NewExpression(from, typeof(TTo))
 					),
 					this.MakeBlock(
 						temporaryVariables.InitialAssignments
@@ -206,6 +209,14 @@ namespace POCOMapper.mapping.common
 				return Expression.Empty();
 
 			return Expression.Block(retExpressions);
+		}
+
+		private Expression NewExpression(Expression from, Type type)
+		{
+			if (this.aFactoryFunction == null)
+				return ObjectToObject<TFrom, TTo>.NewExpression(type);
+			else
+				return Expression.Invoke(Expression.Constant(this.aFactoryFunction), from);
 		}
 
 		private static Expression NewExpression(Type type)

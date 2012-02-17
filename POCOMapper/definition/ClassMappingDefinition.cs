@@ -21,6 +21,7 @@ namespace POCOMapper.definition
 		private Action<TFrom, TTo> aPostprocessDelegate;
 		private bool aUseImplicitMappings;
 		private readonly List<IMemberMappingDefinition> aExplicitMappings;
+		private Func<TFrom, TTo> aFactoryFunction;
 
 		internal ClassMappingDefinition()
 		{
@@ -29,6 +30,7 @@ namespace POCOMapper.definition
 			this.aPostprocessDelegate = null;
 			this.aUseImplicitMappings = true;
 			this.aExplicitMappings = new List<IMemberMappingDefinition>();
+			this.aFactoryFunction = null;
 		}
 
 		#region Implementation of IMappingDefinition
@@ -40,7 +42,7 @@ namespace POCOMapper.definition
 			{
 				IEnumerable<PairedMembers> members = this.aExplicitMappings.Select(x => x.CreateMapping(allMappings));
 
-				mapping = new ObjectToObject<TFrom, TTo>(allMappings, members, this.aUseImplicitMappings);
+				mapping = new ObjectToObject<TFrom, TTo>(aFactoryFunction, allMappings, members, this.aUseImplicitMappings);
 
 				if (aSubClassMaps.Count > 0)
 					mapping = new SubClassToObject<TFrom, TTo>(allMappings, aSubClassMaps, mapping);
@@ -96,6 +98,13 @@ namespace POCOMapper.definition
 		public ClassMappingDefinition<TFrom, TTo> Postprocess(Action<TFrom, TTo> postprocessDelegate)
 		{
 			this.aPostprocessDelegate = postprocessDelegate;
+
+			return this;
+		}
+
+		public ClassMappingDefinition<TFrom, TTo> Factory(Func<TFrom, TTo> factoryFunction)
+		{
+			this.aFactoryFunction = factoryFunction;
 
 			return this;
 		}
