@@ -51,6 +51,7 @@
     <Compile Include="conventions\members\MethodMember.cs" />
     <Compile Include="conventions\members\ThisMember.cs" />
     <Compile Include="definition\MemberMappingDefinition.cs" />
+    <Compile Include="definition\SimpleMemberMappingDefinition.cs" />
     <Compile Include="exceptions\CantMap.cs" />
     <Compile Include="mapping\collection\CompiledCollectionMapping.cs" />
     <Compile Include="mapping\common\parser\PairedMembers.cs" />

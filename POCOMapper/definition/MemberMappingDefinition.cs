@@ -64,6 +64,8 @@ namespace POCOMapper.definition
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}
 
+		#endregion
+
 		private IMember WrapMember(Conventions conventions, MemberInfo member, bool write)
 		{
 			if (member is FieldInfo)
@@ -88,8 +90,6 @@ namespace POCOMapper.definition
 
 			return ret;
 		}
-
-		#endregion
 
 		public void Using<TMapping>()
 			where TMapping : IMapping<TFromType, TToType>
