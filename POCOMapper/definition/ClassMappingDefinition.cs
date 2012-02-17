@@ -22,6 +22,8 @@ namespace POCOMapper.definition
 		private bool aUseImplicitMappings;
 		private readonly List<IMemberMappingDefinition> aExplicitMappings;
 		private Func<TFrom, TTo> aFactoryFunction;
+		private Func<TFrom, TTo> aMappingFunc;
+		private Action<TFrom, TTo> aMappingAction;
 
 		internal ClassMappingDefinition()
 		{
@@ -31,6 +33,8 @@ namespace POCOMapper.definition
 			this.aUseImplicitMappings = true;
 			this.aExplicitMappings = new List<IMemberMappingDefinition>();
 			this.aFactoryFunction = null;
+			this.aMappingAction = null;
+			this.aMappingFunc = null;
 		}
 
 		#region Implementation of IMappingDefinition
@@ -38,7 +42,19 @@ namespace POCOMapper.definition
 		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
 			IMapping<TFrom, TTo> mapping;
-			if (this.aMapping == null)
+			if (this.aMapping != null)
+			{
+				mapping = (IMapping<TFrom, TTo>)Activator.CreateInstance(this.aMapping, allMappings);
+			}
+			else if (this.aMappingFunc != null)
+			{
+				mapping = new FuncMapping<TFrom, TTo>(this.aMappingFunc);
+			}
+			else if (this.aMappingAction != null)
+			{
+				mapping = new FuncMapping<TFrom, TTo>(this.aMappingAction);
+			}
+			else
 			{
 				IEnumerable<PairedMembers> members = this.aExplicitMappings.Select(x => x.CreateMapping(allMappings));
 
@@ -46,10 +62,6 @@ namespace POCOMapper.definition
 
 				if (aSubClassMaps.Count > 0)
 					mapping = new SubClassToObject<TFrom, TTo>(allMappings, aSubClassMaps, mapping);
-			}
-			else
-			{
-				mapping = (IMapping<TFrom, TTo>)Activator.CreateInstance(this.aMapping, allMappings);
 			}
 
 			if (this.aPostprocessDelegate != null)
@@ -120,6 +132,16 @@ namespace POCOMapper.definition
 			if (this.aExplicitMappings.Count > 0 || this.aSubClassMaps.Count > 0 || !this.aUseImplicitMappings)
 				throw new InvalidMapping("Cannot map using custom mappings when some mapping settings are in use");
 			this.aMapping = typeof(TMapping);
+		}
+
+		public void Using(Func<TFrom, TTo> mappingFunc)
+		{
+			this.aMappingFunc = mappingFunc;
+		}
+
+		public void Using(Action<TFrom, TTo> mappingAction)
+		{
+			this.aMappingAction = mappingAction;
 		}
 
 		/// <summary>
