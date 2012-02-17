@@ -45,7 +45,9 @@ namespace POCOMapper.conventions.members
 			{
 				MemberInfo cur = this.GetOneMember(type, name);
 
-				if (cur is PropertyInfo)
+				if (cur == null)
+					throw new InvalidMapping(string.Format("{0} member not found in type {1}", name, type.Name));
+				else if (cur is PropertyInfo)
 					type = ((PropertyInfo)cur).PropertyType;
 				else if (cur is FieldInfo)
 					type = ((FieldInfo)cur).FieldType;
@@ -62,13 +64,8 @@ namespace POCOMapper.conventions.members
 		{
 			MemberInfo ret = type.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault();
 
-			if (ret == null)
-			{
-				if (type.BaseType != null)
-					return this.GetOneMember(type.BaseType, name);
-				else
-					throw new InvalidMapping(string.Format("{0} member not found in type {1}", name, type.Name));
-			}
+			if (ret == null && type.BaseType != null)
+				return this.GetOneMember(type.BaseType, name);
 
 			return ret;
 		}
