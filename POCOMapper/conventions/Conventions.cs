@@ -1,24 +1,29 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using POCOMapper.conventions.members;
 using POCOMapper.conventions.symbol;
+using POCOMapper.exceptions;
 
 namespace POCOMapper.conventions
 {
 	public class Conventions
 	{
 		private Func<Type, Conventions, IMember, IEnumerable<IMember>> aMemberIterator;
+		private MemberType[] aMemberScanningPrecedence;
 
 		public Conventions()
 		{
-			this.Attributes = new BigCammelCase();
+			this.Fields = new BigCammelCase();
 			this.Methods = new BigCammelCase();
 			this.Properties = new BigCammelCase();
 
 			this.aMemberIterator = (type, conventions, parent) => new MemberIterator(type, conventions, parent);
+
+			this.aMemberScanningPrecedence = new MemberType[] { MemberType.Property, MemberType.Method, MemberType.Field };
 		}
 
-		public ISymbolParser Attributes { get; private set; }
+		public ISymbolParser Fields { get; private set; }
 		public ISymbolParser Methods { get; private set; }
 		public ISymbolParser Properties { get; private set; }
 
@@ -27,9 +32,9 @@ namespace POCOMapper.conventions
 			return this.aMemberIterator(type, this, parent);
 		}
 
-		public Conventions SetAttributeConvention(ISymbolParser parser)
+		public Conventions SetFieldConvention(ISymbolParser parser)
 		{
-			this.Attributes = parser;
+			this.Fields = parser;
 			return this;
 		}
 
@@ -49,6 +54,21 @@ namespace POCOMapper.conventions
 		{
 			this.aMemberIterator = memberIterator;
 			return this;
+		}
+
+		public Conventions SetMemberScanningPrecedence(params MemberType[] precedence)
+		{
+			if (precedence.GroupBy(x => x).Any(x => x.Count() > 1))
+				throw new InvalidConvention("Parameters of the SetMemberScanningPrecedence method must be uniqe");
+
+			this.aMemberScanningPrecedence = precedence;
+			return this;
+		}
+
+		public IEnumerable<MemberType> GetMemberScanningPrecedence()
+		{
+			foreach (MemberType memberType in this.aMemberScanningPrecedence)
+				yield return memberType;
 		}
 	}
 }

@@ -23,12 +23,37 @@ namespace POCOMapper.conventions.members
 
 		public IEnumerator<IMember> GetEnumerator()
 		{
+			foreach (MemberType memberType in this.aConventions.GetMemberScanningPrecedence())
+			{
+				switch (memberType)
+				{
+					case MemberType.Field:
+						foreach (IMember member in this.GetFields())
+							yield return member;
+						break;
+					case MemberType.Method:
+						foreach (IMember member in this.GetMethods())
+							yield return member;
+						break;
+					case MemberType.Property:
+						foreach (IMember member in this.GetProperties())
+							yield return member;
+						break;
+				}
+			}
+		}
+
+		private IEnumerable<IMember> GetFields()
+		{
 			foreach (FieldInfo field in this.aType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 			{
-				Symbol symbol = this.aConventions.Attributes.Parse(field.Name);
+				Symbol symbol = this.aConventions.Fields.Parse(field.Name);
 				yield return new FieldMember(this.aParent, symbol, field);
 			}
+		}
 
+		private IEnumerable<IMember> GetMethods()
+		{
 			Dictionary<Tuple<Symbol, Type>, MethodInfo[]> methodMembers = new Dictionary<Tuple<Symbol, Type>, MethodInfo[]>();
 
 			foreach (MethodInfo method in this.aType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
@@ -56,7 +81,10 @@ namespace POCOMapper.conventions.members
 
 			foreach (KeyValuePair<Tuple<Symbol, Type>, MethodInfo[]> method in methodMembers)
 				yield return new MethodMember(this.aParent, method.Key.Item1, method.Value[0], method.Value[1]);
+		}
 
+		private IEnumerable<IMember> GetProperties()
+		{
 			foreach (PropertyInfo property in this.aType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 			{
 				Symbol symbol = this.aConventions.Properties.Parse(property.Name);

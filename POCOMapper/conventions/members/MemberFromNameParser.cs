@@ -24,15 +24,15 @@ namespace POCOMapper.conventions.members
 				parent = null;
 
 			if (current is FieldInfo)
-				return new FieldMember(parent, conventions.Attributes.Parse(current.Name), (FieldInfo)current);
+				return new FieldMember(parent, conventions.Fields.Parse(current.Name), (FieldInfo)current);
 			else if (current is PropertyInfo)
-				return new PropertyMember(parent, conventions.Attributes.Parse(current.Name), (PropertyInfo)current);
+				return new PropertyMember(parent, conventions.Fields.Parse(current.Name), (PropertyInfo)current);
 			else
 			{
 				if (write)
-					return new MethodMember(parent, conventions.Attributes.Parse(current.Name), null, (MethodInfo)current);
+					return new MethodMember(parent, conventions.Fields.Parse(current.Name), null, (MethodInfo)current);
 				else
-					return new MethodMember(parent, conventions.Attributes.Parse(current.Name), (MethodInfo)current, null);
+					return new MethodMember(parent, conventions.Fields.Parse(current.Name), (MethodInfo)current, null);
 			}
 		}
 
