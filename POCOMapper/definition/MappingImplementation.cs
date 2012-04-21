@@ -67,20 +67,8 @@ namespace POCOMapper.definition
 
 			if (fromIsEnumerable && toIsEnumerable)
 			{
-				Type fromType = from.IsArray ? typeof(T[]) : from.IsGenericType ? from.GetGenericTypeDefinition().MakeGenericType(typeof(T)) : from;
-				Type toType = to.IsArray ? typeof(T[]) : to.IsGenericType ? to.GetGenericTypeDefinition().MakeGenericType(typeof(T)) : to;
-
-				List<Type> fromPosibilities = new List<Type>();
-				for (Type fromBase = fromType; fromBase != null; fromBase = fromBase.BaseType)
-					if ((typeof(IEnumerable<T>).IsAssignableFrom(fromBase)))
-						fromPosibilities.Add(fromBase);
-				fromPosibilities.AddRange(fromType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));
-
-				List<Type> toPosibilities = new List<Type>();
-				for (Type toBase = toType; toBase != null; toBase = toBase.BaseType)
-					if ((typeof(IEnumerable<T>).IsAssignableFrom(toBase)))
-						toPosibilities.Add(toBase);
-				toPosibilities.AddRange(toType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));
+				IEnumerable<Type> fromPosibilities = this.GetGenericPosibilities(from);
+				IEnumerable<Type> toPosibilities = this.GetGenericPosibilities(to);
 
 				foreach (Type fromBase in fromPosibilities)
 				{
@@ -99,6 +87,47 @@ namespace POCOMapper.definition
 			}
 
 			return null;
+		}
+
+		private IEnumerable<Type> GetGenericPosibilities(Type type)
+		{
+			Type tempType = type;
+			bool orig = true;
+
+			while (tempType != null)
+			{
+				if (tempType.IsArray)
+				{
+					tempType = typeof(T[]);
+					break;
+				}
+				if (tempType.IsGenericType && tempType.GetGenericArguments().Length == 1)
+				{
+					tempType = tempType.GetGenericTypeDefinition().MakeGenericType(typeof(T));
+					break;
+				}
+				tempType = tempType.BaseType;
+				orig = false;
+			}
+
+			if (tempType == null)
+				return new List<Type> { type };
+			else if (!orig)
+			{
+				if ((typeof (IEnumerable<T>).IsAssignableFrom(tempType)))
+					return new List<Type> {type, typeof (IEnumerable<T>)};
+				else
+					return new List<Type> {type};
+			}
+			else
+			{
+				List<Type> fromPosibilities = new List<Type> { type };
+				for (Type fromBase = tempType; fromBase != null; fromBase = fromBase.BaseType)
+					if ((typeof(IEnumerable<T>).IsAssignableFrom(fromBase)))
+						fromPosibilities.Add(fromBase);
+				fromPosibilities.AddRange(tempType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));
+				return fromPosibilities;
+			}
 		}
 
 		/// <summary>

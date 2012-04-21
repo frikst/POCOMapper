@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 using POCOMapper.conventions.members;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
@@ -114,6 +115,11 @@ namespace POCOMapper.mapping.common.parser
 					synchronize
 				);
 			}
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0} => {1}", this.aFrom, this.aTo);
 		}
 	}
 }
