@@ -3,8 +3,8 @@
 	/// <summary>
 	/// Placeholder for the generic type mappings.
 	/// </summary>
-	public abstract class T
+	public sealed class T
 	{
-		private T() { }
+		
 	}
 }

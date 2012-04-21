@@ -27,41 +27,65 @@ namespace POCOMapper.mapping.collection
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 
-			ConstructorInfo constructTo;
-
-			if (this.aToIEnumerable)
-				constructTo = typeof(List<>).MakeGenericType(this.ItemTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.ItemTo) });
-			else
-				constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.ItemTo) });
-
 			IMapping itemMapping = this.GetMapping();
 
-			if (itemMapping != null)
+			if (this.aToIEnumerable)
 			{
-				Delegate mapMethod = Delegate.CreateDelegate(
-					typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
-					itemMapping,
-					MappingMethods.Map(this.ItemFrom, this.ItemTo)
-				);
+				if (itemMapping != null)
+				{
+					Delegate mapMethod = Delegate.CreateDelegate(
+						typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
+						itemMapping,
+						MappingMethods.Map(this.ItemFrom, this.ItemTo)
+					);
 
-				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.New(constructTo,
+					return Expression.Lambda<Func<TFrom, TTo>>(
 						Expression.Call(null, LinqMethods.Select(this.ItemFrom, this.ItemTo),
 							from,
 							Expression.Constant(mapMethod)
-						)
-					),
-					from
-				);
+						),
+						from
+					);
+				}
+				else
+				{
+					return Expression.Lambda<Func<TFrom, TTo>>(
+						from,
+						from
+					);
+				}
 			}
 			else
 			{
-				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.New(constructTo,
+				ConstructorInfo constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.ItemTo) });
+
+				if (itemMapping != null)
+				{
+					Delegate mapMethod = Delegate.CreateDelegate(
+						typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
+						itemMapping,
+						MappingMethods.Map(this.ItemFrom, this.ItemTo)
+					);
+
+					return Expression.Lambda<Func<TFrom, TTo>>(
+						Expression.New(constructTo,
+							Expression.Call(null, LinqMethods.Select(this.ItemFrom, this.ItemTo),
+								from,
+								Expression.Constant(mapMethod)
+							)
+						),
 						from
-					),
-					from
-				);
+					);
+				}
+				else
+				{
+					return Expression.Lambda<Func<TFrom, TTo>>(
+						Expression.New(constructTo,
+							from
+						),
+						from
+					);
+				}
 			}
 		}
 	}
