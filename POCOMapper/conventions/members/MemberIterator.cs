@@ -45,50 +45,81 @@ namespace POCOMapper.conventions.members
 
 		private IEnumerable<IMember> GetFields()
 		{
-			foreach (FieldInfo field in this.aType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+			HashSet<Symbol> used = new HashSet<Symbol>();
+
+			for (Type current = this.aType; current != null; current = current.BaseType)
 			{
-				Symbol symbol = this.aConventions.Fields.Parse(field.Name);
-				yield return new FieldMember(this.aParent, symbol, field);
+				foreach (FieldInfo field in current.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+				{
+					Symbol symbol = this.aConventions.Fields.Parse(field.Name);
+
+					if (!used.Contains(symbol))
+					{
+						yield return new FieldMember(this.aParent, symbol, field);
+						used.Add(symbol);
+					}
+				}
 			}
 		}
 
 		private IEnumerable<IMember> GetMethods()
 		{
-			Dictionary<Tuple<Symbol, Type>, MethodInfo[]> methodMembers = new Dictionary<Tuple<Symbol, Type>, MethodInfo[]>();
+			HashSet<Symbol> used = new HashSet<Symbol>();
 
-			foreach (MethodInfo method in this.aType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+			for (Type current = this.aType; current != null; current = current.BaseType)
 			{
-				Symbol symbol = this.aConventions.Methods.Parse(method.Name);
-				if (symbol.HasPrefix("get") && method.GetParameters().Length == 0 && method.ReturnType != typeof(void))
+				Dictionary<Tuple<Symbol, Type>, MethodInfo[]> methodMembers = new Dictionary<Tuple<Symbol, Type>, MethodInfo[]>();
+
+				foreach (MethodInfo method in current.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 				{
-					Tuple<Symbol, Type> key = new Tuple<Symbol, Type>(symbol.GetWithoutPrefix(), method.ReturnType);
-					MethodInfo[] item;
-					if (methodMembers.TryGetValue(key, out item))
-						item[0] = method;
-					else
-						methodMembers[key] = new MethodInfo[] { method, null };
+					Symbol symbol = this.aConventions.Methods.Parse(method.Name);
+					if (symbol.HasPrefix("get") && method.GetParameters().Length == 0 && method.ReturnType != typeof(void))
+					{
+						Tuple<Symbol, Type> key = new Tuple<Symbol, Type>(symbol.GetWithoutPrefix(), method.ReturnType);
+						MethodInfo[] item;
+						if (methodMembers.TryGetValue(key, out item))
+							item[0] = method;
+						else
+							methodMembers[key] = new MethodInfo[] { method, null };
+					}
+					else if (symbol.HasPrefix("set") && method.GetParameters().Length == 1 && method.ReturnType == typeof(void))
+					{
+						Tuple<Symbol, Type> key = new Tuple<Symbol, Type>(symbol.GetWithoutPrefix(), method.GetParameters()[0].ParameterType);
+						MethodInfo[] item;
+						if (methodMembers.TryGetValue(key, out item))
+							item[1] = method;
+						else
+							methodMembers[key] = new MethodInfo[] { null, method };
+					}
 				}
-				else if (symbol.HasPrefix("set") && method.GetParameters().Length == 1 && method.ReturnType == typeof(void))
+
+				foreach (KeyValuePair<Tuple<Symbol, Type>, MethodInfo[]> method in methodMembers)
 				{
-					Tuple<Symbol, Type> key = new Tuple<Symbol, Type>(symbol.GetWithoutPrefix(), method.GetParameters()[0].ParameterType);
-					MethodInfo[] item;
-					if (methodMembers.TryGetValue(key, out item))
-						item[1] = method;
-					else
-						methodMembers[key] = new MethodInfo[] { null, method };
+					if (!used.Contains(method.Key.Item1))
+					{
+						yield return new MethodMember(this.aParent, method.Key.Item1, method.Value[0], method.Value[1]);
+						used.Add(method.Key.Item1);
+					}
 				}
 			}
-
-			foreach (KeyValuePair<Tuple<Symbol, Type>, MethodInfo[]> method in methodMembers)
-				yield return new MethodMember(this.aParent, method.Key.Item1, method.Value[0], method.Value[1]);
 		}
 
 		private IEnumerable<IMember> GetProperties()
 		{
-			foreach (PropertyInfo property in this.aType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+			HashSet<Symbol> used = new HashSet<Symbol>();
+
+			for (Type current = this.aType; current != null; current = current.BaseType)
 			{
-				Symbol symbol = this.aConventions.Properties.Parse(property.Name);
-				yield return new PropertyMember(this.aParent, symbol, property);
+				foreach (PropertyInfo property in current.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+				{
+					Symbol symbol = this.aConventions.Properties.Parse(property.Name);
+
+					if (!used.Contains(symbol))
+					{
+						yield return new PropertyMember(this.aParent, symbol, property);
+						used.Add(symbol);
+					}
+				}
 			}
 		}
 

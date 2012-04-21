@@ -22,7 +22,7 @@ namespace POCOMapper.conventions.members
 
 		public IMember Parent { get; private set; }
 
-		public Symbol Symbol { get; set; }
+		public Symbol Symbol { get; private set; }
 
 		public Type Type
 		{
