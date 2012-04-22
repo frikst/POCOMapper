@@ -27,7 +27,7 @@ namespace POCOMapper.mapping.special
 
 		public IEnumerable<Tuple<string, IMapping>> Children
 		{
-			get { return null; }
+			get { return Enumerable.Empty<Tuple<string, IMapping>>(); }
 		}
 
 		public bool CanSynchronize
