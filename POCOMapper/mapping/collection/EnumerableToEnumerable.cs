@@ -27,65 +27,23 @@ namespace POCOMapper.mapping.collection
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 
-			IMapping itemMapping = this.GetMapping();
-
 			if (this.aToIEnumerable)
 			{
-				if (itemMapping != null)
-				{
-					Delegate mapMethod = Delegate.CreateDelegate(
-						typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
-						itemMapping,
-						MappingMethods.Map(this.ItemFrom, this.ItemTo)
-					);
-
-					return Expression.Lambda<Func<TFrom, TTo>>(
-						Expression.Call(null, LinqMethods.Select(this.ItemFrom, this.ItemTo),
-							from,
-							Expression.Constant(mapMethod)
-						),
-						from
-					);
-				}
-				else
-				{
-					return Expression.Lambda<Func<TFrom, TTo>>(
-						from,
-						from
-					);
-				}
+				return Expression.Lambda<Func<TFrom, TTo>>(
+					this.CreateItemMappingExpression(from),
+					from
+				);
 			}
 			else
 			{
 				ConstructorInfo constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.ItemTo) });
 
-				if (itemMapping != null)
-				{
-					Delegate mapMethod = Delegate.CreateDelegate(
-						typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
-						itemMapping,
-						MappingMethods.Map(this.ItemFrom, this.ItemTo)
-					);
-
-					return Expression.Lambda<Func<TFrom, TTo>>(
-						Expression.New(constructTo,
-							Expression.Call(null, LinqMethods.Select(this.ItemFrom, this.ItemTo),
-								from,
-								Expression.Constant(mapMethod)
-							)
-						),
-						from
-					);
-				}
-				else
-				{
-					return Expression.Lambda<Func<TFrom, TTo>>(
-						Expression.New(constructTo,
-							from
-						),
-						from
-					);
-				}
+				return Expression.Lambda<Func<TFrom, TTo>>(
+					Expression.New(constructTo,
+						this.CreateItemMappingExpression(from)
+					),
+					from
+				);
 			}
 		}
 	}

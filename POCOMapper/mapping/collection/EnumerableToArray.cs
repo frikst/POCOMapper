@@ -20,35 +20,12 @@ namespace POCOMapper.mapping.collection
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 
-			IMapping itemMapping = this.GetMapping();
-
-			if (itemMapping != null)
-			{
-				Delegate mapMethod = Delegate.CreateDelegate(
-					typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
-					itemMapping,
-					MappingMethods.Map(this.ItemFrom, this.ItemTo)
-				);
-
-				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, LinqMethods.ToArray(this.ItemTo),
-						Expression.Call(null, LinqMethods.Select(this.ItemFrom, this.ItemTo),
-							from,
-							Expression.Constant(mapMethod)
-						)
-					),
-					from
-				);
-			}
-			else
-			{
-				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Call(null, LinqMethods.ToArray(this.ItemTo),
-						from
-					),
-					from
-				);
-			}
+			return this.CreateMappingEnvelope(
+				from,
+				Expression.Call(null, LinqMethods.ToArray(this.ItemTo),
+					this.CreateItemMappingExpression(from)
+				)
+			);
 		}
 	}
 }
