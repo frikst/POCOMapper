@@ -29,20 +29,20 @@ namespace POCOMapper.mapping.collection
 
 			if (this.aToIEnumerable)
 			{
-				return Expression.Lambda<Func<TFrom, TTo>>(
-					this.CreateItemMappingExpression(from),
-					from
+				return this.CreateMappingEnvelope(
+					from,
+					this.CreateItemMappingExpression(from)
 				);
 			}
 			else
 			{
 				ConstructorInfo constructTo = typeof(TTo).GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(this.ItemTo) });
 
-				return Expression.Lambda<Func<TFrom, TTo>>(
+				return this.CreateMappingEnvelope(
+					from,
 					Expression.New(constructTo,
 						this.CreateItemMappingExpression(from)
-					),
-					from
+					)
 				);
 			}
 		}
