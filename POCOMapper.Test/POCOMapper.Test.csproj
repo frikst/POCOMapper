@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeMemberProcesingOrder.cs" />
+    <Compile Include="ChildSetParent.cs" />
     <Compile Include="Collections.cs" />
     <Compile Include="CompositeStructure.cs" />
     <Compile Include="ExplicitOnlyMapping.cs" />

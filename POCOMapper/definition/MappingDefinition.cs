@@ -18,10 +18,12 @@ namespace POCOMapper.definition
 
 		private readonly List<IMappingDefinition> aMappingDefinitions;
 		private bool aFinished;
+		private List<IChildAssociationPostprocessing> aChildPostprocessings;
 
 		protected MappingDefinition()
 		{
 			this.aMappingDefinitions = new List<IMappingDefinition>();
+			this.aChildPostprocessings = new List<IChildAssociationPostprocessing>();
 			this.aFinished = false;
 
 			this.FromConventions = new Conventions();
@@ -30,7 +32,7 @@ namespace POCOMapper.definition
 			this.DefaultMappings();
 		}
 
-		private void DefaultMappings()
+		protected virtual void DefaultMappings()
 		{
 			this.Map<int, double>()
 				.Using<Cast<int, double>>();
@@ -95,6 +97,16 @@ namespace POCOMapper.definition
 			return mappingDefinitionDef;
 		}
 
+		protected ChildAssociationPostprocessing<TParent, TChild> Child<TParent, TChild>()
+		{
+			if (aFinished)
+				throw new Exception("Cannot modify the mapping");
+
+			ChildAssociationPostprocessing<TParent, TChild> mappingDefinitionDef = new ChildAssociationPostprocessing<TParent, TChild>();
+			this.aChildPostprocessings.Add(mappingDefinitionDef);
+			return mappingDefinitionDef;
+		}
+
 		/// <summary>
 		/// Instance of the singleton. Should be used only on the <see cref="POCOMapper.definition.MappingDefinition{T}"/> descendant.
 		/// </summary>
@@ -110,7 +122,12 @@ namespace POCOMapper.definition
 					MappingDefinition<TMapping> definition = (MappingDefinition<TMapping>)ci.Invoke(null);
 					definition.aFinished = true;
 
-					aMapping = new MappingImplementation(definition.aMappingDefinitions, definition.FromConventions, definition.ToConventions);
+					aMapping = new MappingImplementation(
+						definition.aMappingDefinitions,
+						definition.aChildPostprocessings,
+						definition.FromConventions,
+						definition.ToConventions
+					);
 				}
 
 				return aMapping;

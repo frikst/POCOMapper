@@ -16,12 +16,13 @@ namespace POCOMapper.definition
 		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aClassMappingDefinitions;
 		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aContainerMappingDefinitions;
 		private readonly Dictionary<Tuple<Type, Type>, IMapping> aMappings;
+		private List<IChildAssociationPostprocessing> aChildPostprocessings;
 
-		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, Conventions fromConventions, Conventions toConventions)
+		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, Conventions fromConventions, Conventions toConventions)
 		{
 			this.aMappings = new Dictionary<Tuple<Type, Type>, IMapping>();
 			this.aClassMappingDefinitions = new Dictionary<Tuple<Type, Type>, IMappingDefinition>();
-			aContainerMappingDefinitions = new Dictionary<Tuple<Type, Type>, IMappingDefinition>();
+			this.aContainerMappingDefinitions = new Dictionary<Tuple<Type, Type>, IMappingDefinition>();
 
 			foreach (IMappingDefinition def in mappingDefinitions)
 			{
@@ -31,6 +32,7 @@ namespace POCOMapper.definition
 					this.aContainerMappingDefinitions[new Tuple<Type, Type>(def.From, def.To)] = def;
 			}
 
+			this.aChildPostprocessings = childPostprocessings.ToList();
 
 			this.FromConventions = fromConventions;
 			this.ToConventions = toConventions;
@@ -238,6 +240,17 @@ namespace POCOMapper.definition
 			this.MappingToString(this.GetMapping<TFrom, TTo>(), output, 1);
 
 			return output.ToString();
+		}
+
+		internal Delegate GetChildPostprocessing(Type parent, Type child)
+		{
+			foreach (IChildAssociationPostprocessing item in aChildPostprocessings)
+			{
+				if (item.Parent.IsAssignableFrom(parent) && item.Child.IsAssignableFrom(child))
+					return item.PostprocessDelegate;
+			}
+
+			return null;
 		}
 	}
 }

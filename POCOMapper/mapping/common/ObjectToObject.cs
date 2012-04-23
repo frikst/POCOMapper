@@ -160,7 +160,9 @@ namespace POCOMapper.mapping.common
 							x => x.CreateAssignmentExpression(
 								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
 								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
-								PairedMembers.Action.Map
+								PairedMembers.Action.Map,
+								this.Mapping.GetChildPostprocessing(typeof(TTo), x.To.Type),
+								to
 							)
 						)
 					),
@@ -192,7 +194,9 @@ namespace POCOMapper.mapping.common
 							x => x.CreateAssignmentExpression(
 								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
 								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
-								PairedMembers.Action.Sync
+								PairedMembers.Action.Sync,
+								this.Mapping.GetChildPostprocessing(typeof(TTo), x.To.Type),
+								to
 							)
 						)
 					),

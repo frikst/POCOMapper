@@ -41,7 +41,7 @@ namespace POCOMapper.mapping.common.parser
 			get { return aMapping; }
 		}
 
-		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action)
+		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action, Delegate postprocess, ParameterExpression parent)
 		{
 			if (
 				(
@@ -63,10 +63,13 @@ namespace POCOMapper.mapping.common.parser
 						ret
 					);
 
-				return this.aTo.CreateSetterExpression(
+				ret = this.aTo.CreateSetterExpression(
 					to,
 					ret
 				);
+
+				return this.AddPostprocess(ret, to, postprocess, parent);
+
 			}
 			else
 			{
@@ -88,18 +91,22 @@ namespace POCOMapper.mapping.common.parser
 				);
 
 				if (this.aMapping.CanMap)
+				{
+					Expression map = this.aTo.CreateSetterExpression(
+						to,
+						Expression.Call(
+							Expression.Constant(this.aMapping),
+							MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
+							tempFromValue
+						)
+					);
+					map = this.AddPostprocess(map, to, postprocess, parent);
 					synchronize = Expression.IfThenElse(
 						Expression.Equal(tempToValue, Expression.Constant(null)),
-						this.aTo.CreateSetterExpression(
-							to,
-							Expression.Call(
-								Expression.Constant(this.aMapping),
-								MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
-								tempFromValue
-							)
-						),
+						map,
 						synchronize
 					);
+				}
 
 				if (this.aTo.Setter != null)
 					synchronize = Expression.IfThenElse(
@@ -114,6 +121,25 @@ namespace POCOMapper.mapping.common.parser
 					Expression.Assign(tempToValue, this.aTo.CreateGetterExpression(to)),
 					synchronize
 				);
+			}
+		}
+
+		private Expression AddPostprocess(Expression assignment, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
+		{
+			if (postprocess != null)
+			{
+				Expression postprocessTarget = postprocess.Target == null ? null : Expression.Constant(postprocess.Target);
+				return Expression.Block(
+					new Expression[]
+						{
+							assignment,
+							Expression.Call(postprocessTarget, postprocess.Method, parent, this.aTo.CreateGetterExpression(to))
+						}
+				);
+			}
+			else
+			{
+				return assignment;
 			}
 		}
 
