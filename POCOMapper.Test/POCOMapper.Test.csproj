@@ -59,6 +59,7 @@
     <Compile Include="FactoryMethod.cs" />
     <Compile Include="Flattering.cs" />
     <Compile Include="ExplicitMemberMapping.cs" />
+    <Compile Include="InvalidConstructorMapping.cs" />
     <Compile Include="MemberMapping1toN.cs" />
     <Compile Include="MemberMappingNto1.cs" />
     <Compile Include="PostprocessTest.cs" />

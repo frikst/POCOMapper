@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using POCOMapper.conventions.members;
 using POCOMapper.definition;
+using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.common.parser;
 
@@ -221,7 +222,12 @@ namespace POCOMapper.mapping.common
 		private Expression NewExpression(Expression from, Type type)
 		{
 			if (this.aFactoryFunction == null)
-				return ObjectToObject<TFrom, TTo>.NewExpression(type);
+			{
+				Expression newExpression = ObjectToObject<TFrom, TTo>.NewExpression(type);
+				if (newExpression == null)
+					throw new InvalidMapping(string.Format("Cannot find constructor for type {0}", typeof(TTo).FullName));
+				return newExpression;
+			}
 			else
 				return Expression.Invoke(Expression.Constant(this.aFactoryFunction), from);
 		}
