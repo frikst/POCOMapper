@@ -50,5 +50,15 @@ namespace POCOMapper.Test
 			Assert.AreEqual("hello", to.Inner.Data);
 			Assert.AreEqual("world", to.Data);
 		}
+
+		[TestMethod]
+		public void StructuringToStringTest()
+		{
+			string correct = Constants.STANDARD_MAPPINGS + "ObjectToObject`2<From, To>\n    InnerData => Inner.Data (null)\n    Data => Data (null)\n" + Constants.SEPARATOR;
+
+			string mappingToString = Mapping.Instance.AllMappingsToString();
+
+			Assert.AreEqual(correct, mappingToString);
+		}
 	}
 }

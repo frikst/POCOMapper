@@ -122,7 +122,7 @@ namespace POCOMapper.mapping.common
 			get
 			{
 				foreach (var mapping in this.aMemberPairs)
-					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.From.Name, mapping.To.Name), mapping.Mapping);
+					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.From.FullName, mapping.To.FullName), mapping.Mapping);
 			}
 		}
 
@@ -209,6 +209,8 @@ namespace POCOMapper.mapping.common
 			);
 		}
 
+		#endregion
+
 		private Expression MakeBlock(IEnumerable<Expression> expressions)
 		{
 			Expression[] retExpressions = expressions.ToArray();
@@ -253,7 +255,5 @@ namespace POCOMapper.mapping.common
 			else
 				return Expression.Coalesce(left, right);
 		}
-
-		#endregion
 	}
 }

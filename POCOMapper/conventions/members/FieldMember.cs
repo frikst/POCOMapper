@@ -39,6 +39,17 @@ namespace POCOMapper.conventions.members
 			get { return this.aField.Name; }
 		}
 
+		public string FullName
+		{
+			get
+			{
+				if (this.Parent == null)
+					return this.Name;
+				else
+					return this.Parent.Name + "." + this.Name;
+			}
+		}
+
 		public MemberInfo Getter
 		{
 			get { return this.aField; }
