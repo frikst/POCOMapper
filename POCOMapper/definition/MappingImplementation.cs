@@ -185,7 +185,7 @@ namespace POCOMapper.definition
 			mapping.Synchronize(from, to);
 		}
 
-		private void MappingToString(IMapping mapping, StringBuilder output, int level)
+		private void MappingToString(IMapping mapping, StringBuilder output, int level, List<IMapping> allMappings = null)
 		{
 			string indent = string.Concat(Enumerable.Range(0, level).Select(x => "    "));
 
@@ -222,7 +222,10 @@ namespace POCOMapper.definition
 					output.Append(child.Item1);
 					output.Append(" ");
 
-					this.MappingToString(child.Item2, output, level + 1);
+					if (allMappings != null)
+						allMappings.Add(child.Item2);
+
+					this.MappingToString(child.Item2, output, level + 1, allMappings);
 				}
 			}
 		}
@@ -240,6 +243,37 @@ namespace POCOMapper.definition
 			this.MappingToString(this.GetMapping<TFrom, TTo>(), output, 1);
 
 			return output.ToString();
+		}
+
+		///<summary>
+		/// Buields the debug string for all the mappings
+		///</summary>
+		///<returns></returns>
+		public string AllMappingsToString()
+		{
+			List<Tuple<IMapping, StringBuilder>> results = new List<Tuple<IMapping, StringBuilder>>();
+			List<IMapping> toIgnore = new List<IMapping>();
+
+			foreach (Tuple<Type, Type> key in this.aClassMappingDefinitions.Keys)
+			{
+				IMapping mapping = this.GetMapping(key.Item1, key.Item2);
+				StringBuilder output = new StringBuilder();
+				this.MappingToString(mapping, output, 1, toIgnore);
+				results.Add(new Tuple<IMapping,StringBuilder>(mapping, output));
+			}
+
+			StringBuilder ret = new StringBuilder();
+
+			foreach (Tuple<IMapping, StringBuilder> result in results)
+			{
+				if (!toIgnore.Contains(result.Item1))
+				{
+					ret.Append(result.Item2.ToString());
+					ret.Append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				}
+			}
+
+			return ret.ToString();
 		}
 
 		internal Delegate GetChildPostprocessing(Type parent, Type child)
