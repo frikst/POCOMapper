@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using POCOMapper.conventions;
+using POCOMapper.definition.patterns;
 using POCOMapper.mapping.collection;
 using POCOMapper.mapping.standard;
 
@@ -44,11 +45,11 @@ namespace POCOMapper.definition
 			this.Map<string, int>()
 				.Using<Parse<int>>();
 
-			this.ContainerMap<IEnumerable<T>, T[]>()
+			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<T[]>())
 				.Using<EnumerableToArray<IEnumerable<T>, T[]>>();
-			this.ContainerMap<IEnumerable<T>, List<T>>()
+			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<List<T>>())
 				.Using<EnumerableToList<IEnumerable<T>, List<T>>>();
-			this.ContainerMap<IEnumerable<T>, IEnumerable<T>>()
+			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<SubClass<IEnumerable<T>>>())
 				.Using<EnumerableToEnumerable<IEnumerable<T>, IEnumerable<T>>>();
 		}
 
@@ -68,12 +69,12 @@ namespace POCOMapper.definition
 		/// <typeparam name="TFrom">Class from the source model.</typeparam>
 		/// <typeparam name="TTo">Class from the destination model.</typeparam>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected ClassMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
+		protected ExactMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
 		{
 			if (aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			ClassMappingDefinition<TFrom, TTo> mappingDefinitionDef = new ClassMappingDefinition<TFrom, TTo>();
+			ExactMappingDefinition<TFrom, TTo> mappingDefinitionDef = new ExactMappingDefinition<TFrom, TTo>();
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}
@@ -85,14 +86,12 @@ namespace POCOMapper.definition
 		/// <typeparam name="TFrom">Class from the source model.</typeparam>
 		/// <typeparam name="TTo">Class from the destination model.</typeparam>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected ContainerMappingDefinition<TFrom, TTo> ContainerMap<TFrom, TTo>()
-			where TFrom : IEnumerable<T>
-			where TTo : IEnumerable<T>
+		protected PatternMappingDefinition Map(IPattern patternFrom, IPattern patternTo)
 		{
 			if (aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			ContainerMappingDefinition<TFrom, TTo> mappingDefinitionDef = new ContainerMappingDefinition<TFrom, TTo>();
+			PatternMappingDefinition mappingDefinitionDef = new PatternMappingDefinition(patternFrom, patternTo);
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}

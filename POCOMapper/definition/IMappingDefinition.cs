@@ -4,19 +4,14 @@ using POCOMapper.mapping.common.parser;
 
 namespace POCOMapper.definition
 {
-	internal enum MappingType
-	{
-		ClassMapping,
-		ContainerMapping
-	}
-
 	internal interface IMappingDefinition
 	{
 		IMapping CreateMapping(MappingImplementation allMappings, Type from, Type to);
-		Type From { get; }
-		Type To { get; }
 
-		MappingType Type { get; }
+		bool IsFrom(Type from);
+		bool IsTo(Type to);
+
+		Tuple<Type, Type> GetKey();
 	}
 
 	internal interface IMemberMappingDefinition

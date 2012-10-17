@@ -13,7 +13,7 @@ namespace POCOMapper.definition
 	/// </summary>
 	public class MappingImplementation
 	{
-		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aClassMappingDefinitions;
+		private readonly List<IMappingDefinition> aMappingDefinitions;
 		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aContainerMappingDefinitions;
 		private readonly Dictionary<Tuple<Type, Type>, IMapping> aMappings;
 		private List<IChildAssociationPostprocessing> aChildPostprocessings;
@@ -21,16 +21,8 @@ namespace POCOMapper.definition
 		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, Conventions fromConventions, Conventions toConventions)
 		{
 			this.aMappings = new Dictionary<Tuple<Type, Type>, IMapping>();
-			this.aClassMappingDefinitions = new Dictionary<Tuple<Type, Type>, IMappingDefinition>();
-			this.aContainerMappingDefinitions = new Dictionary<Tuple<Type, Type>, IMappingDefinition>();
 
-			foreach (IMappingDefinition def in mappingDefinitions)
-			{
-				if (def.Type == MappingType.ClassMapping)
-					this.aClassMappingDefinitions[new Tuple<Type, Type>(def.From, def.To)] = def;
-				else
-					this.aContainerMappingDefinitions[new Tuple<Type, Type>(def.From, def.To)] = def;
-			}
+			this.aMappingDefinitions = mappingDefinitions.ToList();
 
 			this.aChildPostprocessings = childPostprocessings.ToList();
 
@@ -54,82 +46,18 @@ namespace POCOMapper.definition
 
 			if (this.aMappings.ContainsKey(key))
 				return this.aMappings[key];
-			
-			if (this.aClassMappingDefinitions.ContainsKey(key))
+
+			foreach (IMappingDefinition mappingDefinition in aMappingDefinitions)
 			{
-				IMapping mapping = this.aClassMappingDefinitions[key].CreateMapping(this, from, to);
-				this.aMappings[key] = mapping;
-				return mapping;
-			}
-
-			bool fromIsEnumerable = from.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-				|| (from.IsGenericType && from.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-			bool toIsEnumerable = to.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-				|| (to.IsGenericType && to.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-
-			if (fromIsEnumerable && toIsEnumerable)
-			{
-				IEnumerable<Type> fromPosibilities = this.GetGenericPosibilities(from);
-				IEnumerable<Type> toPosibilities = this.GetGenericPosibilities(to);
-
-				foreach (Type fromBase in fromPosibilities)
+				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
 				{
-					foreach (Type toBase in toPosibilities)
-					{
-						Tuple<Type, Type> baseKey = new Tuple<Type, Type>(fromBase, toBase);
-
-						if (aContainerMappingDefinitions.ContainsKey(baseKey))
-						{
-							IMapping mapping = this.aContainerMappingDefinitions[baseKey].CreateMapping(this, from, to);
-							this.aMappings[key] = mapping;
-							return mapping;
-						}
-					}
+					IMapping mapping = mappingDefinition.CreateMapping(this, from, to);
+					this.aMappings[key] = mapping;
+					return mapping;
 				}
 			}
 
 			return null;
-		}
-
-		private IEnumerable<Type> GetGenericPosibilities(Type type)
-		{
-			Type tempType = type;
-			bool orig = true;
-
-			while (tempType != null)
-			{
-				if (tempType.IsArray)
-				{
-					tempType = typeof(T[]);
-					break;
-				}
-				if (tempType.IsGenericType && tempType.GetGenericArguments().Length == 1)
-				{
-					tempType = tempType.GetGenericTypeDefinition().MakeGenericType(typeof(T));
-					break;
-				}
-				tempType = tempType.BaseType;
-				orig = false;
-			}
-
-			if (tempType == null)
-				return new List<Type> { type };
-			else if (!orig)
-			{
-				if ((typeof (IEnumerable<T>).IsAssignableFrom(tempType)))
-					return new List<Type> {type, typeof (IEnumerable<T>)};
-				else
-					return new List<Type> {type};
-			}
-			else
-			{
-				List<Type> fromPosibilities = new List<Type> { type };
-				for (Type fromBase = tempType; fromBase != null; fromBase = fromBase.BaseType)
-					if ((typeof(IEnumerable<T>).IsAssignableFrom(fromBase)))
-						fromPosibilities.Add(fromBase);
-				fromPosibilities.AddRange(tempType.GetInterfaces().Where(x => typeof(IEnumerable<T>).IsAssignableFrom(x)));
-				return fromPosibilities;
-			}
 		}
 
 		/// <summary>
@@ -254,12 +182,18 @@ namespace POCOMapper.definition
 			List<Tuple<IMapping, StringBuilder>> results = new List<Tuple<IMapping, StringBuilder>>();
 			List<IMapping> toIgnore = new List<IMapping>();
 
-			foreach (Tuple<Type, Type> key in this.aClassMappingDefinitions.Keys)
+			foreach (IMappingDefinition mappingDefinition in this.aMappingDefinitions)
 			{
-				IMapping mapping = this.GetMapping(key.Item1, key.Item2);
-				StringBuilder output = new StringBuilder();
-				this.MappingToString(mapping, output, 1, toIgnore);
-				results.Add(new Tuple<IMapping,StringBuilder>(mapping, output));
+				Tuple<Type, Type> key = mappingDefinition.GetKey();
+
+				if (key != null)
+				{
+					IMapping mapping = this.GetMapping(key.Item1, key.Item2);
+
+					StringBuilder output = new StringBuilder();
+					this.MappingToString(mapping, output, 1, toIgnore);
+					results.Add(new Tuple<IMapping, StringBuilder>(mapping, output));
+				}
 			}
 
 			StringBuilder ret = new StringBuilder();

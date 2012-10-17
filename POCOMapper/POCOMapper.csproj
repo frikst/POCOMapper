@@ -54,6 +54,13 @@
     <Compile Include="conventions\MemberType.cs" />
     <Compile Include="definition\ChildAssociationPostprocessing.cs" />
     <Compile Include="definition\MemberMappingDefinition.cs" />
+    <Compile Include="definition\patterns\AnyPattern.cs" />
+    <Compile Include="definition\patterns\ArrayPattern.cs" />
+    <Compile Include="definition\patterns\ExactPattern.cs" />
+    <Compile Include="definition\patterns\GenericPattern.cs" />
+    <Compile Include="definition\patterns\IPattern.cs" />
+    <Compile Include="definition\patterns\Pattern.cs" />
+    <Compile Include="definition\patterns\SubClass.cs" />
     <Compile Include="definition\SimpleMemberMappingDefinition.cs" />
     <Compile Include="exceptions\CantMap.cs" />
     <Compile Include="exceptions\InvalidConvention.cs" />
@@ -62,9 +69,9 @@
     <Compile Include="mapping\common\parser\PairedMembers.cs" />
     <Compile Include="conventions\members\PropertyMember.cs" />
     <Compile Include="mapping\common\parser\TypePairParser.cs" />
-    <Compile Include="definition\ContainerMappingDefinition.cs" />
+    <Compile Include="definition\PatternMappingDefinition.cs" />
     <Compile Include="definition\IMappingDefinition.cs" />
-    <Compile Include="definition\T.cs" />
+    <Compile Include="definition\patterns\T.cs" />
     <Compile Include="exceptions\InvalidMapping.cs" />
     <Compile Include="exceptions\UnknownMapping.cs" />
     <Compile Include="internal\EnumMethods.cs" />
@@ -92,7 +99,7 @@
     <Compile Include="mapping\standard\Parse.cs" />
     <Compile Include="mapping\standard\ToString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="definition\ClassMappingDefinition.cs" />
+    <Compile Include="definition\ExactMappingDefinition.cs" />
     <Compile Include="conventions\symbol\Symbol.cs" />
   </ItemGroup>
   <ItemGroup />

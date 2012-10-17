@@ -14,7 +14,7 @@ namespace POCOMapper.definition
 	/// </summary>
 	/// <typeparam name="TFrom">Source class.</typeparam>
 	/// <typeparam name="TTo">Destination class.</typeparam>
-	public class ClassMappingDefinition<TFrom, TTo> : IMappingDefinition
+	public class ExactMappingDefinition<TFrom, TTo> : IMappingDefinition
 	{
 		private readonly List<Tuple<Type, Type>> aSubClassMaps;
 		private Type aMapping;
@@ -25,7 +25,7 @@ namespace POCOMapper.definition
 		private Func<TFrom, TTo> aMappingFunc;
 		private Action<TFrom, TTo> aMappingAction;
 
-		internal ClassMappingDefinition()
+		internal ExactMappingDefinition()
 		{
 			this.aSubClassMaps = new List<Tuple<Type, Type>>();
 			this.aMapping = null;
@@ -69,19 +69,19 @@ namespace POCOMapper.definition
 			return mapping;
 		}
 
-		Type IMappingDefinition.From
+		bool IMappingDefinition.IsFrom(Type from)
 		{
-			get { return typeof(TFrom); }
+			return from == typeof(TFrom);
 		}
 
-		Type IMappingDefinition.To
+		bool IMappingDefinition.IsTo(Type to)
 		{
-			get { return typeof(TTo); }
+			return to == typeof(TTo);
 		}
 
-		MappingType IMappingDefinition.Type
+		Tuple<Type, Type> IMappingDefinition.GetKey()
 		{
-			get { return MappingType.ClassMapping; }
+			return new Tuple<Type, Type>(typeof(TFrom), typeof(TTo));
 		}
 
 		#endregion
@@ -92,7 +92,7 @@ namespace POCOMapper.definition
 		/// <typeparam name="TSubFrom">Source subclass.</typeparam>
 		/// <typeparam name="TSubTo">Destination subclass.</typeparam>
 		/// <returns>The class definition specification object.</returns>
-		public ClassMappingDefinition<TFrom, TTo> MapSubClass<TSubFrom, TSubTo>()
+		public ExactMappingDefinition<TFrom, TTo> MapSubClass<TSubFrom, TSubTo>()
 			where TSubFrom : TFrom
 			where TSubTo : TTo
 		{
@@ -107,14 +107,14 @@ namespace POCOMapper.definition
 		/// </summary>
 		/// <param name="postprocessDelegate">The delegate which should be called after the mapping process.</param>
 		/// <returns>The class definition specification object.</returns>
-		public ClassMappingDefinition<TFrom, TTo> Postprocess(Action<TFrom, TTo> postprocessDelegate)
+		public ExactMappingDefinition<TFrom, TTo> Postprocess(Action<TFrom, TTo> postprocessDelegate)
 		{
 			this.aPostprocessDelegate = postprocessDelegate;
 
 			return this;
 		}
 
-		public ClassMappingDefinition<TFrom, TTo> Factory(Func<TFrom, TTo> factoryFunction)
+		public ExactMappingDefinition<TFrom, TTo> Factory(Func<TFrom, TTo> factoryFunction)
 		{
 			this.aFactoryFunction = factoryFunction;
 
@@ -147,7 +147,7 @@ namespace POCOMapper.definition
 		/// <summary>
 		/// Marks the mapping to use only explicit column mapping.
 		/// </summary>
-		public ClassMappingDefinition<TFrom, TTo> OnlyExplicit
+		public ExactMappingDefinition<TFrom, TTo> OnlyExplicit
 		{
 			get
 			{
@@ -156,7 +156,7 @@ namespace POCOMapper.definition
 			}
 		}
 
-		public ClassMappingDefinition<TFrom, TTo> Member(string from, string to)
+		public ExactMappingDefinition<TFrom, TTo> Member(string from, string to)
 		{
 			SimpleMemberMappingDefinition def = new SimpleMemberMappingDefinition(typeof(TFrom), typeof(TTo), from, to);
 			this.aExplicitMappings.Add(def);
@@ -164,7 +164,7 @@ namespace POCOMapper.definition
 			return this;
 		}
 
-		public ClassMappingDefinition<TFrom, TTo> Member<TFromType, TToType>(string from, string to, Action<MemberMappingDefinition<TFromType, TToType>> mappingDefinition)
+		public ExactMappingDefinition<TFrom, TTo> Member<TFromType, TToType>(string from, string to, Action<MemberMappingDefinition<TFromType, TToType>> mappingDefinition)
 		{
 			MemberMappingDefinition<TFromType, TToType> def = new MemberMappingDefinition<TFromType, TToType>(typeof(TFrom), typeof(TTo), from, to);
 			mappingDefinition(def);
@@ -173,7 +173,7 @@ namespace POCOMapper.definition
 			return this;
 		}
 
-		public ClassMappingDefinition<TFrom, TTo> MemberFrom<TFromType>(string from, Action<MemberMappingDefinition<TFromType, TTo>> mappingDefinition)
+		public ExactMappingDefinition<TFrom, TTo> MemberFrom<TFromType>(string from, Action<MemberMappingDefinition<TFromType, TTo>> mappingDefinition)
 		{
 			MemberMappingDefinition<TFromType, TTo> def = new MemberMappingDefinition<TFromType, TTo>(typeof(TFrom), typeof(TTo), from, null);
 			mappingDefinition(def);
@@ -182,7 +182,7 @@ namespace POCOMapper.definition
 			return this;
 		}
 
-		public ClassMappingDefinition<TFrom, TTo> MemberTo<TToType>(string to, Action<MemberMappingDefinition<TFrom, TToType>> mappingDefinition)
+		public ExactMappingDefinition<TFrom, TTo> MemberTo<TToType>(string to, Action<MemberMappingDefinition<TFrom, TToType>> mappingDefinition)
 		{
 			MemberMappingDefinition<TFrom, TToType> def = new MemberMappingDefinition<TFrom, TToType>(typeof(TFrom), typeof(TTo), null, to);
 			mappingDefinition(def);

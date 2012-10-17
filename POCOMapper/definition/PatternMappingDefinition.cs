@@ -1,16 +1,25 @@
 ﻿using System;
+using POCOMapper.definition.patterns;
 using POCOMapper.mapping.@base;
 
 namespace POCOMapper.definition
 {
 	/// <summary>
-	/// Container mapping specification definition class.
+	/// Pattern mapping specification definition class.
 	/// </summary>
-	/// <typeparam name="TFrom">Source collection.</typeparam>
-	/// <typeparam name="TTo">Destination collection.</typeparam>
-	public class ContainerMappingDefinition<TFrom, TTo> : IMappingDefinition
+	public class PatternMappingDefinition : IMappingDefinition
 	{
+		private readonly IPattern aPatternFrom;
+		private readonly IPattern aPatternTo;
+
 		private Type aMapping;
+
+		internal PatternMappingDefinition(IPattern patternFrom, IPattern patternTo)
+		{
+			aPatternFrom = patternFrom;
+			aPatternTo = patternTo;
+			aMapping = null;
+		}
 
 		#region Implementation of IMappingDefinition
 
@@ -20,19 +29,19 @@ namespace POCOMapper.definition
 			return (IMapping)Activator.CreateInstance(typedMapping, allMappings);
 		}
 
-		Type IMappingDefinition.From
+		bool IMappingDefinition.IsFrom(Type from)
 		{
-			get { return typeof(TFrom); }
+			return this.aPatternFrom.Matches(from);
 		}
 
-		Type IMappingDefinition.To
+		bool IMappingDefinition.IsTo(Type to)
 		{
-			get { return typeof(TTo); }
+			return this.aPatternTo.Matches(to);
 		}
 
-		MappingType IMappingDefinition.Type
+		Tuple<Type, Type> IMappingDefinition.GetKey()
 		{
-			get { return MappingType.ContainerMapping; }
+			return null;
 		}
 
 		#endregion
@@ -43,7 +52,7 @@ namespace POCOMapper.definition
 		/// </summary>
 		/// <typeparam name="TMapping"></typeparam>
 		public void Using<TMapping>()
-			where TMapping : IMapping<TFrom, TTo>
+			where TMapping : IMapping
 		{
 			this.aMapping = typeof(TMapping).GetGenericTypeDefinition();
 		}
