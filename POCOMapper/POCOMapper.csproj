@@ -56,7 +56,7 @@
     <Compile Include="definition\MemberMappingDefinition.cs" />
     <Compile Include="definition\patterns\AnyPattern.cs" />
     <Compile Include="definition\patterns\ArrayPattern.cs" />
-    <Compile Include="definition\patterns\ExactPattern.cs" />
+    <Compile Include="definition\patterns\ClassPattern.cs" />
     <Compile Include="definition\patterns\GenericPattern.cs" />
     <Compile Include="definition\patterns\IPattern.cs" />
     <Compile Include="definition\patterns\Pattern.cs" />

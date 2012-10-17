@@ -23,7 +23,7 @@ namespace POCOMapper.definition.patterns
 			else if (type == typeof(T))
 				return new AnyPattern();
 			else
-				return new ExactPattern(type, subclass);
+				return new ClassPattern(type, subclass);
 		}
 
 		#region Implementation of IPattern
@@ -31,6 +31,11 @@ namespace POCOMapper.definition.patterns
 		public bool Matches(Type type)
 		{
 			return this.aPattern.Matches(type);
+		}
+
+		public override string ToString()
+		{
+			return this.aPattern.ToString();
 		}
 
 		#endregion

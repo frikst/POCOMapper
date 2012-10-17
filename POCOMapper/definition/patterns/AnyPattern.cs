@@ -14,6 +14,11 @@ namespace POCOMapper.definition.patterns
 			return true;
 		}
 
+		public override string ToString()
+		{
+			return "?";
+		}
+
 		#endregion
 	}
 }

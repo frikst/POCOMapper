@@ -32,6 +32,18 @@ namespace POCOMapper.definition.patterns
 			return true;
 		}
 
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append(this.aItem);
+			for (int i = 0; i < this.aDimensionCount; i++)
+			{
+				sb.Append("[]");
+			}
+
+			return sb.ToString();
+		}
+
 		#endregion
 	}
 }

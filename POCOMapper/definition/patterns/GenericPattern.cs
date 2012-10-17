@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace POCOMapper.definition.patterns
 {
@@ -52,6 +53,31 @@ namespace POCOMapper.definition.patterns
 			}
 
 			return true;
+		}
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("[");
+			sb.Append(this.aGenericType);
+			sb.Append("]");
+			sb.Append("<");
+
+			bool first = true;
+
+			foreach (IPattern parameter in this.aGenericParameters)
+			{
+				if (!first)
+					sb.Append(", ");
+
+				sb.Append(parameter);
+
+				first = false;
+			}
+
+			sb.Append(">");
+
+			return sb.ToString();
 		}
 
 		#endregion

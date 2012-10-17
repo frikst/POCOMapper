@@ -5,12 +5,12 @@ using System.Text;
 
 namespace POCOMapper.definition.patterns
 {
-	internal class ExactPattern : IPattern
+	internal class ClassPattern : IPattern
 	{
 		private Type aType;
 		private readonly bool aSubclass;
 
-		public ExactPattern(Type type, bool subclass)
+		public ClassPattern(Type type, bool subclass)
 		{
 			this.aType = type;
 			this.aSubclass = subclass;
@@ -24,6 +24,19 @@ namespace POCOMapper.definition.patterns
 				return this.IsBase(type, this.aType);
 			else
 				return type == this.aType;
+		}
+
+		public override string ToString()
+		{
+			if (this.aSubclass)
+			{
+				if (this.aType.IsInterface)
+					return "? implements " + this.aType.FullName;
+				else
+					return "? extends " + this.aType.FullName;
+			}
+			else
+				return this.aType.FullName;
 		}
 
 		#endregion
