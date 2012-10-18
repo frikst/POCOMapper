@@ -22,37 +22,31 @@ namespace POCOMapper.definition.patterns
 
 		public bool Matches(Type type)
 		{
-			if (type.IsArray && type.GetArrayRank() == 1)
-				type = typeof (IEnumerable<>).MakeGenericType(type.GetElementType());
-
 			if (this.aSubclass)
 			{
-				while (!type.IsGenericType)
+				Type current = type;
+
+				while (current != null)
 				{
-					if (type.BaseType == null)
-						return false;
-					type = type.BaseType;
+					if (this.CompareTypeToPattern(current))
+						return true;
+
+					foreach (Type @interface in current.GetInterfaces())
+					{
+						if (this.CompareTypeToPattern(@interface))
+							return true;
+					}
+
+					current = current.BaseType;
 				}
 			}
-
-			if (!type.IsGenericType)
-				return false;
-
-			if (! this.aGenericType.Matches(type.GetGenericTypeDefinition()))
-				return false;
-
-			Type[] genericParameters = type.GetGenericArguments();
-
-			if (genericParameters.Length != this.aGenericParameters.Count)
-				return false;
-
-			foreach (Tuple<IPattern, Type> genericParameter in aGenericParameters.Zip(genericParameters, (a, b) => new Tuple<IPattern, Type>(a, b)))
+			else
 			{
-				if (!genericParameter.Item1.Matches(genericParameter.Item2))
-					return false;
+				if (this.CompareTypeToPattern(type))
+					return true;
 			}
 
-			return true;
+			return false;
 		}
 
 		public override string ToString()
@@ -81,5 +75,30 @@ namespace POCOMapper.definition.patterns
 		}
 
 		#endregion
+
+		private bool CompareTypeToPattern(Type type)
+		{
+			if (type.IsArray && type.GetArrayRank() == 1)
+				type = typeof(IEnumerable<>).MakeGenericType(type.GetElementType());
+
+			if (!type.IsGenericType)
+				return false;
+
+			if (!this.aGenericType.Matches(type.GetGenericTypeDefinition()))
+				return false;
+
+			Type[] genericParameters = type.GetGenericArguments();
+
+			if (genericParameters.Length != this.aGenericParameters.Count)
+				return false;
+
+			foreach (Tuple<IPattern, Type> genericParameter in this.aGenericParameters.Zip(genericParameters, (a, b) => new Tuple<IPattern, Type>(a, b)))
+			{
+				if (!genericParameter.Item1.Matches(genericParameter.Item2))
+					return false;
+			}
+
+			return true;
+		}
 	}
 }

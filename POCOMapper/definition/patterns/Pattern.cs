@@ -17,7 +17,7 @@ namespace POCOMapper.definition.patterns
 			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(SubClass<>))
 				return this.Parse(type.GetGenericArguments()[0], true);
 			else if (type.IsGenericType && !type.IsGenericTypeDefinition)
-				return new GenericPattern(this.Parse(type.GetGenericTypeDefinition(), subclass), type.GetGenericArguments().Select(x => this.Parse(x, false)), subclass);
+				return new GenericPattern(this.Parse(type.GetGenericTypeDefinition(), false), type.GetGenericArguments().Select(x => this.Parse(x, false)), subclass);
 			else if (type.IsArray)
 				return new ArrayPattern(this.Parse(type.GetElementType(), subclass), type.GetArrayRank());
 			else if (type == typeof(T))
