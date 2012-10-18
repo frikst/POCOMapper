@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using POCOMapper.definition;
 using POCOMapper.mapping.@base;
 
 namespace POCOMapper.mapping.standard
 {
-	public class ToString<TFrom> : IMapping<TFrom, string>
+	public class Copy<TFromTo> : IMapping<TFromTo, TFromTo>
 	{
-		public ToString(MappingImplementation mappings)
+		public Copy(MappingImplementation mappings)
 		{
 		}
 
@@ -31,19 +32,27 @@ namespace POCOMapper.mapping.standard
 
 		public bool IsDirect
 		{
-			get { return false; }
+			get
+			{
+				if (typeof(TFromTo) == typeof(string))
+					return true;
+				else if (typeof(TFromTo).IsValueType)
+					return true;
+				else
+					return false;
+			}
 		}
 
 		#endregion
 
-		#region Implementation of IMapping<TFrom,string>
+		#region Implementation of IMapping<TFrom,TTo>
 
-		public string Map(TFrom from)
+		public TFromTo Map(TFromTo from)
 		{
-			return from.ToString();
+			return from;
 		}
 
-		public void Synchronize(TFrom from, string to)
+		public void Synchronize(TFromTo from, TFromTo to)
 		{
 			throw new NotImplementedException();
 		}

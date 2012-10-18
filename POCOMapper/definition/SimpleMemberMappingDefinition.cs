@@ -30,11 +30,7 @@ namespace POCOMapper.definition
 			IMember memberFrom = parser.Parse(allMappings.FromConventions, this.aFromClass, this.aFromName, false);
 			IMember memberTo = parser.Parse(allMappings.ToConventions, this.aToClass, this.aToName, true);
 
-			IMapping mapping;
-			if (memberFrom.Type == memberTo.Type)
-				mapping = null;
-			else
-				mapping = allMappings.GetMapping(memberFrom.Type, memberTo.Type);
+			IMapping mapping = allMappings.GetMapping(memberFrom.Type, memberTo.Type);
 
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}

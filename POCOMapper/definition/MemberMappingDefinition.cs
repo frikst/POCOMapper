@@ -57,8 +57,6 @@ namespace POCOMapper.definition
 				mapping = new FuncMapping<TFromType, TToType>(this.aMappingFunc);
 			else if (this.aMappingAction != null)
 				mapping = new FuncMapping<TFromType, TToType>(this.aMappingAction);
-			else if (memberFrom.Type == memberTo.Type)
-				mapping = null;
 			else
 				mapping = allMappings.GetMapping<TFromType, TToType>();
 

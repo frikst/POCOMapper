@@ -5,6 +5,7 @@ using System.Text;
 using POCOMapper.conventions;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
+using POCOMapper.mapping.standard;
 
 namespace POCOMapper.definition
 {
@@ -56,6 +57,9 @@ namespace POCOMapper.definition
 					return mapping;
 				}
 			}
+
+			if (from == to)
+				return (IMapping) Activator.CreateInstance(typeof(Copy<>).MakeGenericType(from), this);
 
 			return null;
 		}

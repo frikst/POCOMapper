@@ -21,9 +21,13 @@ namespace POCOMapper.mapping.common.parser
 
 		public PairedMembers(IMember from, IMember to, IMapping mapping)
 		{
-			aFrom = from;
-			aTo = to;
-			aMapping = mapping;
+			this.aFrom = from;
+			this.aTo = to;
+
+			if (mapping == null || mapping.IsDirect)
+				this.aMapping = null;
+			else
+				this.aMapping = mapping;
 		}
 
 		public IMember From

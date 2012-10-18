@@ -41,8 +41,6 @@ namespace POCOMapper.mapping.common.parser
 
 			if (mapping != null)
 				return new PairedMembers(from, to, mapping);
-			else if (from.Type == to.Type)
-				return new PairedMembers(from, to, null);
 			else
 				return null;
 		}

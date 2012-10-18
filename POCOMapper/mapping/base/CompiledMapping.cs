@@ -60,6 +60,8 @@ namespace POCOMapper.mapping.@base
 		public abstract bool CanSynchronize { get; }
 		public abstract bool CanMap { get; }
 
+		public abstract bool IsDirect { get; }
+
 		#endregion
 
 		#endregion

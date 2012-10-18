@@ -45,6 +45,9 @@ namespace POCOMapper.definition
 			this.Map<string, int>()
 				.Using<Parse<int>>();
 
+			this.Map<string, string>()
+				.Using<Copy<string>>();
+
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<T[]>())
 				.Using<EnumerableToArray<IEnumerable<T>, T[]>>();
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<List<T>>())

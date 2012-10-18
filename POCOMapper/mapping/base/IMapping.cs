@@ -9,6 +9,8 @@ namespace POCOMapper.mapping.@base
 
 		bool CanSynchronize { get; }
 		bool CanMap { get; }
+
+		bool IsDirect { get; }
 	}
 
 	public interface IMapping<TFrom, TTo> : IMapping

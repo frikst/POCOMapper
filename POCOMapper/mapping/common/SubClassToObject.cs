@@ -48,6 +48,11 @@ namespace POCOMapper.mapping.common
 			get { return true; }
 		}
 
+		public override bool IsDirect
+		{
+			get { return false; }
+		}
+
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();

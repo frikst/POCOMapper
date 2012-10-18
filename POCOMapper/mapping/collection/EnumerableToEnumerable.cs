@@ -24,6 +24,11 @@ namespace POCOMapper.mapping.collection
 				this.aToIEnumerable = false;
 		}
 
+		public override bool IsDirect
+		{
+			get { return false; }
+		}
+
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");

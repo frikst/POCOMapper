@@ -40,6 +40,11 @@ namespace POCOMapper.mapping.special
 			get { return aMappingFunc != null; }
 		}
 
+		public bool IsDirect
+		{
+			get { return false; }
+		}
+
 		#endregion
 
 		#region Implementation of IMapping<TFrom,TTo>

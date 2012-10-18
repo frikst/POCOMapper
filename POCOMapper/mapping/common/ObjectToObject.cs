@@ -136,6 +136,11 @@ namespace POCOMapper.mapping.common
 			get { return true; }
 		}
 
+		public override bool IsDirect
+		{
+			get { return false; }
+		}
+
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");

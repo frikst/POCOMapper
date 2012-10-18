@@ -34,6 +34,11 @@ namespace POCOMapper.mapping.special
 			get { return this.aInnerMapping.CanMap; }
 		}
 
+		public bool IsDirect
+		{
+			get { return false; }
+		}
+
 		#endregion
 
 		#region Implementation of IMapping<TFrom,TTo>
