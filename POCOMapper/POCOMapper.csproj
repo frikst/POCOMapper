@@ -64,6 +64,7 @@
     <Compile Include="definition\SimpleMemberMappingDefinition.cs" />
     <Compile Include="exceptions\CantMap.cs" />
     <Compile Include="exceptions\InvalidConvention.cs" />
+    <Compile Include="exceptions\InvalidPattern.cs" />
     <Compile Include="internal\ExpressionHelper.cs" />
     <Compile Include="mapping\collection\CompiledCollectionMapping.cs" />
     <Compile Include="mapping\common\parser\PairedMembers.cs" />

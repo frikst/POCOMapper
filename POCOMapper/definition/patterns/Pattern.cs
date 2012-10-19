@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using POCOMapper.exceptions;
 
 namespace POCOMapper.definition.patterns
 {
@@ -24,6 +27,179 @@ namespace POCOMapper.definition.patterns
 				return new AnyPattern();
 			else
 				return new ClassPattern(type, subclass);
+		}
+
+		#region Implementation of IPattern
+
+		public bool Matches(Type type)
+		{
+			return this.aPattern.Matches(type);
+		}
+
+		public override string ToString()
+		{
+			return this.aPattern.ToString();
+		}
+
+		#endregion
+	}
+
+	public class Pattern : IPattern
+	{
+		private enum State
+		{
+			Begin,
+			Implements,
+			Extends
+		}
+
+		private static readonly string TOKEN_EMPTY = "";
+		private static readonly string TOKEN_ANY = "?";
+		private static readonly string TOKEN_IMPLEMENTS = "?implements";
+		private static readonly string TOKEN_EXTENDS = "?extends";
+		private static readonly string TOKEN_GENERIC_BEGIN = "<";
+		private static readonly string TOKEN_GENERIC_SEPARATOR = ",";
+		private static readonly string TOKEN_GENERIC_END = ">";
+
+		private IPattern aPattern;
+		private Assembly aAssembly;
+
+		public Pattern(Assembly assembly, string pattern)
+		{
+			this.aAssembly = assembly;
+			int index = 0;
+			this.aPattern = this.Parse(pattern, ref index);
+			if (index != pattern.Length)
+				throw new InvalidPattern(pattern, index);
+		}
+
+		private IPattern Parse(string pattern, ref int indexFrom)
+		{
+			string token = TOKEN_EMPTY;
+			State state = State.Begin;
+
+			for (int i = indexFrom; i < pattern.Length; i++)
+			{
+				char current = pattern[i];
+
+				if (char.IsWhiteSpace(current))
+					continue;
+
+				if (state == State.Begin && current == TOKEN_ANY[0] && token == "")
+					token = "?";
+				else if (TOKEN_IMPLEMENTS.StartsWith((token + current)))
+				{
+					token += current;
+					if (token == TOKEN_IMPLEMENTS)
+					{
+						state = State.Implements;
+						token = TOKEN_EMPTY;
+					}
+				}
+				else if (TOKEN_EXTENDS.StartsWith((token + current)))
+				{
+					token += current;
+					if (token == TOKEN_EXTENDS)
+					{
+						state = State.Extends;
+						token = TOKEN_EMPTY;
+					}
+				}
+				else if (token == TOKEN_ANY)
+				{
+					indexFrom = i;
+					return new AnyPattern();
+				}
+				else if ((token == TOKEN_EMPTY || token.All(this.IsClassNameChar)) && this.IsClassNameChar(current))
+				{
+					token += current;
+				}
+				else if (token != TOKEN_EMPTY && token.All(this.IsClassNameChar) && current == TOKEN_GENERIC_BEGIN[0])
+				{
+					i++;
+					List<IPattern> parameters = new List<IPattern>();
+
+					while (true)
+					{
+						parameters.Add(this.Parse(pattern, ref i));
+
+						while (char.IsWhiteSpace(pattern[i]))
+							i++;
+
+						if (pattern[i] == TOKEN_GENERIC_END[0])
+							break;
+						else if (pattern[i] != TOKEN_GENERIC_SEPARATOR[0])
+							throw new InvalidPattern(pattern, pattern.Length);
+					}
+
+					Type generic = this.aAssembly.GetType(token + "`" + parameters.Count);
+
+					if (!generic.IsGenericType)
+						throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
+
+					if (state == State.Extends && !generic.IsClass)
+						throw new InvalidPattern(pattern, indexFrom, "The given type is not class type");
+
+					if (state == State.Implements && !generic.IsInterface)
+						throw new InvalidPattern(pattern, indexFrom, "The given type is not interface");
+
+
+					indexFrom = i + 1;
+					return new GenericPattern(new ClassPattern(generic, false), parameters, state == State.Implements || state == State.Extends);
+				}
+				else if (token != TOKEN_EMPTY && token.All(this.IsClassNameChar) && this.IsClassNameChar(current))
+				{
+					token += current;
+				}
+				else if (token != TOKEN_EMPTY && token.All(this.IsClassNameChar))
+				{
+					Type @class = this.aAssembly.GetType(token);
+
+					if (@class.IsGenericType)
+						throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
+
+					if (state == State.Extends && !@class.IsClass)
+						throw new InvalidPattern(pattern, indexFrom, "The given type is not class type");
+
+					if (state == State.Implements && !@class.IsInterface)
+						throw new InvalidPattern(pattern, indexFrom, "The given type is not interface");
+
+					indexFrom = i;
+					return new ClassPattern(@class, state == State.Implements || state == State.Extends);
+				}
+				else
+					throw new InvalidPattern(pattern, pattern.Length);
+			}
+
+			if (token == TOKEN_ANY)
+			{
+				indexFrom = pattern.Length;
+				return new AnyPattern();
+			}
+
+			if (token != TOKEN_EMPTY && token.All(this.IsClassNameChar))
+			{
+				Type @class = this.aAssembly.GetType(token);
+
+				if (@class.IsGenericType)
+					throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
+
+				if (state == State.Extends && !@class.IsClass)
+					throw new InvalidPattern(pattern, indexFrom, "The given type is not class type");
+
+				if (state == State.Implements && !@class.IsInterface)
+					throw new InvalidPattern(pattern, indexFrom, "The given type is not interface");
+
+				indexFrom = pattern.Length;
+				return new ClassPattern(@class, state == State.Implements || state == State.Extends);
+			}
+
+			throw new InvalidPattern(pattern, pattern.Length, "Unexpected end of pattern");
+		}
+
+		private bool IsClassNameChar(char current)
+		{
+			return char.IsLetterOrDigit(current) || current == '.' || current == '+';
 		}
 
 		#region Implementation of IPattern
