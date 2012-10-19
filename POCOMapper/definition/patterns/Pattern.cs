@@ -134,6 +134,9 @@ namespace POCOMapper.definition.patterns
 
 					Type generic = this.aAssembly.GetType(token + "`" + parameters.Count);
 
+					if (generic == null)
+						throw new InvalidPattern(pattern, indexFrom, "Unknown type");
+
 					if (!generic.IsGenericType)
 						throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
 
@@ -154,6 +157,9 @@ namespace POCOMapper.definition.patterns
 				else if (token != TOKEN_EMPTY && token.All(this.IsClassNameChar))
 				{
 					Type @class = this.aAssembly.GetType(token);
+
+					if (@class == null)
+						throw new InvalidPattern(pattern, indexFrom, "Unknown type");
 
 					if (@class.IsGenericType)
 						throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
@@ -180,6 +186,9 @@ namespace POCOMapper.definition.patterns
 			if (token != TOKEN_EMPTY && token.All(this.IsClassNameChar))
 			{
 				Type @class = this.aAssembly.GetType(token);
+
+				if (@class == null)
+					throw new InvalidPattern(pattern, indexFrom, "Unknown type");
 
 				if (@class.IsGenericType)
 					throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
