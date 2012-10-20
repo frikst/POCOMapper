@@ -54,6 +54,7 @@
     <Compile Include="CollectionChildSetParent.cs" />
     <Compile Include="Collections.cs" />
     <Compile Include="CompositeStructure.cs" />
+    <Compile Include="ConditionalConventions.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ExplicitOnlyMapping.cs" />
     <Compile Include="FactoryMethod.cs" />

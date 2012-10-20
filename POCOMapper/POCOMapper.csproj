@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="conventions\ConditionalConventions.cs" />
+    <Compile Include="conventions\GlobalConventions.cs" />
     <Compile Include="conventions\members\MemberFromNameParser.cs" />
     <Compile Include="conventions\members\MemberIterator.cs" />
     <Compile Include="conventions\members\FieldMember.cs" />

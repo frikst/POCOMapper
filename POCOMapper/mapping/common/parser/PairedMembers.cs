@@ -21,6 +21,9 @@ namespace POCOMapper.mapping.common.parser
 
 		public PairedMembers(IMember from, IMember to, IMapping mapping)
 		{
+			if (!from.CanPairWith(to))
+				throw new Exception(string.Format("Cannot map {0} and {1} together", from, to));
+
 			this.aFrom = from;
 			this.aTo = to;
 

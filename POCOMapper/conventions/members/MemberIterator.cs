@@ -23,6 +23,10 @@ namespace POCOMapper.conventions.members
 
 		public IEnumerator<IMember> GetEnumerator()
 		{
+			foreach (Conventions child in this.aConventions.GetChildConventions())
+				foreach (IMember member in child.GetAllMembers(this.aType, this.aParent))
+					yield return member;
+
 			foreach (MemberType memberType in this.aConventions.GetMemberScanningPrecedence())
 			{
 				switch (memberType)
@@ -55,7 +59,7 @@ namespace POCOMapper.conventions.members
 
 					if (!used.Contains(symbol))
 					{
-						yield return new FieldMember(this.aParent, symbol, field);
+						yield return new FieldMember(this.aParent, symbol, field, this.aConventions);
 						used.Add(symbol);
 					}
 				}
@@ -97,7 +101,7 @@ namespace POCOMapper.conventions.members
 				{
 					if (!used.Contains(method.Key.Item1))
 					{
-						yield return new MethodMember(this.aParent, method.Key.Item1, method.Value[0], method.Value[1]);
+						yield return new MethodMember(this.aParent, method.Key.Item1, method.Value[0], method.Value[1], this.aConventions);
 						used.Add(method.Key.Item1);
 					}
 				}
@@ -116,7 +120,7 @@ namespace POCOMapper.conventions.members
 
 					if (!used.Contains(symbol))
 					{
-						yield return new PropertyMember(this.aParent, symbol, property);
+						yield return new PropertyMember(this.aParent, symbol, property, this.aConventions);
 						used.Add(symbol);
 					}
 				}

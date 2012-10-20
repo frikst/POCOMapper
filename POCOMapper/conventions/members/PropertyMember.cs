@@ -8,14 +8,17 @@ namespace POCOMapper.conventions.members
 	public class PropertyMember : IMember
 	{
 		private readonly PropertyInfo aProperty;
+		private readonly Conventions aConventions;
 
-		public PropertyMember(IMember parent, Symbol symbol, PropertyInfo property)
+		public PropertyMember(IMember parent, Symbol symbol, PropertyInfo property, Conventions conventions)
 		{
 			this.Parent = parent;
 
 			this.Symbol = symbol;
 
 			this.aProperty = property;
+
+			this.aConventions = conventions;
 		}
 
 		#region Implementation of IMember
@@ -65,6 +68,11 @@ namespace POCOMapper.conventions.members
 				else
 					return this.Parent.Name + "." + this.Name;
 			}
+		}
+
+		public bool CanPairWith(IMember other)
+		{
+			return this.aConventions.CanPair(this, other);
 		}
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)

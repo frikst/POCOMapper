@@ -52,6 +52,11 @@ namespace POCOMapper.conventions.members
 			get { return this.Name; }
 		}
 
+		public bool CanPairWith(IMember other)
+		{
+			return true;
+		}
+
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 		{
 			return parentVariable;

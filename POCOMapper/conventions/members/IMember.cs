@@ -18,6 +18,8 @@ namespace POCOMapper.conventions.members
 
 		string FullName { get; }
 
+		bool CanPairWith(IMember other);
+
 		Expression CreateGetterExpression(ParameterExpression parentVariable);
 		Expression CreateSetterExpression(ParameterExpression parentVariable, Expression value);
 	}

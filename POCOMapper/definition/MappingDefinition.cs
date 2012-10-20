@@ -27,8 +27,8 @@ namespace POCOMapper.definition
 			this.aChildPostprocessings = new List<IChildAssociationPostprocessing>();
 			this.aFinished = false;
 
-			this.FromConventions = new Conventions();
-			this.ToConventions = new Conventions();
+			this.FromConventions = new GlobalConventions(Conventions.Direction.From);
+			this.ToConventions = new GlobalConventions(Conventions.Direction.To);
 
 			this.DefaultMappings();
 		}
@@ -59,12 +59,12 @@ namespace POCOMapper.definition
 		/// <summary>
 		/// Conventions for the source model.
 		/// </summary>
-		protected Conventions FromConventions { get; private set; }
+		protected GlobalConventions FromConventions { get; private set; }
 
 		/// <summary>
 		/// Conventions for the destination model.
 		/// </summary>
-		protected Conventions ToConventions { get; private set; }
+		protected GlobalConventions ToConventions { get; private set; }
 
 		/// <summary>
 		/// Defines the mapping of one instance of the class TFrom onto the instance of the class TTo.

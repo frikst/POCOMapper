@@ -8,14 +8,17 @@ namespace POCOMapper.conventions.members
 	public class FieldMember : IMember
 	{
 		private readonly FieldInfo aField;
+		private readonly Conventions aConventions;
 
-		public FieldMember(IMember parent, Symbol symbol, FieldInfo field)
+		public FieldMember(IMember parent, Symbol symbol, FieldInfo field, Conventions conventions)
 		{
 			this.Parent = parent;
 
 			this.Symbol = symbol;
 
 			this.aField = field;
+
+			this.aConventions = conventions;
 		}
 
 		#region Implementation of IMember
@@ -53,6 +56,11 @@ namespace POCOMapper.conventions.members
 		public MemberInfo Getter
 		{
 			get { return this.aField; }
+		}
+
+		public bool CanPairWith(IMember other)
+		{
+			return this.aConventions.CanPair(this, other);
 		}
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)

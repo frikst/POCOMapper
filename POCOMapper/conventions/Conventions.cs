@@ -7,13 +7,20 @@ using POCOMapper.exceptions;
 
 namespace POCOMapper.conventions
 {
-	public class Conventions
+	public abstract class Conventions
 	{
+		public enum Direction
+		{
+			From,
+			To
+		}
+
 		private Func<Type, Conventions, IMember, IEnumerable<IMember>> aMemberIterator;
 		private MemberType[] aMemberScanningPrecedence;
 
-		public Conventions()
+		protected Conventions(Direction direction)
 		{
+			this.ConventionDirection = direction;
 			this.Fields = new BigCammelCase();
 			this.Methods = new BigCammelCase();
 			this.Properties = new BigCammelCase();
@@ -70,5 +77,10 @@ namespace POCOMapper.conventions
 			foreach (MemberType memberType in this.aMemberScanningPrecedence)
 				yield return memberType;
 		}
+
+		public Direction ConventionDirection { get; private set; }
+
+		public abstract IEnumerable<Conventions> GetChildConventions();
+		public abstract bool CanPair(IMember first, IMember second);
 	}
 }

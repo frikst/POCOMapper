@@ -47,7 +47,7 @@ namespace POCOMapper.mapping.common.parser
 
 		private PairedMembers DetectPair(IMember from, IMember to)
 		{
-			if (from.Symbol != to.Symbol)
+			if (from.Symbol != to.Symbol || !from.CanPairWith(to))
 				return null;
 
 			return CreateMemberPair(from, to);
@@ -59,7 +59,7 @@ namespace POCOMapper.mapping.common.parser
 
 			foreach (IMember toOne in this.GetToMembers(to.Type, to))
 			{
-				if (from.Symbol == foundPart + toOne.Symbol)
+				if (from.Symbol == foundPart + toOne.Symbol && from.CanPairWith(toOne))
 					return this.CreateMemberPair(from, toOne);
 				else if (from.Symbol.HasPrefix(toOne.Symbol))
 					foundMember = toOne;
@@ -77,7 +77,7 @@ namespace POCOMapper.mapping.common.parser
 
 			foreach (IMember fromOne in this.GetToMembers(from.Type, from))
 			{
-				if (to.Symbol == foundPart + fromOne.Symbol)
+				if (to.Symbol == foundPart + fromOne.Symbol && fromOne.CanPairWith(to))
 					return this.CreateMemberPair(fromOne, to);
 				else if (to.Symbol.HasPrefix(fromOne.Symbol))
 					foundMember = fromOne;

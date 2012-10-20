@@ -9,8 +9,9 @@ namespace POCOMapper.conventions.members
 	{
 		private readonly MethodInfo aGetMethod;
 		private readonly MethodInfo aSetMethod;
+		private readonly Conventions aConventions;
 
-		public MethodMember(IMember parent, Symbol symbol, MethodInfo getMethod, MethodInfo setMethod)
+		public MethodMember(IMember parent, Symbol symbol, MethodInfo getMethod, MethodInfo setMethod, Conventions conventions)
 		{
 			this.Parent = parent;
 
@@ -18,6 +19,8 @@ namespace POCOMapper.conventions.members
 
 			this.aSetMethod = setMethod;
 			this.aGetMethod = getMethod;
+
+			this.aConventions = conventions;
 		}
 
 		#region Implementation of IMember
@@ -55,6 +58,11 @@ namespace POCOMapper.conventions.members
 				else
 					return this.Parent.Name + "." + this.Name;
 			}
+		}
+
+		public bool CanPairWith(IMember other)
+		{
+			return this.aConventions.CanPair(this, other);
 		}
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
