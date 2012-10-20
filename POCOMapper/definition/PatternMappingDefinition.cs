@@ -47,14 +47,22 @@ namespace POCOMapper.definition
 		#endregion
 
 		/// <summary>
-		/// Mapping class specified by the <typeparamref name="TMapping"/> should be used for
-		/// mapping the <typeparamref name="TFrom"/> collection to the <typeparamref name="TTo"/> collection.
+		/// Mapping class specified by the <typeparamref name="TMapping"/> should be used for the mapping.
 		/// </summary>
 		/// <typeparam name="TMapping"></typeparam>
 		public void Using<TMapping>()
 			where TMapping : IMapping
 		{
 			this.aMapping = typeof(TMapping).GetGenericTypeDefinition();
+		}
+
+		/// <summary>
+		/// Mapping class specified by the <paramref name="mapping"/> should be used for the mapping.
+		/// </summary>
+		/// <param name="mapping"></param>
+		public void Using(Type mapping)
+		{
+			this.aMapping = mapping;
 		}
 	}
 }
