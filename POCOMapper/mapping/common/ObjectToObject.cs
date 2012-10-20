@@ -103,11 +103,11 @@ namespace POCOMapper.mapping.common
 
 			if (implicitMappings)
 			{
-				this.aMemberPairs = new TypePairParser(
+				this.aMemberPairs = explicitPairs.Concat(new TypePairParser(
 					this.Mapping,
 					typeof(TFrom),
 					typeof(TTo)
-				).Union(explicitPairs);
+				));
 			}
 			else
 			{
