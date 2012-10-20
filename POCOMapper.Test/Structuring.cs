@@ -54,7 +54,7 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void StructuringToStringTest()
 		{
-			string correct = Constants.STANDARD_MAPPINGS + "ObjectToObject`2<From, To>\n    InnerData => Inner.Data (null)\n    Data => Data (null)\n" + Constants.SEPARATOR;
+			string correct = "ObjectToObject`2<From, To>\n    InnerData => Inner.Data (null)\n    Data => Data (null)\n" + Constants.STANDARD_MAPPINGS;
 
 			string mappingToString = Mapping.Instance.AllMappingsToString();
 

@@ -17,7 +17,7 @@ namespace POCOMapper.conventions
 			this.aConditionalConventionList = new List<Conventions>();
 		}
 
-		public Conventions ConditionalConventions<TMemberFrom, TMemberTo>(Action<Conventions> conventions)
+		public GlobalConventions ConditionalConventions<TMemberFrom, TMemberTo>(Action<Conventions> conventions)
 		{
 			Conventions conv = new ConditionalConventions(new Pattern<TMemberFrom>(), new Pattern<TMemberTo>(), this.ConventionDirection);
 			conventions(conv);
@@ -27,7 +27,7 @@ namespace POCOMapper.conventions
 			return this;
 		}
 
-		public Conventions ConditionalConventions(IPattern from, IPattern to, Action<Conventions> conventions)
+		public GlobalConventions ConditionalConventions(IPattern from, IPattern to, Action<Conventions> conventions)
 		{
 			Conventions conv = new ConditionalConventions(from, to, this.ConventionDirection);
 			conventions(conv);

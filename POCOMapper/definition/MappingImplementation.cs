@@ -23,7 +23,7 @@ namespace POCOMapper.definition
 		{
 			this.aMappings = new Dictionary<Tuple<Type, Type>, IMapping>();
 
-			this.aMappingDefinitions = mappingDefinitions.ToList();
+			this.aMappingDefinitions = mappingDefinitions.OrderBy(x => x.Priority).ToList();
 
 			this.aChildPostprocessings = childPostprocessings.ToList();
 

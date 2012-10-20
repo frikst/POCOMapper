@@ -12,6 +12,8 @@ namespace POCOMapper.definition
 		bool IsTo(Type to);
 
 		Tuple<Type, Type> GetKey();
+
+		int Priority { get; }
 	}
 
 	internal interface IMemberMappingDefinition

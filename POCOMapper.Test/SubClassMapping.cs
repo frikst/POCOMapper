@@ -79,7 +79,7 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void ToStringTest()
 		{
-			string correct = Constants.STANDARD_MAPPINGS + "SubClassToObject`2<From, To>\n    SubFrom1 => SubTo1 ObjectToObject`2<SubFrom1, SubTo1>\n    SubFrom2 => SubTo1 ObjectToObject`2<SubFrom2, SubTo1>\n    SubFrom3 => SubTo2 ObjectToObject`2<SubFrom3, SubTo2>\n    From => To ObjectToObject`2<From, To>\n" + Constants.SEPARATOR;
+			string correct = "SubClassToObject`2<From, To>\n    SubFrom1 => SubTo1 ObjectToObject`2<SubFrom1, SubTo1>\n    SubFrom2 => SubTo1 ObjectToObject`2<SubFrom2, SubTo1>\n    SubFrom3 => SubTo2 ObjectToObject`2<SubFrom3, SubTo2>\n    From => To ObjectToObject`2<From, To>\n" + Constants.STANDARD_MAPPINGS;
 
 			string mappingToString = Mapping.Instance.AllMappingsToString();
 

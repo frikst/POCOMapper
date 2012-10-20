@@ -63,7 +63,7 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void ToStringTest()
 		{
-			string correct = Constants.STANDARD_MAPPINGS + "ObjectToObject`2<SubFrom, SubTo>\n    GetValue2 => Value2 (null)\n    GetValue => Value (null)\n    GetValue3 => value3 (null)\n" + Constants.SEPARATOR;
+			string correct = "ObjectToObject`2<SubFrom, SubTo>\n    GetValue2 => Value2 (null)\n    GetValue => Value (null)\n    GetValue3 => value3 (null)\n" + Constants.STANDARD_MAPPINGS;
 
 			string mappingToString = Mapping.Instance.AllMappingsToString();
 

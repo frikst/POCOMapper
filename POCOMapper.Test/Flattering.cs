@@ -54,7 +54,7 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void FlatteringToStringTest()
 		{
-			string correct = Constants.STANDARD_MAPPINGS + "ObjectToObject`2<From, To>\n    Inner.Data => InnerData (null)\n    Data => Data (null)\n" + Constants.SEPARATOR;
+			string correct = "ObjectToObject`2<From, To>\n    Inner.Data => InnerData (null)\n    Data => Data (null)\n" + Constants.STANDARD_MAPPINGS;
 
 			string mappingToString = Mapping.Instance.AllMappingsToString();
 

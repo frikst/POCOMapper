@@ -13,12 +13,15 @@ namespace POCOMapper.definition
 		private readonly IPattern aPatternTo;
 
 		private Type aMapping;
+		private int aPriority;
+
 
 		internal PatternMappingDefinition(IPattern patternFrom, IPattern patternTo)
 		{
-			aPatternFrom = patternFrom;
-			aPatternTo = patternTo;
-			aMapping = null;
+			this.aPatternFrom = patternFrom;
+			this.aPatternTo = patternTo;
+			this.aMapping = null;
+			this.aPriority = 0;
 		}
 
 		#region Implementation of IMappingDefinition
@@ -44,7 +47,19 @@ namespace POCOMapper.definition
 			return null;
 		}
 
+		int IMappingDefinition.Priority
+		{
+			get { return this.aPriority; }
+		}
+
 		#endregion
+
+		public PatternMappingDefinition SetPriority(int priority)
+		{
+			this.aPriority = priority;
+
+			return this;
+		}
 
 		/// <summary>
 		/// Mapping class specified by the <typeparamref name="TMapping"/> should be used for the mapping.

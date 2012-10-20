@@ -36,23 +36,31 @@ namespace POCOMapper.definition
 		protected virtual void DefaultMappings()
 		{
 			this.Map<int, double>()
+				.SetPriority(int.MaxValue)
 				.Using<Cast<int, double>>();
 			this.Map<double, int>()
+				.SetPriority(int.MaxValue)
 				.Using<Cast<double, int>>();
 
 			this.Map<int, string>()
+				.SetPriority(int.MaxValue)
 				.Using<ToString<int>>();
 			this.Map<string, int>()
+				.SetPriority(int.MaxValue)
 				.Using<Parse<int>>();
 
 			this.Map<string, string>()
+				.SetPriority(int.MaxValue)
 				.Using<Copy<string>>();
 
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<T[]>())
+				.SetPriority(int.MaxValue)
 				.Using<EnumerableToArray<IEnumerable<T>, T[]>>();
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<List<T>>())
+				.SetPriority(int.MaxValue)
 				.Using<EnumerableToList<IEnumerable<T>, List<T>>>();
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<SubClass<IEnumerable<T>>>())
+				.SetPriority(int.MaxValue)
 				.Using<EnumerableToEnumerable<IEnumerable<T>, IEnumerable<T>>>();
 		}
 

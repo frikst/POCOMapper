@@ -34,7 +34,7 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void ToStringTest()
 		{
-			string correct = Constants.STANDARD_MAPPINGS + "ObjectToObject`2<From, To>\n" + Constants.SEPARATOR;
+			string correct = "ObjectToObject`2<From, To>\n" + Constants.STANDARD_MAPPINGS;
 
 			string mappingToString = Mapping.Instance.AllMappingsToString();
 

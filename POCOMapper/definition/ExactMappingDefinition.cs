@@ -24,6 +24,7 @@ namespace POCOMapper.definition
 		private Func<TFrom, TTo> aFactoryFunction;
 		private Func<TFrom, TTo> aMappingFunc;
 		private Action<TFrom, TTo> aMappingAction;
+		private int aPriority;
 
 		internal ExactMappingDefinition()
 		{
@@ -35,6 +36,7 @@ namespace POCOMapper.definition
 			this.aFactoryFunction = null;
 			this.aMappingAction = null;
 			this.aMappingFunc = null;
+			this.aPriority = 0;
 		}
 
 		#region Implementation of IMappingDefinition
@@ -84,7 +86,19 @@ namespace POCOMapper.definition
 			return new Tuple<Type, Type>(typeof(TFrom), typeof(TTo));
 		}
 
+		public int Priority
+		{
+			get { return this.aPriority; }
+		}
+
 		#endregion
+
+		public ExactMappingDefinition<TFrom, TTo> SetPriority(int priority)
+		{
+			this.aPriority = priority;
+
+			return this;
+		}
 
 		/// <summary>
 		/// Adds subclass mapping.
