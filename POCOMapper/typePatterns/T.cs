@@ -1,4 +1,4 @@
-﻿namespace POCOMapper.definition
+﻿namespace POCOMapper.typePatterns
 {
 	/// <summary>
 	/// Placeholder for the generic type mappings.

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using POCOMapper.conventions;
-using POCOMapper.definition.patterns;
 using POCOMapper.mapping.collection;
 using POCOMapper.mapping.standard;
+using POCOMapper.typePatterns;
 
 namespace POCOMapper.definition
 {
@@ -84,7 +84,7 @@ namespace POCOMapper.definition
 
 		/// <summary>
 		/// Defines the mapping of one instance of the container TFrom onto the instance of the container TTo.
-		/// <see cref="POCOMapper.definition.T"/> should be used as the collection item type.
+		/// <see cref="T"/> should be used as the collection item type.
 		/// </summary>
 		/// <typeparam name="TFrom">Class from the source model.</typeparam>
 		/// <typeparam name="TTo">Class from the destination model.</typeparam>

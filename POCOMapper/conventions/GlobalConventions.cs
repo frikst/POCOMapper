@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using POCOMapper.conventions.members;
+using POCOMapper.typePatterns;
 
 namespace POCOMapper.conventions
 {
@@ -18,7 +19,17 @@ namespace POCOMapper.conventions
 
 		public Conventions ConditionalConventions<TMemberFrom, TMemberTo>(Action<Conventions> conventions)
 		{
-			Conventions conv = new ConditionalConventions(typeof(TMemberFrom), typeof(TMemberTo), this.ConventionDirection);
+			Conventions conv = new ConditionalConventions(new Pattern<TMemberFrom>(), new Pattern<TMemberTo>(), this.ConventionDirection);
+			conventions(conv);
+
+			this.aConditionalConventionList.Add(conv);
+
+			return this;
+		}
+
+		public Conventions ConditionalConventions(IPattern from, IPattern to, Action<Conventions> conventions)
+		{
+			Conventions conv = new ConditionalConventions(from, to, this.ConventionDirection);
 			conventions(conv);
 
 			this.aConditionalConventionList.Add(conv);

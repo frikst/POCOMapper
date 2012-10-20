@@ -1,6 +1,6 @@
 ﻿using System;
-using POCOMapper.definition.patterns;
 using POCOMapper.mapping.@base;
+using POCOMapper.typePatterns;
 
 namespace POCOMapper.definition
 {

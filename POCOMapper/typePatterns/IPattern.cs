@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POCOMapper.definition.patterns
+namespace POCOMapper.typePatterns
 {
 	public interface IPattern
 	{

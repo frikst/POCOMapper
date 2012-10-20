@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using POCOMapper.definition;
 using POCOMapper.exceptions;
 
-namespace POCOMapper.definition.patterns
+namespace POCOMapper.typePatterns
 {
 	public class Pattern<TPattern> : IPattern
 	{
