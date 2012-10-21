@@ -127,9 +127,13 @@ namespace POCOMapper.typePatterns
 						while (char.IsWhiteSpace(pattern[i]))
 							i++;
 
-						if (pattern[i] == TOKEN_GENERIC_END[0])
+						char c = pattern[i];
+
+						i++;
+
+						if (c == TOKEN_GENERIC_END[0])
 							break;
-						else if (pattern[i] != TOKEN_GENERIC_SEPARATOR[0])
+						else if (c != TOKEN_GENERIC_SEPARATOR[0])
 							throw new InvalidPattern(pattern, pattern.Length);
 					}
 
@@ -148,7 +152,7 @@ namespace POCOMapper.typePatterns
 						throw new InvalidPattern(pattern, indexFrom, "The given type is not interface");
 
 
-					indexFrom = i + 1;
+					indexFrom = i;
 					return new GenericPattern(new ClassPattern(generic, false), parameters, state == State.Implements || state == State.Extends);
 				}
 				else if (token != TOKEN_EMPTY && token.All(this.IsClassNameChar) && this.IsClassNameChar(current))
