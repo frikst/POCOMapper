@@ -75,7 +75,7 @@ namespace POCOMapper.mapping.common.parser
 		{
 			IMember foundMember = null;
 
-			foreach (IMember fromOne in this.GetToMembers(from.Type, from))
+			foreach (IMember fromOne in this.GetFromMembers(from.Type, from))
 			{
 				if (to.Symbol == foundPart + fromOne.Symbol && fromOne.CanPairWith(to))
 					return this.CreateMemberPair(fromOne, to);
@@ -95,20 +95,30 @@ namespace POCOMapper.mapping.common.parser
 			if (this.aFromMembers.TryGetValue(type, out value))
 				return value;
 
-			value = this.aMapping.FromConventions.GetAllMembers(type).Where(x => x.Getter != null).ToList();
+			value = (List<IMember>) this.GetFromMembers(type, null);
 			this.aFromMembers[type] = value;
 			return value;
 		}
 
-		private IEnumerable<IMember> GetToMembers(Type type, IMember parent = null)
+		private IEnumerable<IMember> GetFromMembers(Type type, IMember parent)
+		{
+			return this.aMapping.FromConventions.GetAllMembers(type, parent).Where(x => x.Getter != null).ToList();
+		}
+
+		private IEnumerable<IMember> GetToMembers(Type type)
 		{
 			List<IMember> value;
 			if (this.aToMembers.TryGetValue(type, out value))
 				return value;
 
-			value = this.aMapping.ToConventions.GetAllMembers(type, parent).Where(x => x.Setter != null).ToList();
+			value = (List<IMember>) this.GetToMembers(type, null);
 			this.aToMembers[type] = value;
 			return value;
+		}
+
+		private IEnumerable<IMember> GetToMembers(Type type, IMember parent)
+		{
+			return this.aMapping.ToConventions.GetAllMembers(type, parent).Where(x => x.Setter != null).ToList();
 		}
 
 		#region Implementation of IEnumerable
