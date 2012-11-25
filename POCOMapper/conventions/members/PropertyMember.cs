@@ -97,5 +97,28 @@ namespace POCOMapper.conventions.members
 				return string.Format("{0}.[P]{1}", this.Parent, this.Symbol);
 			return string.Format("[P]{0}", this.Symbol);
 		}
+
+		public bool Equals(PropertyMember other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(other.aProperty, this.aProperty) && Equals(other.Parent, this.Parent);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != typeof (PropertyMember)) return false;
+			return Equals((PropertyMember) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((this.aProperty != null ? this.aProperty.GetHashCode() : 0)*397) ^ (this.Parent != null ? this.Parent.GetHashCode() : 0);
+			}
+		}
 	}
 }

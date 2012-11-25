@@ -68,5 +68,23 @@ namespace POCOMapper.conventions.members
 		}
 
 		#endregion
+
+		public bool Equals(ThisMember<TClass> other)
+		{
+			return !ReferenceEquals(null, other);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != typeof (ThisMember<TClass>)) return false;
+			return Equals((ThisMember<TClass>) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return 0;
+		}
 	}
 }

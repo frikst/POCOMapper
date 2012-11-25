@@ -81,5 +81,28 @@ namespace POCOMapper.conventions.members
 				return string.Format("{0}.[F]{1}", this.Parent, this.Symbol);
 			return string.Format("[F]{0}", this.Symbol);
 		}
+
+		public bool Equals(FieldMember other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(other.aField, this.aField) && Equals(other.Parent, this.Parent);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != typeof (FieldMember)) return false;
+			return Equals((FieldMember) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((this.aField != null ? this.aField.GetHashCode() : 0)*397) ^ (this.Parent != null ? this.Parent.GetHashCode() : 0);
+			}
+		}
 	}
 }
