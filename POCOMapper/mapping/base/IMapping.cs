@@ -11,6 +11,9 @@ namespace POCOMapper.mapping.@base
 		bool CanMap { get; }
 
 		bool IsDirect { get; }
+
+		string MappingSource { get; }
+		string SynchronizationSource { get; }
 	}
 
 	public interface IMapping<TFrom, TTo> : IMapping

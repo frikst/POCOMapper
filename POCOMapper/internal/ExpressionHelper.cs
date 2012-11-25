@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 
 namespace POCOMapper.@internal
@@ -44,6 +45,12 @@ namespace POCOMapper.@internal
 				return Expression.Call(@delegate.Method, arguments);
 			else
 				return Expression.Call(Expression.Constant(@delegate.Target), @delegate.Method, arguments);
+		}
+
+		public static string GetDebugView(Expression expression)
+		{
+			PropertyInfo DebugViewProperty = typeof(Expression).GetProperty("DebugView", BindingFlags.NonPublic | BindingFlags.Instance);
+			return (string) DebugViewProperty.GetValue(expression, null);
 		}
 	}
 }

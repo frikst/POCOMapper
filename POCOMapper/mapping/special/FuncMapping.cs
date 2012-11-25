@@ -45,6 +45,16 @@ namespace POCOMapper.mapping.special
 			get { return false; }
 		}
 
+		public string MappingSource
+		{
+			get { return null; }
+		}
+
+		public string SynchronizationSource
+		{
+			get { return null; }
+		}
+
 		#endregion
 
 		#region Implementation of IMapping<TFrom,TTo>
