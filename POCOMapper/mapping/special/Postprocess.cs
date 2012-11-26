@@ -63,6 +63,7 @@ namespace POCOMapper.mapping.special
 		public void Synchronize(TFrom from, TTo to)
 		{
 			this.aInnerMapping.Synchronize(from, to);
+			this.aPostprocessDelegate(from, to);
 		}
 
 		#endregion

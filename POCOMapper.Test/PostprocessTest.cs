@@ -41,7 +41,7 @@ namespace POCOMapper.Test
 		{
 			To ret = new To();
 			Mapping.Instance.Synchronize(new From(), ret);
-			Assert.IsNull(ret.Value);
+			Assert.AreEqual("Hi", ret.Value);
 		}
 	}
 }
