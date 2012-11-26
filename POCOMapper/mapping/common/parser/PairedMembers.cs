@@ -85,11 +85,11 @@ namespace POCOMapper.mapping.common.parser
 
 				if (this.aTo.Getter == null)
 					// TODO: ???
-					throw new InvalidMapping("Cannot synchronize object with setter method mapping destination without any getter method defined");
+					throw new InvalidMapping(string.Format("Cannot synchronize object with setter method mapping destination without any getter method defined for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
 
 				if (this.aMapping == null)
 					// TODO: ???
-					throw new InvalidMapping("Cannot synchronize two reference objects with the same type");
+					throw new InvalidMapping(string.Format("Cannot synchronize two reference objects with the same type for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
 
 				Expression synchronize = Expression.Call(
 					Expression.Constant(this.aMapping),
@@ -97,7 +97,7 @@ namespace POCOMapper.mapping.common.parser
 					tempFromValue, this.aTo.CreateGetterExpression(to)
 				);
 
-				if (this.aMapping.CanMap)
+				if (this.aMapping.CanMap && !this.aTo.Type.IsValueType)
 				{
 					Expression map = this.aTo.CreateSetterExpression(
 						to,
@@ -115,7 +115,7 @@ namespace POCOMapper.mapping.common.parser
 					);
 				}
 
-				if (this.aTo.Setter != null)
+				if (this.aTo.Setter != null && !this.aFrom.Type.IsValueType)
 					synchronize = Expression.IfThenElse(
 						Expression.Equal(tempFromValue, Expression.Constant(null)),
 						this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),

@@ -65,7 +65,7 @@ namespace POCOMapper.mapping.collection
 					throw new UnknownMapping(this.ItemFrom, this.ItemTo);
 
 				if (!mapping.CanMap)
-					throw new InvalidMapping("Collection items cannot be mapped to each other");
+					throw new InvalidMapping(string.Format("Collection items typed as {0} and {1} cannot be mapped to each other", this.ItemFrom.Name, this.ItemTo.Name));
 
 				return mapping;
 			}

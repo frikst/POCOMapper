@@ -34,6 +34,11 @@ namespace POCOMapper.conventions.members
 			get { return this.aGetMethod.ReturnType; }
 		}
 
+		public Type DeclaringType
+		{
+			get { return this.aGetMethod.DeclaringType; }
+		}
+
 		public MemberInfo Getter
 		{
 			get { return this.aGetMethod; }

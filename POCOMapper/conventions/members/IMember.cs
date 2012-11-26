@@ -12,6 +12,8 @@ namespace POCOMapper.conventions.members
 		Symbol Symbol { get; }
 		Type Type { get; }
 
+		Type DeclaringType { get; }
+
 		MemberInfo Getter { get; }
 		MemberInfo Setter { get; }
 		string Name { get; }

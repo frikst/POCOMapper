@@ -14,7 +14,7 @@ namespace POCOMapper.mapping.standard
 		public Parse(MappingImplementation mapping) : base(mapping)
 		{
 			if (!typeof(TTo).IsEnum && !typeof(TTo).IsPrimitive)
-				throw new InvalidMapping("You can use CastMapping only on primitive or enum types");
+				throw new InvalidMapping(string.Format("You can use Parse only on primitive or enum types, not {0}", typeof(TTo).Name));
 		}
 
 		#region Overrides of CompiledMapping<string,TTo>

@@ -32,6 +32,11 @@ namespace POCOMapper.conventions.members
 			get { return typeof(TClass); }
 		}
 
+		public Type DeclaringType
+		{
+			get { return typeof(TClass); }
+		}
+
 		public MemberInfo Getter
 		{
 			get { throw new NotImplementedException(); }

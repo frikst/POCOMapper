@@ -32,6 +32,11 @@ namespace POCOMapper.conventions.members
 			get { return this.aProperty.PropertyType; }
 		}
 
+		public Type DeclaringType
+		{
+			get { return this.aProperty.DeclaringType; }
+		}
+
 		public MemberInfo Getter
 		{
 			get

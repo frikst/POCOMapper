@@ -17,7 +17,7 @@ namespace POCOMapper.mapping.standard
 		public Cast(MappingImplementation mapping) : base(mapping)
 		{
 			if ((!typeof(TFrom).IsEnum && !typeof(TFrom).IsPrimitive) || (!typeof(TTo).IsEnum && !typeof(TTo).IsPrimitive))
-				throw new InvalidMapping("You can use CastMapping only on primitive or enum types");
+				throw new InvalidMapping(string.Format("You can use CastMapping only on primitive or enum types, not {0} and {1}", typeof(TFrom).Name, typeof(TTo).Name));
 		}
 
 		public override IEnumerable<Tuple<string, IMapping>> Children

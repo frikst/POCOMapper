@@ -32,6 +32,11 @@ namespace POCOMapper.conventions.members
 			get { return this.aField.FieldType; }
 		}
 
+		public Type DeclaringType
+		{
+			get { return this.aField.DeclaringType; }
+		}
+
 		public MemberInfo Setter
 		{
 			get { return this.aField; }
