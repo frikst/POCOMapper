@@ -117,15 +117,18 @@ namespace POCOMapper.definition
 			mapping.Synchronize(from, to);
 		}
 
-		private void MappingToString(IMapping mapping, StringBuilder output, int level, List<IMapping> allMappings = null)
+		private void MappingToString(IMapping mapping, StringBuilder output, int level, List<IMapping> allMappings = null, List<IMapping> mappingsRecursionDetection = null)
 		{
+			if (mappingsRecursionDetection == null)
+				mappingsRecursionDetection = new List<IMapping>();
+
 			string indent = string.Concat(Enumerable.Range(0, level).Select(x => "    "));
 
 			if (mapping == null)
 			{
 				output.Append("(null)\n");
 			}
-			else
+			else 
 			{
 				Type mappingType = mapping.GetType();
 				output.Append(mappingType.Name);
@@ -147,17 +150,25 @@ namespace POCOMapper.definition
 				}
 
 				output.Append("\n");
-
-				foreach (Tuple<string, IMapping> child in mapping.Children)
+				if (mappingsRecursionDetection.Contains(mapping))
 				{
-					output.Append(indent);
-					output.Append(child.Item1);
-					output.Append(" ");
+					output.Append(indent + "...\n");
+				}
+				else
+				{
+					mappingsRecursionDetection.Add(mapping);
 
-					if (allMappings != null)
-						allMappings.Add(child.Item2);
+					foreach (Tuple<string, IMapping> child in mapping.Children)
+					{
+						output.Append(indent);
+						output.Append(child.Item1);
+						output.Append(" ");
 
-					this.MappingToString(child.Item2, output, level + 1, allMappings);
+						if (allMappings != null)
+							allMappings.Add(child.Item2);
+
+						this.MappingToString(child.Item2, output, level + 1, allMappings, mappingsRecursionDetection);
+					}
 				}
 			}
 		}

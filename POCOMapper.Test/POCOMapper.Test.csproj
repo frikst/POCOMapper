@@ -67,6 +67,7 @@
     <Compile Include="PostprocessTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NoAttributesMapping.cs" />
+    <Compile Include="RecursiveStructure.cs" />
     <Compile Include="SimpleSynchronization.cs" />
     <Compile Include="SpecializedCollection.cs" />
     <Compile Include="StandardMappings.cs" />
