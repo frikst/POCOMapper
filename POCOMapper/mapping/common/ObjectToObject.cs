@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using POCOMapper.conventions.members;
+using POCOMapper.conventions.symbol;
 using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
@@ -103,11 +104,13 @@ namespace POCOMapper.mapping.common
 
 			if (implicitMappings)
 			{
-				this.aMemberPairs = explicitPairs.Concat(new TypePairParser(
-					this.Mapping,
-					typeof(TFrom),
-					typeof(TTo)
-				));
+				List<PairedMembers> explicitPairsList = explicitPairs.ToList();
+				HashSet<Symbol> explicitSymbols = new HashSet<Symbol>(explicitPairsList.Select(x => x.To.Symbol));
+
+				this.aMemberPairs = explicitPairsList.Concat(
+					new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo))
+						.Where(x => !explicitSymbols.Contains(x.To.Symbol))
+				);
 			}
 			else
 			{
