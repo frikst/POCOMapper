@@ -10,8 +10,6 @@ using POCOMapper.mapping.@base;
 namespace POCOMapper.mapping.collection
 {
 	public class EnumerableToEnumerable<TFrom, TTo> : CompiledCollectionMapping<TFrom, TTo>
-		where TFrom : class
-		where TTo : class
 	{
 		private readonly bool aToIEnumerable;
 

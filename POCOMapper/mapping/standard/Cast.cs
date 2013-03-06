@@ -9,8 +9,6 @@ using POCOMapper.mapping.@base;
 namespace POCOMapper.mapping.standard
 {
 	public class Cast<TFrom, TTo> : CompiledMapping<TFrom, TTo>
-		where TFrom : struct
-		where TTo : struct
 	{
 		#region Overrides of CompiledMapping<TFrom,TTo>
 

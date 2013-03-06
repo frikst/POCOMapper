@@ -7,8 +7,6 @@ using POCOMapper.mapping.@base;
 namespace POCOMapper.mapping.collection
 {
 	public class EnumerableToArray<TFrom, TTo> : CompiledCollectionMapping<TFrom, TTo>
-		where TFrom : class
-		where TTo : class
 	{
 		public EnumerableToArray(MappingImplementation mapping)
 			: base(mapping)

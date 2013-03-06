@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.definition;
+using POCOMapper.mapping.common;
 
 namespace POCOMapper.Test
 {
@@ -26,6 +27,7 @@ namespace POCOMapper.Test
 			private Mapping()
 			{
 				Map<From, To>()
+					.ObjectMappingRules()
 					.MemberTo<bool>("i1", def => def
 						.Using(from => (from.i & 1) == 1)
 					)

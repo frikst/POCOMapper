@@ -37,31 +37,33 @@ namespace POCOMapper.definition
 		{
 			this.Map<int, double>()
 				.SetPriority(int.MaxValue)
-				.Using<Cast<int, double>>();
+				.CastRules();;
 			this.Map<double, int>()
 				.SetPriority(int.MaxValue)
-				.Using<Cast<double, int>>();
+				.CastRules();
 
 			this.Map<int, string>()
 				.SetPriority(int.MaxValue)
-				.Using<ToString<int>>();
+				.ToStringRules();
 			this.Map<string, int>()
 				.SetPriority(int.MaxValue)
-				.Using<Parse<int>>();
+				.ParseRules();
 
 			this.Map<string, string>()
 				.SetPriority(int.MaxValue)
-				.Using<Copy<string>>();
+				.CopyRules();
 
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<T[]>())
 				.SetPriority(int.MaxValue)
-				.Using<EnumerableToArray<IEnumerable<T>, T[]>>();
+				.CollectionMappingRules()
+				.MapAs(CollectionMappingType.Array);
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<List<T>>())
 				.SetPriority(int.MaxValue)
-				.Using<EnumerableToList<IEnumerable<T>, List<T>>>();
+				.CollectionMappingRules()
+				.MapAs(CollectionMappingType.List);
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<SubClass<IEnumerable<T>>>())
 				.SetPriority(int.MaxValue)
-				.Using<EnumerableToEnumerable<IEnumerable<T>, IEnumerable<T>>>();
+				.CollectionMappingRules();
 		}
 
 		/// <summary>

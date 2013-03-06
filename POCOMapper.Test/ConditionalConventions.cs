@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.conventions.symbol;
 using POCOMapper.definition;
+using POCOMapper.mapping.special;
 
 namespace POCOMapper.Test
 {
@@ -48,6 +49,7 @@ namespace POCOMapper.Test
 
 				Map<From, To>();
 				Map<Int64, ToChild>()
+					.FuncMappingRules()
 					.Using(x => new ToChild(x));
 			}
 		}

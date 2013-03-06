@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.definition;
 using POCOMapper.exceptions;
+using POCOMapper.mapping.common;
 
 namespace POCOMapper.Test
 {
@@ -22,9 +23,10 @@ namespace POCOMapper.Test
 			private Mapping()
 			{
 				Map<From, To>()
-					.MapSubClass<SubFrom1, SubTo1>()
-					.MapSubClass<SubFrom2, SubTo1>()
-					.MapSubClass<SubFrom3, SubTo2>();
+					.SubClassMappingRules()
+					.Map<SubFrom1, SubTo1>()
+					.Map<SubFrom2, SubTo1>()
+					.Map<SubFrom3, SubTo2>();
 
 				Map<SubFrom1, SubTo1>();
 				Map<SubFrom2, SubTo1>();

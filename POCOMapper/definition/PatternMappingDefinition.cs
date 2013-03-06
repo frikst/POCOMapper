@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using POCOMapper.mapping.@base;
 using POCOMapper.typePatterns;
 
@@ -7,29 +8,29 @@ namespace POCOMapper.definition
 	/// <summary>
 	/// Pattern mapping specification definition class.
 	/// </summary>
-	public class PatternMappingDefinition : IMappingDefinition
+	public class PatternMappingDefinition : IMappingDefinition, IRulesDefinition
 	{
 		private readonly IPattern aPatternFrom;
 		private readonly IPattern aPatternTo;
 
-		private Type aMapping;
 		private int aPriority;
+		private IMappingRules aRules;
 
 
 		internal PatternMappingDefinition(IPattern patternFrom, IPattern patternTo)
 		{
 			this.aPatternFrom = patternFrom;
 			this.aPatternTo = patternTo;
-			this.aMapping = null;
 			this.aPriority = 0;
+			this.aRules = null;
 		}
 
 		#region Implementation of IMappingDefinition
 
 		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
-			Type typedMapping = aMapping.MakeGenericType(from, to);
-			return (IMapping)Activator.CreateInstance(typedMapping, allMappings);
+			MethodInfo mappingCreateMethod = typeof(IMappingRules).GetMethod("Create").MakeGenericMethod(from, to);
+			return (IMapping) mappingCreateMethod.Invoke(this.aRules, new object[] { allMappings });
 		}
 
 		bool IMappingDefinition.IsFrom(Type from)
@@ -61,23 +62,16 @@ namespace POCOMapper.definition
 			return this;
 		}
 
-		/// <summary>
-		/// Mapping class specified by the <typeparamref name="TMapping"/> should be used for the mapping.
-		/// </summary>
-		/// <typeparam name="TMapping"></typeparam>
-		public void Using<TMapping>()
-			where TMapping : IMapping
+		#region Implementation of IRulesDefinition
+
+		public TRules Rules<TRules>()
+			where TRules : class, IMappingRules, new()
 		{
-			this.aMapping = typeof(TMapping).GetGenericTypeDefinition();
+			TRules ret = new TRules();
+			this.aRules = ret;
+			return ret;
 		}
 
-		/// <summary>
-		/// Mapping class specified by the <paramref name="mapping"/> should be used for the mapping.
-		/// </summary>
-		/// <param name="mapping"></param>
-		public void Using(Type mapping)
-		{
-			this.aMapping = mapping;
-		}
+		#endregion
 	}
 }
