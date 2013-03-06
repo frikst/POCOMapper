@@ -56,11 +56,6 @@ namespace POCOMapper.mapping.special
 			return new Postprocess<TFrom, TTo>(this.aRules.Create(mapping), this.aPostprocessDelegate);
 		}
 
-		IMapping<TCreateFrom, TCreateTo> IMappingRules.Create<TCreateFrom, TCreateTo>(MappingImplementation mapping)
-		{
-			return (IMapping<TCreateFrom, TCreateTo>)((IMappingRules<TFrom, TTo>)this).Create(mapping);
-		}
-
 		#endregion
 	}
 }

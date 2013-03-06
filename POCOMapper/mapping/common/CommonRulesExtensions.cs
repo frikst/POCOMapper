@@ -10,6 +10,11 @@ namespace POCOMapper.mapping.common
 			return definition.Rules<ObjectMappingRules<TFrom, TTo>>();
 		}
 
+		public static ObjectMappingRules ObjectMappingRules(this IRulesDefinition definition)
+		{
+			return definition.Rules<ObjectMappingRules>();
+		}
+
 		public static SubClassMappingRules<TFrom, TTo> SubClassMappingRules<TFrom, TTo>(this IRulesDefinition<TFrom, TTo> definition)
 		{
 			return definition.Rules<SubClassMappingRules<TFrom, TTo>>();

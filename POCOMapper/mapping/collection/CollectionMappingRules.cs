@@ -20,7 +20,7 @@ namespace POCOMapper.mapping.collection
 			return this;
 		}
 
-		protected CollectionMappingType CfgType { get; private set; }
+		internal CollectionMappingType CfgType { get; private set; }
 
 		#region Implementation of IMappingRules
 
@@ -35,11 +35,6 @@ namespace POCOMapper.mapping.collection
 				default:
 					return new EnumerableToEnumerable<TFrom, TTo>(mapping);
 			}
-		}
-
-		IMapping<TCreateFrom, TCreateTo> IMappingRules.Create<TCreateFrom, TCreateTo>(MappingImplementation mapping)
-		{
-			return (IMapping<TCreateFrom, TCreateTo>)((IMappingRules<TFrom, TTo>)this).Create(mapping);
 		}
 
 		#endregion

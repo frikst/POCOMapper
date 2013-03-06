@@ -16,11 +16,6 @@ namespace POCOMapper.mapping.standard
 			return new Parse<TTo>(mapping);
 		}
 
-		IMapping<TCreateFrom, TCreateTo> IMappingRules.Create<TCreateFrom, TCreateTo>(MappingImplementation mapping)
-		{
-			return (IMapping<TCreateFrom, TCreateTo>)((IMappingRules<string, TTo>)this).Create(mapping);
-		}
-
 		#endregion
 	}
 

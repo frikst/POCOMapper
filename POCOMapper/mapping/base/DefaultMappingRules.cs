@@ -14,11 +14,6 @@ namespace POCOMapper.mapping.@base
 			return mapping.GetMapping<TFrom, TTo>();
 		}
 
-		IMapping<TCreateFrom, TCreateTo> IMappingRules.Create<TCreateFrom, TCreateTo>(MappingImplementation mapping)
-		{
-			return (IMapping<TCreateFrom, TCreateTo>)((IMappingRules<TFrom, TTo>)this).Create(mapping);
-		}
-
 		#endregion
 	}
 

@@ -60,11 +60,6 @@ namespace POCOMapper.mapping.common
 			return new SubClassToObject<TFrom, TTo>(mapping, this.CfgMappings, this.CfgDefaultRules.Create(mapping));
 		}
 
-		IMapping<TCreateFrom, TCreateTo> IMappingRules.Create<TCreateFrom, TCreateTo>(MappingImplementation mapping)
-		{
-			return (IMapping<TCreateFrom, TCreateTo>) ((IMappingRules<TFrom, TTo>)this).Create(mapping);
-		}
-
 		#endregion
 	}
 }

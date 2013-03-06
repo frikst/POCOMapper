@@ -7,7 +7,7 @@ namespace POCOMapper.mapping.@base
 		IMapping<TFrom, TTo> Create<TFrom, TTo>(MappingImplementation mapping);
 	}
 
-	public interface IMappingRules<TFrom, TTo> : IMappingRules
+	public interface IMappingRules<TFrom, TTo>
 	{
 		IMapping<TFrom, TTo> Create(MappingImplementation mapping);
 	}

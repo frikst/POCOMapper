@@ -9,16 +9,12 @@ namespace POCOMapper.mapping.common.memberMappings
 {
 	public class MemberMappingDefinition<TFromType, TToType> : IMemberMappingDefinition, IRulesDefinition<TFromType, TToType>
 	{
-		private readonly Type aFromClass;
-		private readonly Type aToClass;
 		private readonly string aFromName;
 		private readonly string aToName;
 		private IMappingRules<TFromType, TToType> aRules;
 
-		internal MemberMappingDefinition(Type fromClass, Type toClass, string fromName, string toName)
+		internal MemberMappingDefinition(string fromName, string toName)
 		{
-			this.aFromClass = fromClass;
-			this.aToClass = toClass;
 			this.aFromName = fromName;
 			this.aToName = toName;
 
@@ -27,7 +23,7 @@ namespace POCOMapper.mapping.common.memberMappings
 
 		#region Implementation of IMemberMappingDefinition
 
-		PairedMembers IMemberMappingDefinition.CreateMapping(MappingImplementation allMappings)
+		PairedMembers IMemberMappingDefinition.CreateMapping(MappingImplementation allMappings, Type fromClass, Type toClass)
 		{
 			MemberFromNameParser parser = new MemberFromNameParser();
 
@@ -37,12 +33,12 @@ namespace POCOMapper.mapping.common.memberMappings
 			if (this.aFromName == null)
 				memberFrom = new ThisMember<TFromType>();
 			else
-				memberFrom = parser.Parse(allMappings.FromConventions, this.aFromClass, this.aFromName, false);
+				memberFrom = parser.Parse(allMappings.FromConventions, fromClass, this.aFromName, false);
 			IMember memberTo;
 			if (this.aToName == null)
 				memberTo = new ThisMember<TToType>();
 			else
-				memberTo = parser.Parse(allMappings.ToConventions, this.aToClass, this.aToName, true);
+				memberTo = parser.Parse(allMappings.ToConventions, toClass, this.aToName, true);
 
 			mapping = this.aRules.Create(allMappings);
 

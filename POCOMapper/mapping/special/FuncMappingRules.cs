@@ -38,11 +38,6 @@ namespace POCOMapper.mapping.special
 				throw new InvalidMapping("Function mapping without the mapping function defined");
 		}
 
-		IMapping<TCreateFrom, TCreateTo> IMappingRules.Create<TCreateFrom, TCreateTo>(MappingImplementation mapping)
-		{
-			return (IMapping<TCreateFrom, TCreateTo>)((IMappingRules<TFrom, TTo>)this).Create(mapping);
-		}
-
 		#endregion
 	}
 }
