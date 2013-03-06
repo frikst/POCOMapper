@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using POCOMapper.mapping.@base;
+﻿using POCOMapper.mapping.@base;
 
 namespace POCOMapper.definition
 {

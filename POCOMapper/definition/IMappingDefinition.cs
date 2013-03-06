@@ -15,16 +15,4 @@ namespace POCOMapper.definition
 
 		int Priority { get; }
 	}
-
-	internal interface IMemberMappingDefinition
-	{
-		PairedMembers CreateMapping(MappingImplementation allMappings);
-	}
-
-	internal interface IChildAssociationPostprocessing
-	{
-		Type Parent { get; }
-		Type Child { get; }
-		Delegate PostprocessDelegate { get; }
-	}
 }

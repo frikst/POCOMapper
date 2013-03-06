@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.definition;
 using POCOMapper.mapping.common;
+using POCOMapper.mapping.special;
 
 namespace POCOMapper.Test
 {
@@ -29,9 +30,11 @@ namespace POCOMapper.Test
 				Map<From, To>()
 					.ObjectMappingRules()
 					.MemberTo<bool>("i1", def => def
+						.FuncMappingRules()
 						.Using(from => (from.i & 1) == 1)
 					)
 					.MemberTo<bool>("i2", def => def
+						.FuncMappingRules()
 						.Using(from => (from.i & 2) == 2)
 					);
 			}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using POCOMapper.definition;
 using POCOMapper.mapping.@base;
+using POCOMapper.mapping.common.memberMappings;
 using POCOMapper.mapping.common.parser;
 
 namespace POCOMapper.mapping.common

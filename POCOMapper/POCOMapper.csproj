@@ -55,8 +55,11 @@
     <Compile Include="conventions\members\ThisMember.cs" />
     <Compile Include="conventions\MemberType.cs" />
     <Compile Include="definition\ChildAssociationPostprocessing.cs" />
+    <Compile Include="definition\IChildAssociationPostprocessing.cs" />
     <Compile Include="definition\IRulesDefinition.cs" />
-    <Compile Include="definition\MemberMappingDefinition.cs" />
+    <Compile Include="mapping\base\DefaultMappingRules.cs" />
+    <Compile Include="mapping\common\memberMappings\IMemberMappingDefinition.cs" />
+    <Compile Include="mapping\common\memberMappings\MemberMappingDefinition.cs" />
     <Compile Include="mapping\base\IMappingRules.cs" />
     <Compile Include="mapping\collection\CollectionMappingRules.cs" />
     <Compile Include="mapping\collection\CollectionMappingRulesExtensions.cs" />
@@ -79,7 +82,7 @@
     <Compile Include="typePatterns\IPattern.cs" />
     <Compile Include="typePatterns\Pattern.cs" />
     <Compile Include="typePatterns\SubClass.cs" />
-    <Compile Include="definition\SimpleMemberMappingDefinition.cs" />
+    <Compile Include="mapping\common\memberMappings\SimpleMemberMappingDefinition.cs" />
     <Compile Include="exceptions\CantMap.cs" />
     <Compile Include="exceptions\InvalidConvention.cs" />
     <Compile Include="exceptions\InvalidPattern.cs" />

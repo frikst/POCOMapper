@@ -17,7 +17,7 @@ namespace POCOMapper.definition
 		private readonly List<IMappingDefinition> aMappingDefinitions;
 		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aContainerMappingDefinitions;
 		private readonly Dictionary<Tuple<Type, Type>, IMapping> aMappings;
-		private List<IChildAssociationPostprocessing> aChildPostprocessings;
+		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 
 		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, Conventions fromConventions, Conventions toConventions)
 		{

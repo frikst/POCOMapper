@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
-using POCOMapper.conventions;
 using POCOMapper.conventions.members;
-using POCOMapper.exceptions;
+using POCOMapper.definition;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.common.parser;
 using POCOMapper.mapping.special;
 
-namespace POCOMapper.definition
+namespace POCOMapper.mapping.common.memberMappings
 {
-	public class MemberMappingDefinition<TFromType, TToType> : IMemberMappingDefinition
+	public class MemberMappingDefinition<TFromType, TToType> : IMemberMappingDefinition, IRulesDefinition<TFromType, TToType>
 	{
 		private readonly Type aFromClass;
 		private readonly Type aToClass;
 		private readonly string aFromName;
 		private readonly string aToName;
-		private Type aMapping;
-		private Func<TFromType, TToType> aMappingFunc;
-		private Action<TFromType, TToType> aMappingAction;
+		private IMappingRules<TFromType, TToType> aRules;
 
 		internal MemberMappingDefinition(Type fromClass, Type toClass, string fromName, string toName)
 		{
@@ -27,9 +22,7 @@ namespace POCOMapper.definition
 			this.aFromName = fromName;
 			this.aToName = toName;
 
-			this.aMapping = null;
-			this.aMappingAction = null;
-			this.aMappingFunc = null;
+			this.aRules = new DefaultMappingRules<TFromType, TToType>();
 		}
 
 		#region Implementation of IMemberMappingDefinition
@@ -51,34 +44,23 @@ namespace POCOMapper.definition
 			else
 				memberTo = parser.Parse(allMappings.ToConventions, this.aToClass, this.aToName, true);
 
-			if (this.aMapping != null)
-				mapping = (IMapping<TFromType, TToType>)Activator.CreateInstance(this.aMapping, allMappings);
-			else if (this.aMappingFunc != null)
-				mapping = new FuncMapping<TFromType, TToType>(this.aMappingFunc);
-			else if (this.aMappingAction != null)
-				mapping = new FuncMapping<TFromType, TToType>(this.aMappingAction);
-			else
-				mapping = allMappings.GetMapping<TFromType, TToType>();
+			mapping = this.aRules.Create(allMappings);
 
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}
 
 		#endregion
 
-		public void Using<TMapping>()
-			where TMapping : IMapping<TFromType, TToType>
+		#region Implementation of IRulesDefinition<TFromType,TToType>
+
+		public TRules Rules<TRules>()
+			where TRules : class, IMappingRules<TFromType, TToType>, new()
 		{
-			this.aMapping = typeof(TMapping);
+			TRules ret = new TRules();
+			this.aRules = ret;
+			return ret;
 		}
 
-		public void Using(Func<TFromType, TToType> mappingFunc)
-		{
-			this.aMappingFunc = mappingFunc;
-		}
-
-		public void Using(Action<TFromType, TToType> mappingAction)
-		{
-			this.aMappingAction = mappingAction;
-		}
+		#endregion
 	}
 }

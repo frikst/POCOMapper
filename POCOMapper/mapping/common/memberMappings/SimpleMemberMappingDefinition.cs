@@ -1,9 +1,10 @@
 ﻿using System;
 using POCOMapper.conventions.members;
+using POCOMapper.definition;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.common.parser;
 
-namespace POCOMapper.definition
+namespace POCOMapper.mapping.common.memberMappings
 {
 	public class SimpleMemberMappingDefinition : IMemberMappingDefinition
 	{
