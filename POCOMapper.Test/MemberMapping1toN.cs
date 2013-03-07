@@ -86,7 +86,7 @@ namespace POCOMapper.Test
 			From from = new From { i = 0 };
 			To to = new To();
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 			Assert.IsFalse(to.i1);
 			Assert.IsFalse(to.i2);
 		}
@@ -97,7 +97,7 @@ namespace POCOMapper.Test
 			From from = new From { i = 1 };
 			To to = new To();
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 			Assert.IsTrue(to.i1);
 			Assert.IsFalse(to.i2);
 		}
@@ -108,7 +108,7 @@ namespace POCOMapper.Test
 			From from = new From { i = 2 };
 			To to = new To();
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 			Assert.IsFalse(to.i1);
 			Assert.IsTrue(to.i2);
 		}
@@ -119,7 +119,7 @@ namespace POCOMapper.Test
 			From from = new From { i = 3 };
 			To to = new To();
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 			Assert.IsTrue(to.i1);
 			Assert.IsTrue(to.i2);
 		}

@@ -45,7 +45,7 @@ namespace POCOMapper.Test
 			To to = new To();
 			From from = new From();
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 
 			Assert.AreEqual("hello", to.InnerData);
 			Assert.AreEqual("world", to.Data);

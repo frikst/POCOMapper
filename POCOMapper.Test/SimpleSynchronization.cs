@@ -40,7 +40,7 @@ namespace POCOMapper.Test
 			From val = new From("test");
 			To valNew = new To();
 
-			Mapping.Instance.Synchronize(val, valNew);
+			Mapping.Instance.Synchronize(val, ref valNew);
 
 			Assert.AreEqual(val.GetValue(), valNew.Value);
 		}
@@ -52,7 +52,7 @@ namespace POCOMapper.Test
 			To valNew = new To();
 			valNew.Value = "hello";
 
-			Mapping.Instance.Synchronize(val, valNew);
+			Mapping.Instance.Synchronize(val, ref valNew);
 
 			Assert.AreEqual(val.GetValue(), valNew.Value);
 		}
@@ -63,7 +63,7 @@ namespace POCOMapper.Test
 			From val = new From(null);
 			To valNew = new To();
 
-			Mapping.Instance.Synchronize(val, valNew);
+			Mapping.Instance.Synchronize(val, ref valNew);
 
 			Assert.AreEqual(val.GetValue(), valNew.Value);
 		}
@@ -75,7 +75,7 @@ namespace POCOMapper.Test
 			To valNew = new To();
 			valNew.Value = "hello";
 
-			Mapping.Instance.Synchronize(val, valNew);
+			Mapping.Instance.Synchronize(val, ref valNew);
 
 			Assert.AreEqual(val.GetValue(), valNew.Value);
 		}

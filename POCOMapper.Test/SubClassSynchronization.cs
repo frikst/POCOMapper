@@ -42,14 +42,14 @@ namespace POCOMapper.Test
 		public void ParentToParentTest()
 		{
 			To ret = new To();
-			Mapping.Instance.Synchronize<From, To>(new From(), ret);
+			Mapping.Instance.Synchronize<From, To>(new From(), ref ret);
 		}
 
 		[TestMethod]
 		public void SubFrom1ToSubTo1Test()
 		{
 			To ret = new SubTo1();
-			Mapping.Instance.Synchronize<From, To>(new SubFrom1(), ret);
+			Mapping.Instance.Synchronize<From, To>(new SubFrom1(), ref ret);
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
@@ -57,7 +57,7 @@ namespace POCOMapper.Test
 		public void SubFrom2ToSubTo1Test()
 		{
 			To ret = new SubTo1();
-			Mapping.Instance.Synchronize<From, To>(new SubFrom2(), ret);
+			Mapping.Instance.Synchronize<From, To>(new SubFrom2(), ref ret);
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
@@ -65,7 +65,7 @@ namespace POCOMapper.Test
 		public void SubFrom3ToSubTo2Test()
 		{
 			To ret = new SubTo2();
-			Mapping.Instance.Synchronize<From, To>(new SubFrom3(), ret);
+			Mapping.Instance.Synchronize<From, To>(new SubFrom3(), ref ret);
 			Assert.AreEqual(typeof(SubTo2), ret.GetType());
 		}
 
@@ -76,7 +76,7 @@ namespace POCOMapper.Test
 			try
 			{
 				To ret = new To();
-				Mapping.Instance.Synchronize<From, To>(new SubFrom4(), ret);
+				Mapping.Instance.Synchronize<From, To>(new SubFrom4(), ref ret);
 			}
 			catch (UnknownMapping e)
 			{

@@ -46,5 +46,15 @@ namespace POCOMapper.mapping.standard
 		{
 			return definition.Rules<ToStringRules<TFrom>>();
 		}
+
+		public static CustomMappingRules<TFrom, TTo> CustomMappingRules<TFrom, TTo>(this IRulesDefinition<TFrom, TTo> definition)
+		{
+			return definition.Rules<CustomMappingRules<TFrom, TTo>>();
+		}
+
+		public static CustomMappingRules CustomMappingRules(this IRulesDefinition definition)
+		{
+			return definition.Rules<CustomMappingRules>();
+		}
 	}
 }

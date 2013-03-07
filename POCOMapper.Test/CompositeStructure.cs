@@ -45,7 +45,7 @@ namespace POCOMapper.Test
 			From from = new From { child = new From { child = new From() } };
 			To to = new To();
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 			Assert.IsNotNull(to.child);
 			Assert.IsNotNull(to.child.child);
 			Assert.IsNull(to.child.child.child);
@@ -58,7 +58,7 @@ namespace POCOMapper.Test
 			To to = new To { child = new To() };
 			To toChild = to.child;
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 			Assert.IsNotNull(to.child);
 			Assert.IsNotNull(to.child.child);
 			Assert.IsNull(to.child.child.child);

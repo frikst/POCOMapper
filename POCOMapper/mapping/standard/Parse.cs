@@ -39,6 +39,11 @@ namespace POCOMapper.mapping.standard
 			get { return false; }
 		}
 
+		public override bool SynchronizeCanChangeObject
+		{
+			get { return false; }
+		}
+
 		protected override Expression<Func<string, TTo>> CompileMapping()
 		{
 			ParameterExpression from = Expression.Parameter(typeof(string), "from");

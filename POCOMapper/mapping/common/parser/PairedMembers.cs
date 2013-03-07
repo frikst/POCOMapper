@@ -51,15 +51,10 @@ namespace POCOMapper.mapping.common.parser
 		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action, Delegate postprocess, ParameterExpression parent)
 		{
 			if (
-				(
-					action == Action.Map
-					|| this.aTo.Type.IsValueType
-					|| this.aTo.Type.IsAssignableFrom(typeof(string))
-					|| (this.aMapping != null && !this.aMapping.CanSynchronize)
-				) && (
-					this.aMapping == null
-					|| this.aMapping.CanMap
-				))
+				action == Action.Map
+				|| this.aMapping == null
+				|| (this.aMapping != null && !this.aMapping.CanSynchronize)
+			)
 			{
 				Expression ret = this.aFrom.CreateGetterExpression(from);
 
@@ -96,6 +91,14 @@ namespace POCOMapper.mapping.common.parser
 					MappingMethods.Synchronize(this.aFrom.Type, this.aTo.Type),
 					tempFromValue, this.aTo.CreateGetterExpression(to)
 				);
+
+				if (this.aMapping.SynchronizeCanChangeObject)
+				{
+					synchronize = this.aTo.CreateSetterExpression(
+						to,
+						synchronize
+					);
+				}
 
 				if (this.aMapping.CanMap && !this.aTo.Type.IsValueType)
 				{

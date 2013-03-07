@@ -34,6 +34,11 @@ namespace POCOMapper.mapping.standard
 			get { return false; }
 		}
 
+		public bool SynchronizeCanChangeObject
+		{
+			get { return false; }
+		}
+
 		public string MappingSource
 		{
 			get { return null; }
@@ -53,7 +58,7 @@ namespace POCOMapper.mapping.standard
 			return from.ToString();
 		}
 
-		public void Synchronize(TFrom from, string to)
+		public string Synchronize(TFrom from, string to)
 		{
 			throw new NotImplementedException();
 		}

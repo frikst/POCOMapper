@@ -80,7 +80,7 @@ namespace POCOMapper.Test
 		public void FieldSourceSynchronization()
 		{
 			To ret = new To();
-			MappingFields.Instance.Synchronize(new From(), ret);
+			MappingFields.Instance.Synchronize(new From(), ref ret);
 			Assert.AreEqual("field", ret.Data);
 		}
 
@@ -88,7 +88,7 @@ namespace POCOMapper.Test
 		public void MethodSourceSynchronization()
 		{
 			To ret = new To();
-			MappingMethods.Instance.Synchronize(new From(), ret);
+			MappingMethods.Instance.Synchronize(new From(), ref ret);
 			Assert.AreEqual("meth", ret.Data);
 		}
 
@@ -96,7 +96,7 @@ namespace POCOMapper.Test
 		public void PropertySourceSynchronization()
 		{
 			To ret = new To();
-			MappingProps.Instance.Synchronize(new From(), ret);
+			MappingProps.Instance.Synchronize(new From(), ref ret);
 			Assert.AreEqual("prop", ret.Data);
 		}
 	}

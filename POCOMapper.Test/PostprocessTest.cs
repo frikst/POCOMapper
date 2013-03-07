@@ -42,7 +42,7 @@ namespace POCOMapper.Test
 		public void TestPostprocessSnychronize()
 		{
 			To ret = new To();
-			Mapping.Instance.Synchronize(new From(), ret);
+			Mapping.Instance.Synchronize(new From(), ref ret);
 			Assert.AreEqual("Hi", ret.Value);
 		}
 	}

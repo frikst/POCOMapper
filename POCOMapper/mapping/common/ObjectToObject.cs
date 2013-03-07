@@ -144,6 +144,11 @@ namespace POCOMapper.mapping.common
 			get { return false; }
 		}
 
+		public override bool SynchronizeCanChangeObject
+		{
+			get { return false; }
+		}
+
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");

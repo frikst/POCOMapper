@@ -50,7 +50,7 @@ namespace POCOMapper.Test
 			From from = new From();
 			To to = new To();
 
-			Mapping.Instance.Synchronize(from, to);
+			Mapping.Instance.Synchronize(from, ref to);
 			Assert.AreEqual("s", to.helloWorld);
 			Assert.IsNull(to.a);
 		}

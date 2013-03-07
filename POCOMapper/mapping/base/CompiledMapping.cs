@@ -42,15 +42,19 @@ namespace POCOMapper.mapping.@base
 			return this.aMappingFnc(from);
 		}
 
-		public void Synchronize(TFrom from, TTo to)
+		public TTo Synchronize(TFrom from, TTo to)
 		{
 			if (object.ReferenceEquals(from, to))
-				return;
+				return to;
 
 			this.EnsureSynchronizeCompiled();
 
 			this.aSynchronizationFnc(from, to);
+
+			return to;
 		}
+
+		#endregion
 
 		#region Implementation of IMapping
 
@@ -60,6 +64,8 @@ namespace POCOMapper.mapping.@base
 		public abstract bool CanMap { get; }
 
 		public abstract bool IsDirect { get; }
+
+		public abstract bool SynchronizeCanChangeObject { get; }
 
 		public string MappingSource
 		{
@@ -80,8 +86,6 @@ namespace POCOMapper.mapping.@base
 				return this.aSynchronizationSource;
 			}
 		}
-
-		#endregion
 
 		#endregion
 

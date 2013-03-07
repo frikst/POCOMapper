@@ -104,7 +104,7 @@ namespace POCOMapper.definition
 		/// <typeparam name="TTo">Class from the destination model.</typeparam>
 		/// <param name="from">Instance that should be mapped.</param>
 		/// <param name="to">Instance that should have state transfered to.</param>
-		public void Synchronize<TFrom, TTo>(TFrom from, TTo to)
+		public void Synchronize<TFrom, TTo>(TFrom from, ref TTo to)
 		{
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
 
@@ -114,7 +114,7 @@ namespace POCOMapper.definition
 			if (!mapping.CanSynchronize)
 				throw new CantMap(string.Format("Can't synchronize {0} to {1}, mapping object does not support synchronization", typeof(TFrom).Name, typeof(TTo).Name));
 
-			mapping.Synchronize(from, to);
+			to = mapping.Synchronize(from, to);
 		}
 
 		private void MappingToString(IMapping mapping, StringBuilder output, int level, List<IMapping> allMappings = null, List<IMapping> mappingsRecursionDetection = null)

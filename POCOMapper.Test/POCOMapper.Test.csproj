@@ -76,6 +76,7 @@
     <Compile Include="SubClassAttributes.cs" />
     <Compile Include="SubClassMapping.cs" />
     <Compile Include="SubClassSynchronization.cs" />
+    <Compile Include="SynchronizationWithValueChange.cs" />
     <Compile Include="UntypedMemberMapping.cs" />
   </ItemGroup>
   <ItemGroup>

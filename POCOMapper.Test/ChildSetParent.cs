@@ -53,7 +53,7 @@ namespace POCOMapper.Test
 		public void InnerParentIsParentSync()
 		{
 			To ret = new To();
-			Mapping.Instance.Synchronize(new From(), ret);
+			Mapping.Instance.Synchronize(new From(), ref ret);
 			Assert.AreSame(ret, ret.Inner.Parent);
 		}
 	}

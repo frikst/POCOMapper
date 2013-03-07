@@ -42,7 +42,7 @@ namespace POCOMapper.definition
 			return new Tuple<Type, Type>(typeof(TFrom), typeof(TTo));
 		}
 
-		public int Priority
+		int IMappingDefinition.Priority
 		{
 			get { return this.aPriority; }
 		}

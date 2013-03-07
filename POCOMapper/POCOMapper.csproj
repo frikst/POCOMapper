@@ -72,6 +72,7 @@
     <Compile Include="mapping\special\SpecialRulesExtensions.cs" />
     <Compile Include="mapping\standard\CastRules.cs" />
     <Compile Include="mapping\standard\CopyRules.cs" />
+    <Compile Include="mapping\standard\CustomMappingRules.cs" />
     <Compile Include="mapping\standard\ParseRules.cs" />
     <Compile Include="mapping\standard\StandardRulesExtensions.cs" />
     <Compile Include="mapping\standard\ToStringRules.cs" />

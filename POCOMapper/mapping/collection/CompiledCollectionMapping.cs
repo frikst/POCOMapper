@@ -50,6 +50,11 @@ namespace POCOMapper.mapping.collection
 			get { return true; }
 		}
 
+		public override bool  SynchronizeCanChangeObject
+		{
+			get { return false; }
+		}
+
 		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
 		{
 			throw new NotImplementedException();

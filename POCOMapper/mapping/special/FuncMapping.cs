@@ -45,6 +45,11 @@ namespace POCOMapper.mapping.special
 			get { return false; }
 		}
 
+		public bool SynchronizeCanChangeObject
+		{
+			get { return false; }
+		}
+
 		public string MappingSource
 		{
 			get { return null; }
@@ -64,9 +69,10 @@ namespace POCOMapper.mapping.special
 			return this.aMappingFunc(from);
 		}
 
-		public void Synchronize(TFrom from, TTo to)
+		public TTo Synchronize(TFrom from, TTo to)
 		{
 			this.aMappingAction(from, to);
+			return to;
 		}
 
 		#endregion
