@@ -8,8 +8,8 @@ namespace POCOMapper.mapping.collection
 {
 	public class EnumerableToList<TFrom, TTo> : CompiledCollectionMapping<TFrom, TTo>
 	{
-		public EnumerableToList(MappingImplementation mapping)
-			: base(mapping)
+		public EnumerableToList(MappingImplementation mapping, Delegate selectIdFrom, Delegate selectIdTo)
+			: base(mapping, selectIdFrom, selectIdTo)
 		{
 
 		}

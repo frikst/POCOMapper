@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
@@ -11,12 +13,65 @@ namespace POCOMapper.mapping.collection
 {
 	public abstract class CompiledCollectionMapping<TFrom, TTo> : CompiledMapping<TFrom, TTo>
 	{
+		private class SynchronizationEnumerable<TId, TItemFrom, TItemTo> : IEnumerable<TItemTo>
+		{
+			private Func<TItemTo, TId> aSelectIdTo;
+			private Func<TItemFrom, TId> aSelectIdFrom;
+
+			private IEnumerable<TItemFrom> aFrom;
+			private IEnumerable<TItemTo> aTo;
+
+			private IMapping<TItemFrom, TItemTo> aMapping;
+
+			public SynchronizationEnumerable(IEnumerable<TItemFrom> @from, IEnumerable<TItemTo> to, Func<TItemTo, TId> selectIdTo, Func<TItemFrom, TId> selectIdFrom, IMapping<TItemFrom, TItemTo> mapping)
+			{
+				this.aFrom = @from;
+				this.aTo = to;
+
+				this.aSelectIdTo = selectIdTo;
+				this.aSelectIdFrom = selectIdFrom;
+
+				this.aMapping = mapping;
+			}
+
+			#region Implementation of IEnumerable
+
+			public IEnumerator<TItemTo> GetEnumerator()
+			{
+				Dictionary<TId, TItemTo> index = this.aTo.ToDictionary(this.aSelectIdTo);
+
+				foreach (TItemFrom itemFrom in this.aFrom)
+				{
+					TItemTo itemTo;
+					if (index.TryGetValue(this.aSelectIdFrom(itemFrom), out itemTo))
+						itemTo = this.aMapping.Synchronize(itemFrom, itemTo);
+					else
+						itemTo = this.aMapping.Map(itemFrom);
+
+					yield return itemTo;
+				}
+			}
+
+			IEnumerator IEnumerable.GetEnumerator()
+			{
+				return this.GetEnumerator();
+			}
+
+			#endregion
+		}
+
+		private readonly Delegate aSelectIdFrom;
+		private readonly Delegate aSelectIdTo;
+
 		protected Type ItemFrom { get; private set; }
 		protected Type ItemTo { get; private set; }
 
-		protected CompiledCollectionMapping(MappingImplementation mapping)
+		protected CompiledCollectionMapping(MappingImplementation mapping, Delegate selectIdFrom, Delegate selectIdTo)
 			: base(mapping)
 		{
+			this.aSelectIdFrom = selectIdFrom;
+			this.aSelectIdTo = selectIdTo;
+
 			if (typeof(TFrom).IsArray)
 				this.ItemFrom = typeof(TFrom).GetElementType();
 			else if (typeof(TFrom).IsGenericType && typeof(TFrom).GetGenericTypeDefinition() == typeof(IEnumerable<>))
@@ -42,7 +97,7 @@ namespace POCOMapper.mapping.collection
 
 		public override bool CanSynchronize
 		{
-			get { return false; }
+			get { return this.aSelectIdFrom != null && this.aSelectIdTo != null; }
 		}
 
 		public override bool CanMap
@@ -55,7 +110,7 @@ namespace POCOMapper.mapping.collection
 			get { return false; }
 		}
 
-		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
+		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
 		{
 			throw new NotImplementedException();
 		}
@@ -130,6 +185,75 @@ namespace POCOMapper.mapping.collection
 						to
 					),
 					from
+				);
+			}
+		}
+
+		protected Expression CreateItemSynchronizationExpression(ParameterExpression @from, ParameterExpression to)
+		{
+			Expression ret;
+			IMapping itemMapping = this.GetMapping();
+
+			if (!this.CanSynchronize)
+				throw new InvalidOperationException("Cannot synchronize collections if no ID selectors are defined");
+
+			if (itemMapping != null)
+			{
+				Type idType = this.aSelectIdFrom.Method.ReturnType;
+				Type synEnu = typeof(SynchronizationEnumerable<,,>).MakeGenericType(typeof(TFrom), typeof(TTo), idType, this.ItemFrom, this.ItemTo);
+				ConstructorInfo synEnuConstructor = synEnu.GetConstructor(
+					BindingFlags.Public | BindingFlags.Instance,
+					null,
+					new [] {
+						typeof(IEnumerable<>).MakeGenericType(this.ItemFrom),
+						typeof(IEnumerable<>).MakeGenericType(this.ItemTo),
+						typeof(Func<,>).MakeGenericType(this.ItemTo, idType),
+						typeof(Func<,>).MakeGenericType(this.ItemFrom, idType),
+						typeof(IMapping<,>).MakeGenericType(this.ItemFrom, this.ItemTo)
+					},
+					null
+				);
+
+				ret = Expression.New(
+					synEnuConstructor,
+					Expression.Convert(from, typeof(IEnumerable<>).MakeGenericType(this.ItemFrom)),
+					Expression.Convert(to, typeof(IEnumerable<>).MakeGenericType(this.ItemTo)),
+					Expression.Constant(this.aSelectIdTo), Expression.Constant(this.aSelectIdFrom), Expression.Constant(itemMapping)
+				);
+			}
+			else
+			{
+				ret = from;
+			}
+
+			return ret;
+		}
+
+		protected Expression<Func<TFrom, TTo, TTo>> CreateSynchronizationEnvelope(ParameterExpression @from, ParameterExpression to, Expression body)
+		{
+			Delegate postprocess = this.Mapping.GetChildPostprocessing(typeof(TTo), this.ItemTo);
+
+			if (postprocess == null)
+			{
+				return Expression.Lambda<Func<TFrom, TTo, TTo>>(body, from, to);
+			}
+			else
+			{
+				ParameterExpression item = Expression.Parameter(this.ItemTo, "item");
+
+				return Expression.Lambda<Func<TFrom, TTo, TTo>>(
+					Expression.Block(
+						new ParameterExpression[] { to },
+
+						Expression.Assign(to, body),
+						ExpressionHelper.ForEach(
+							item,
+							to,
+							ExpressionHelper.Call(postprocess, to, item)
+						),
+						to
+					),
+					from, to
 				);
 			}
 		}

@@ -53,6 +53,7 @@
     <Compile Include="ChildSetParent.cs" />
     <Compile Include="CollectionChildSetParent.cs" />
     <Compile Include="Collections.cs" />
+    <Compile Include="CollectionSynchronization.cs" />
     <Compile Include="CompositeStructure.cs" />
     <Compile Include="ConditionalConventions.cs" />
     <Compile Include="Constants.cs" />

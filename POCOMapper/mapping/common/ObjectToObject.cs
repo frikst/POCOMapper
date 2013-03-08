@@ -189,14 +189,14 @@ namespace POCOMapper.mapping.common
 			);
 		}
 
-		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
+		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
 		{
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
 
 			TemporaryVariables temporaryVariables = new TemporaryVariables(this.aMemberPairs, from, to);
 
-			return Expression.Lambda<Action<TFrom, TTo>>(
+			return Expression.Lambda<Func<TFrom, TTo, TTo>>(
 				Expression.Block(
 					temporaryVariables.Variables,
 
@@ -216,7 +216,8 @@ namespace POCOMapper.mapping.common
 					),
 					this.MakeBlock(
 						temporaryVariables.FinalAssignments
-					)
+					),
+					to
 				),
 				from, to
 			);

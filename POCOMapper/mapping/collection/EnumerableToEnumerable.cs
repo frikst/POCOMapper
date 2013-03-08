@@ -13,8 +13,8 @@ namespace POCOMapper.mapping.collection
 	{
 		private readonly bool aToIEnumerable;
 
-		public EnumerableToEnumerable(MappingImplementation mapping)
-			: base(mapping)
+		public EnumerableToEnumerable(MappingImplementation mapping, Delegate selectIdFrom, Delegate selectIdTo)
+			: base(mapping, selectIdFrom, selectIdTo)
 		{
 			if (typeof(TTo).IsGenericType && typeof(TTo).GetGenericTypeDefinition() == typeof(IEnumerable<>))
 				this.aToIEnumerable = true;

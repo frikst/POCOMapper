@@ -87,7 +87,7 @@ namespace POCOMapper.mapping.common
 			);
 		}
 
-		protected override Expression<Action<TFrom, TTo>> CompileSynchronization()
+		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
 		{
 			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();
 
@@ -96,7 +96,7 @@ namespace POCOMapper.mapping.common
 
 			LabelTarget mappingEnd = Expression.Label();
 
-			return Expression.Lambda<Action<TFrom, TTo>>(
+			return Expression.Lambda<Func<TFrom, TTo, TTo>>(
 				Expression.Block(
 					Expression.Block(
 						allConversions.Select(x => this.MakeIfConvertSynchronizeStatement(x.Item1, x.Item2, x.Item3, from, to, mappingEnd))
@@ -108,7 +108,8 @@ namespace POCOMapper.mapping.common
 							Expression.Constant(typeof(TTo))
 						)
 					),
-					Expression.Label(mappingEnd)
+					Expression.Label(mappingEnd),
+					to
 				),
 				from, to
 			);

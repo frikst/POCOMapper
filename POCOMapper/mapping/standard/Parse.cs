@@ -76,7 +76,7 @@ namespace POCOMapper.mapping.standard
 			}
 		}
 
-		protected override Expression<Action<string, TTo>> CompileSynchronization()
+		protected override Expression<Func<string, TTo, TTo>> CompileSynchronization()
 		{
 			throw new NotImplementedException();
 		}

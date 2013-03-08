@@ -9,7 +9,7 @@ namespace POCOMapper.mapping.@base
 	public abstract class CompiledMapping<TFrom, TTo> : IMapping<TFrom, TTo>
 	{
 		private Func<TFrom, TTo> aMappingFnc;
-		private Action<TFrom, TTo> aSynchronizationFnc;
+		private Func<TFrom, TTo, TTo> aSynchronizationFnc;
 		private readonly MappingImplementation aMapping;
 		private string aMappingSource;
 		private string aSynchronizationSource;
@@ -49,9 +49,7 @@ namespace POCOMapper.mapping.@base
 
 			this.EnsureSynchronizeCompiled();
 
-			this.aSynchronizationFnc(from, to);
-
-			return to;
+			return this.aSynchronizationFnc(from, to);
 		}
 
 		#endregion
@@ -104,7 +102,7 @@ namespace POCOMapper.mapping.@base
 		{
 			if (this.aSynchronizationFnc == null)
 			{
-				Expression<Action<TFrom, TTo>> expression = this.CompileSynchronization();
+				Expression<Func<TFrom, TTo, TTo>> expression = this.CompileSynchronization();
 
 				this.aSynchronizationSource = ExpressionHelper.GetDebugView(expression);
 				this.aSynchronizationFnc = expression.Compile();
@@ -112,6 +110,6 @@ namespace POCOMapper.mapping.@base
 		}
 
 		protected abstract Expression<Func<TFrom, TTo>> CompileMapping();
-		protected abstract Expression<Action<TFrom, TTo>> CompileSynchronization();
+		protected abstract Expression<Func<TFrom, TTo, TTo>> CompileSynchronization();
 	}
 }

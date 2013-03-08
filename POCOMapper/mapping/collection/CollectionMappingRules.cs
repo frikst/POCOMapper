@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using POCOMapper.definition;
 using POCOMapper.mapping.@base;
 
@@ -11,6 +12,8 @@ namespace POCOMapper.mapping.collection
 		public CollectionMappingRules()
 		{
 			this.CfgType = CollectionMappingType.Enumerable;
+			this.CfgSelectIdFrom = null;
+			this.CfgSelectIdTo = null;
 		}
 
 		public CollectionMappingRules<TFrom, TTo> MapAs(CollectionMappingType type)
@@ -20,6 +23,16 @@ namespace POCOMapper.mapping.collection
 			return this;
 		}
 
+		public CollectionMappingRules<TFrom, TTo> EntityId<TItemFrom, TItemTo, TItemId>(Func<TItemFrom, TItemId> selectIdFrom, Func<TItemTo, TItemId> selectIdTo)
+		{
+			this.CfgSelectIdFrom = selectIdFrom;
+			this.CfgSelectIdTo = selectIdTo;
+
+			return this;
+		}
+
+		internal Delegate CfgSelectIdFrom { get; private set; }
+		internal Delegate CfgSelectIdTo { get; private set; }
 		internal CollectionMappingType CfgType { get; private set; }
 
 		#region Implementation of IMappingRules
@@ -29,11 +42,11 @@ namespace POCOMapper.mapping.collection
 			switch (this.CfgType)
 			{
 				case CollectionMappingType.List:
-					return new EnumerableToList<TFrom, TTo>(mapping);
+					return new EnumerableToList<TFrom, TTo>(mapping, this.CfgSelectIdFrom, this.CfgSelectIdTo);
 				case CollectionMappingType.Array:
-					return new EnumerableToArray<TFrom, TTo>(mapping);
+					return new EnumerableToArray<TFrom, TTo>(mapping, this.CfgSelectIdFrom, this.CfgSelectIdTo);
 				default:
-					return new EnumerableToEnumerable<TFrom, TTo>(mapping);
+					return new EnumerableToEnumerable<TFrom, TTo>(mapping, this.CfgSelectIdFrom, this.CfgSelectIdTo);
 			}
 		}
 
@@ -63,11 +76,11 @@ namespace POCOMapper.mapping.collection
 			switch (this.CfgType)
 			{
 				case CollectionMappingType.List:
-					return new EnumerableToList<TFrom, TTo>(mapping);
+					return new EnumerableToList<TFrom, TTo>(mapping, null, null);
 				case CollectionMappingType.Array:
-					return new EnumerableToArray<TFrom, TTo>(mapping);
+					return new EnumerableToArray<TFrom, TTo>(mapping, null, null);
 				default:
-					return new EnumerableToEnumerable<TFrom, TTo>(mapping);
+					return new EnumerableToEnumerable<TFrom, TTo>(mapping, null, null);
 			}
 		}
 
