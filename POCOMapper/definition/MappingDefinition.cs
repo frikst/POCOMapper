@@ -37,7 +37,7 @@ namespace POCOMapper.definition
 		{
 			this.Map<int, double>()
 				.SetPriority(int.MaxValue)
-				.CastRules();;
+				.CastRules();
 			this.Map<double, int>()
 				.SetPriority(int.MaxValue)
 				.CastRules();
