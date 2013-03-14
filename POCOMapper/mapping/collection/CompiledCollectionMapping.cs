@@ -107,7 +107,7 @@ namespace POCOMapper.mapping.collection
 
 		public override bool  SynchronizeCanChangeObject
 		{
-			get { return false; }
+			get { return true; }
 		}
 
 		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()

@@ -114,7 +114,10 @@ namespace POCOMapper.definition
 			if (!mapping.CanSynchronize)
 				throw new CantMap(string.Format("Can't synchronize {0} to {1}, mapping object does not support synchronization", typeof(TFrom).Name, typeof(TTo).Name));
 
-			to = mapping.Synchronize(from, to);
+			if (mapping.SynchronizeCanChangeObject)
+				to = mapping.Synchronize(from, to);
+			else
+				mapping.Synchronize(from, to);
 		}
 
 		private void MappingToString(IMapping mapping, StringBuilder output, int level, List<IMapping> allMappings = null, List<IMapping> mappingsRecursionDetection = null)

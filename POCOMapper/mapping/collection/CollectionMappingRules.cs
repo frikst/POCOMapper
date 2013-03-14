@@ -28,9 +28,9 @@ namespace POCOMapper.mapping.collection
 		public CollectionMappingRules<TFrom, TTo> EntityId<TItemFrom, TItemTo, TItemId>(Func<TItemFrom, TItemId> selectIdFrom, Func<TItemTo, TItemId> selectIdTo)
 		{
 			if (!typeof(IEnumerable<>).MakeGenericType(typeof(TItemFrom)).IsAssignableFrom(typeof(TFrom)))
-				throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", typeof(TItemFrom).Name, typeof(TFrom).Name));
+				throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", typeof(TFrom).Name, typeof(TItemFrom).Name));
 			if (!typeof(IEnumerable<>).MakeGenericType(typeof(TItemTo)).IsAssignableFrom(typeof(TTo)))
-				throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", typeof(TItemTo).Name, typeof(TTo).Name));
+				throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", typeof(TTo).Name, typeof(TItemTo).Name));
 
 			this.CfgSelectIdFrom = selectIdFrom;
 			this.CfgSelectIdTo = selectIdTo;
@@ -95,12 +95,12 @@ namespace POCOMapper.mapping.collection
 			if (this.CfgSelectIdFrom != null && this.CfgSelectIdTo != null)
 			{
 				Type itemFrom = this.CfgSelectIdFrom.Method.GetParameters()[0].ParameterType;
-				Type itemTo = this.CfgSelectIdFrom.Method.GetParameters()[0].ParameterType;
+				Type itemTo = this.CfgSelectIdTo.Method.GetParameters()[0].ParameterType;
 
 				if (!typeof(IEnumerable<>).MakeGenericType(itemFrom).IsAssignableFrom(typeof(TFrom)))
-					throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", itemFrom.Name, typeof(TFrom).Name));
+					throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", typeof(TFrom).Name, itemFrom.Name));
 				if (!typeof(IEnumerable<>).MakeGenericType(itemTo).IsAssignableFrom(typeof(TTo)))
-					throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", itemTo.Name, typeof(TTo).Name));
+					throw new InvalidMapping(string.Format("Collection item of {0} is not {1}", typeof(TTo).Name, itemTo.Name));
 			}
 
 			switch (this.CfgType)
