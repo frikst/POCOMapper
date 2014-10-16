@@ -160,17 +160,19 @@ namespace POCOMapper.mapping.common.parser
 						{
 							PairedMembers pair = this.DetectPairLeft(fromOne, foundMember.Item2, foundMember.Item2.Symbol);
 							if (pair != null)
+							{
 								yield return pair;
-
-							break;
+								break;
+							}
 						}
 						else
 						{
 							PairedMembers pair = this.DetectPairRight(fromOne, foundMember.Item2, fromOne.Symbol);
 							if (pair != null)
+							{
 								yield return pair;
-
-							break;
+								break;
+							}
 						}
 					}
 				}
