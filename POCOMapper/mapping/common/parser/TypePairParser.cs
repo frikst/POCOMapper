@@ -13,10 +13,8 @@ namespace POCOMapper.mapping.common.parser
 	{
 		private enum Found
 		{
-			None,
 			Left,
-			Right,
-			Full
+			Right
 		}
 
 		private readonly MappingImplementation aMapping;
@@ -130,8 +128,8 @@ namespace POCOMapper.mapping.common.parser
 
 			foreach (IMember fromOne in fromAll)
 			{
-				Found found = Found.None;
-				IMember foundMember = null;
+				List<Tuple<Found, IMember>> foundMembers = new List<Tuple<Found, IMember>>();
+				bool foundFull = false;
 
 				foreach (IMember toOne in toAll)
 				{
@@ -139,41 +137,41 @@ namespace POCOMapper.mapping.common.parser
 
 					if (pair != null)
 					{
-						found = Found.Full;
+						foundFull = true;
 
 						yield return pair;
 						break;
 					}
 					else if (fromOne.Symbol.HasPrefix(toOne.Symbol))
 					{
-						found = Found.Left;
-						foundMember = toOne;
+						foundMembers.Add(Tuple.Create(Found.Left, toOne));
 					}
 					else if (toOne.Symbol.HasPrefix(fromOne.Symbol))
 					{
-						found = Found.Right;
-						foundMember = toOne;
+						foundMembers.Add(Tuple.Create(Found.Right, toOne));
 					}
 				}
 
-				if (foundMember != null)
+				if (!foundFull)
 				{
-					PairedMembers pair;
-
-					switch (found)
+					foreach (var foundMember in foundMembers)
 					{
-						case Found.Left:
-							pair = this.DetectPairLeft(fromOne, foundMember, foundMember.Symbol);
+						if (foundMember.Item1 == Found.Left)
+						{
+							PairedMembers pair = this.DetectPairLeft(fromOne, foundMember.Item2, foundMember.Item2.Symbol);
 							if (pair != null)
 								yield return pair;
 
 							break;
-						case Found.Right:
-							pair = this.DetectPairRight(fromOne, foundMember, fromOne.Symbol);
+						}
+						else
+						{
+							PairedMembers pair = this.DetectPairRight(fromOne, foundMember.Item2, fromOne.Symbol);
 							if (pair != null)
 								yield return pair;
 
 							break;
+						}
 					}
 				}
 			}
