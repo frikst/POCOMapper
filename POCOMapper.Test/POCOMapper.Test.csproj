@@ -79,6 +79,7 @@
     <Compile Include="SubClassSynchronization.cs" />
     <Compile Include="SynchronizationWithValueChange.cs" />
     <Compile Include="TwoAttributesWithConflictingPrefix.cs" />
+    <Compile Include="UntypedMapping.cs" />
     <Compile Include="UntypedMemberMapping.cs" />
   </ItemGroup>
   <ItemGroup>

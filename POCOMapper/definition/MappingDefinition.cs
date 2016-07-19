@@ -93,6 +93,22 @@ namespace POCOMapper.definition
 		}
 
 		/// <summary>
+		/// Defines the mapping of one instance of the class from onto the instance of the class to.
+		/// </summary>
+		/// <param name="from">Class from the source model.</param>
+		/// <param name="to">Class from the destination model.</param>
+		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
+		protected UntypedMappingDefinition Map(Type from, Type to)
+		{
+			if (aFinished)
+				throw new Exception("Cannot modify the mapping");
+
+			UntypedMappingDefinition mappingDefinitionDef = new UntypedMappingDefinition(from, to);
+			this.aMappingDefinitions.Add(mappingDefinitionDef);
+			return mappingDefinitionDef;
+		}
+
+		/// <summary>
 		/// Defines the mapping of one instance of the container TFrom onto the instance of the container TTo.
 		/// <see cref="T"/> should be used as the collection item type.
 		/// </summary>

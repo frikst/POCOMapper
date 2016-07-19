@@ -57,6 +57,7 @@
     <Compile Include="definition\ChildAssociationPostprocessing.cs" />
     <Compile Include="definition\IChildAssociationPostprocessing.cs" />
     <Compile Include="definition\IRulesDefinition.cs" />
+    <Compile Include="definition\UntypedMappingDefinition.cs" />
     <Compile Include="mapping\base\DefaultMappingRules.cs" />
     <Compile Include="mapping\common\memberMappings\IMemberMappingDefinition.cs" />
     <Compile Include="mapping\common\memberMappings\MemberMappingDefinition.cs" />
