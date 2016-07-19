@@ -9,7 +9,7 @@ using POCOMapper.mapping.special;
 namespace POCOMapper.Test
 {
 	[TestClass]
-	public class UntypedPostprocessTest
+	public class PostprocessTest
 	{
 		private class From
 		{
@@ -25,7 +25,7 @@ namespace POCOMapper.Test
 		{
 			private Mapping()
 			{
-				Map(typeof(From), typeof(To))
+				Map<From, To>()
 					.PostprocessRules()
 					.Postprocess((a, b) => b.Value = "Hi");
 			}

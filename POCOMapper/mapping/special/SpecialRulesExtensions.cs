@@ -15,5 +15,9 @@ namespace POCOMapper.mapping.special
 			return definition.Rules<PostprocessRules<TFrom, TTo>>();
 		}
 
+		public static PostprocessRules PostprocessRules(this IRulesDefinition definition)
+		{
+			return definition.Rules<PostprocessRules>();
+		}
 	}
 }

@@ -9,9 +9,9 @@ namespace POCOMapper.mapping.special
 	public class Postprocess<TFrom, TTo> : IMapping<TFrom, TTo>
 	{
 		private readonly IMapping<TFrom, TTo> aInnerMapping;
-		private readonly Action<TFrom, TTo> aPostprocessDelegate;
+		private readonly Delegate aPostprocessDelegate;
 
-		public Postprocess(IMapping<TFrom, TTo> innerMapping, Action<TFrom, TTo> postprocessDelegate)
+		public Postprocess(IMapping<TFrom, TTo> innerMapping, Delegate postprocessDelegate)
 		{
 			this.aInnerMapping = innerMapping;
 			this.aPostprocessDelegate = postprocessDelegate;
@@ -61,14 +61,14 @@ namespace POCOMapper.mapping.special
 		public TTo Map(TFrom from)
 		{
 			TTo ret = this.aInnerMapping.Map(from);
-			this.aPostprocessDelegate(from, ret);
+			this.aPostprocessDelegate.DynamicInvoke(from, ret);
 			return ret;
 		}
 
 		public TTo Synchronize(TFrom from, TTo to)
 		{
 			to = this.aInnerMapping.Synchronize(from, to);
-			this.aPostprocessDelegate(from, to);
+			this.aPostprocessDelegate.DynamicInvoke(from, to);
 			return to;
 		}
 
