@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.@base
 {
 	public interface IMapping
 	{
-		IEnumerable<Tuple<string, IMapping>> Children { get; }
+		void Accept(IMappingVisitor visitor);
 
 		bool CanSynchronize { get; }
 		bool CanMap { get; }
@@ -16,6 +16,9 @@ namespace POCOMapper.mapping.@base
 
 		string MappingSource { get; }
 		string SynchronizationSource { get; }
+
+		Type From { get; }
+		Type To { get; }
 	}
 
 	public interface IMapping<TFrom, TTo> : IMapping

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using POCOMapper.definition;
+using POCOMapper.visitor;
 
 namespace POCOMapper.Test
 {
@@ -34,9 +35,13 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void ToStringTest()
 		{
-			string correct = "ObjectToObject`2<From, To>\n" + Constants.STANDARD_MAPPINGS;
+			string correct = "ObjectToObject<From, To>\n" + Constants.STANDARD_MAPPINGS;
 
-			string mappingToString = Mapping.Instance.AllMappingsToString();
+			ToStringVisitor visitor = new ToStringVisitor();
+
+			Mapping.Instance.AcceptForAll(visitor);
+
+			string mappingToString = visitor.GetResult();
 
 			Assert.AreEqual(correct, mappingToString);
 		}

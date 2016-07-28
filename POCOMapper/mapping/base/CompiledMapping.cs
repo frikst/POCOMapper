@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using POCOMapper.definition;
 using POCOMapper.@internal;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.@base
 {
@@ -56,7 +56,7 @@ namespace POCOMapper.mapping.@base
 
 		#region Implementation of IMapping
 
-		public abstract IEnumerable<Tuple<string, IMapping>> Children { get; }
+		public abstract void Accept(IMappingVisitor visitor);
 
 		public abstract bool CanSynchronize { get; }
 		public abstract bool CanMap { get; }
@@ -83,6 +83,16 @@ namespace POCOMapper.mapping.@base
 
 				return this.aSynchronizationSource;
 			}
+		}
+
+		public Type From
+		{
+			get { return typeof(TFrom); }
+		}
+
+		public Type To
+		{
+			get { return typeof(TTo); }
 		}
 
 		#endregion

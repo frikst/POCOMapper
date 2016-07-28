@@ -2,6 +2,7 @@
 using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.common;
+using POCOMapper.visitor;
 
 namespace POCOMapper.Test
 {
@@ -81,9 +82,17 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void ToStringTest()
 		{
-			string correct = "SubClassToObject`2<From, To>\n    SubFrom1 => SubTo1 ObjectToObject`2<SubFrom1, SubTo1>\n    SubFrom2 => SubTo1 ObjectToObject`2<SubFrom2, SubTo1>\n    SubFrom3 => SubTo2 ObjectToObject`2<SubFrom3, SubTo2>\n    From => To ObjectToObject`2<From, To>\n" + Constants.STANDARD_MAPPINGS;
+			string correct = "SubClassToObject<From, To>\n    SubFrom1 => SubTo1 ObjectToObject<SubFrom1, SubTo1>\n    SubFrom2 => SubTo1 ObjectToObject<SubFrom2, SubTo1>\n    SubFrom3 => SubTo2 ObjectToObject<SubFrom3, SubTo2>\n    From => To ObjectToObject<From, To>\n"
+				+ Constants.SEPARATOR + "ObjectToObject<SubFrom1, SubTo1>\n"
+				+ Constants.SEPARATOR + "ObjectToObject<SubFrom2, SubTo1>\n"
+				+ Constants.SEPARATOR + "ObjectToObject<SubFrom3, SubTo2>\n"
+				+ Constants.STANDARD_MAPPINGS;
 
-			string mappingToString = Mapping.Instance.AllMappingsToString();
+			ToStringVisitor visitor = new ToStringVisitor();
+
+			Mapping.Instance.AcceptForAll(visitor);
+
+			string mappingToString = visitor.GetResult();
 
 			Assert.AreEqual(correct, mappingToString);
 		}

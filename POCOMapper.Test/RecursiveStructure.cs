@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.definition;
+using POCOMapper.visitor;
 
 namespace POCOMapper.Test
 {
@@ -67,11 +68,15 @@ namespace POCOMapper.Test
 		[TestMethod]
 		public void MappingToString()
 		{
-			const string expected = "ObjectToObject`2<From, To>\n    Inner => Inner ObjectToObject`2<From, To>\n        ...\n";
+			string expected = "ObjectToObject<From, To>\n    Inner => Inner ObjectToObject<From, To>\n        ...\n" + Constants.STANDARD_MAPPINGS;
 
-			string representation = Mapping.Instance.MappingToString<From, To>();
+			ToStringVisitor visitor = new ToStringVisitor();
 
-			Assert.AreEqual(expected, representation);
+			Mapping.Instance.AcceptForAll(visitor);
+
+			string mappingToString = visitor.GetResult();
+
+			Assert.AreEqual(expected, mappingToString);
 		}
 	}
 }

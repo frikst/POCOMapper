@@ -59,6 +59,10 @@
     <Compile Include="definition\IRulesDefinition.cs" />
     <Compile Include="definition\UntypedMappingDefinition.cs" />
     <Compile Include="mapping\base\DefaultMappingRules.cs" />
+    <Compile Include="visitor\IMappingVisitor.cs" />
+    <Compile Include="mapping\collection\ICollectionMapping.cs" />
+    <Compile Include="mapping\common\IObjectMapping.cs" />
+    <Compile Include="mapping\common\ISubClassMapping.cs" />
     <Compile Include="mapping\common\memberMappings\IMemberMappingDefinition.cs" />
     <Compile Include="mapping\common\memberMappings\MemberMappingDefinition.cs" />
     <Compile Include="mapping\base\IMappingRules.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="definition\ExactMappingDefinition.cs" />
     <Compile Include="conventions\symbol\Symbol.cs" />
+    <Compile Include="visitor\ToStringVisitor.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

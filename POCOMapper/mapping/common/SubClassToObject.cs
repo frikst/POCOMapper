@@ -6,16 +6,30 @@ using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.common
 {
-	internal interface ISubClassToObject
+	public class SubClassToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>, ISubClassMapping
 	{
-		IEnumerable<Tuple<Type, Type, IMapping>> GetConversions();
-	}
+		private class SubClassConversion : ISubClassConversionMapping
+		{
+			public SubClassConversion(Type from, Type to, IMapping mapping)
+			{
+				this.From = from;
+				this.To = to;
+				this.Mapping = mapping;
+			}
 
-	public class SubClassToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>, ISubClassToObject
-	{
+			#region Implementation of ISubClassConversionMapping
+
+			public Type From { get; private set; }
+			public Type To { get; private set; }
+			public IMapping Mapping { get; private set; }
+
+			#endregion
+		}
+
 		private readonly IMapping<TFrom, TTo> aDefaultMapping;
 		private readonly IEnumerable<Tuple<Type, Type>> aConversions;
 
@@ -29,13 +43,9 @@ namespace POCOMapper.mapping.common
 
 		#region Overrides of CompiledMapping<TFrom,TTo>
 
-		public override IEnumerable<Tuple<string, IMapping>> Children
+		public override void Accept(IMappingVisitor visitor)
 		{
-			get
-			{
-				foreach (var mapping in this.GetConversions())
-					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.Item1.Name, mapping.Item2.Name), mapping.Item3);
-			}
+			visitor.Visit(this);
 		}
 
 		public override bool CanSynchronize
@@ -60,7 +70,7 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
-			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();
+			List<ISubClassConversionMapping> allConversions = this.Conversions.ToList();
 
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
@@ -71,7 +81,7 @@ namespace POCOMapper.mapping.common
 				Expression.Block(
 					new ParameterExpression[] { to },
 					Expression.Block(
-						allConversions.Select(x => this.MakeIfConvertMapStatement(x.Item1, x.Item2, x.Item3, from, to, mappingEnd))
+						allConversions.Select(x => this.MakeIfConvertMapStatement(x.From, x.To, x.Mapping, from, to, mappingEnd))
 					),
 					Expression.Throw(
 						Expression.New(
@@ -89,7 +99,7 @@ namespace POCOMapper.mapping.common
 
 		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
 		{
-			List<Tuple<Type, Type, IMapping>> allConversions = this.GetConversions().ToList();
+			List<ISubClassConversionMapping> allConversions = this.Conversions.ToList();
 
 			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
 			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
@@ -99,7 +109,7 @@ namespace POCOMapper.mapping.common
 			return Expression.Lambda<Func<TFrom, TTo, TTo>>(
 				Expression.Block(
 					Expression.Block(
-						allConversions.Select(x => this.MakeIfConvertSynchronizeStatement(x.Item1, x.Item2, x.Item3, from, to, mappingEnd))
+						allConversions.Select(x => this.MakeIfConvertSynchronizeStatement(x.From, x.To, x.Mapping, from, to, mappingEnd))
 					),
 					Expression.Throw(
 						Expression.New(
@@ -117,25 +127,28 @@ namespace POCOMapper.mapping.common
 
 		#endregion
 
-		#region Implementation of ISubClassToObject
+		#region Implementation of ISubClassMapping
 
-		public IEnumerable<Tuple<Type, Type, IMapping>> GetConversions()
+		public IEnumerable<ISubClassConversionMapping> Conversions
 		{
-			foreach (Tuple<Type, Type> conversion in this.aConversions)
+			get
 			{
-				IMapping mapping = this.Mapping.GetMapping(conversion.Item1, conversion.Item2);
-
-				if (mapping is ISubClassToObject)
+				foreach (Tuple<Type, Type> conversion in this.aConversions)
 				{
-					foreach (Tuple<Type, Type, IMapping> innerConversion in ((ISubClassToObject)mapping).GetConversions())
-						yield return innerConversion;
-				}
-				else
-					yield return new Tuple<Type, Type, IMapping>(conversion.Item1, conversion.Item2, mapping);
-			}
+					IMapping mapping = this.Mapping.GetMapping(conversion.Item1, conversion.Item2);
 
-			if (!typeof(TTo).IsAbstract)
-				yield return new Tuple<Type, Type, IMapping>(typeof(TFrom), typeof(TTo), this.aDefaultMapping);
+					if (mapping is ISubClassMapping)
+					{
+						foreach (var innerConversion in ((ISubClassMapping)mapping).Conversions)
+							yield return innerConversion;
+					}
+					else
+						yield return new SubClassConversion(conversion.Item1, conversion.Item2, mapping);
+				}
+
+				if (!typeof(TTo).IsAbstract)
+					yield return new SubClassConversion(typeof(TFrom), typeof(TTo), this.aDefaultMapping);
+			}
 		}
 
 		#endregion

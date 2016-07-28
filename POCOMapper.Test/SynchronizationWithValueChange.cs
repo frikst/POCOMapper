@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POCOMapper.definition;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.standard;
+using POCOMapper.visitor;
 
 namespace POCOMapper.Test
 {
@@ -26,13 +27,19 @@ namespace POCOMapper.Test
 		{
 			#region Implementation of IMapping
 
-			public IEnumerable<Tuple<string, IMapping>> Children { get { return null; } }
+			public void Accept(IMappingVisitor visitor)
+			{
+				visitor.Visit(this);
+			}
+
 			public bool CanSynchronize { get { return true; } }
 			public bool CanMap { get { return true; } }
 			public bool IsDirect { get { return false; } }
 			public bool SynchronizeCanChangeObject { get { return true; } }
 			public string MappingSource { get { return null; } }
 			public string SynchronizationSource { get { return null; } }
+			public Type From { get { return typeof(int); } }
+			public Type To { get { return typeof(int); } }
 
 			#endregion
 

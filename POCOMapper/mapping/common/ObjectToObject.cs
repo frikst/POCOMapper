@@ -9,10 +9,11 @@ using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.common.parser;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.common
 {
-	public class ObjectToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>
+	public class ObjectToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>, IObjectMapping
 	{
 		private class TemporaryVariables
 		{
@@ -120,13 +121,9 @@ namespace POCOMapper.mapping.common
 
 		#region Overrides of CompiledMapping<TFrom,TTo>
 
-		public override IEnumerable<Tuple<string, IMapping>> Children
+		public override void Accept(IMappingVisitor visitor)
 		{
-			get
-			{
-				foreach (var mapping in this.aMemberPairs)
-					yield return new Tuple<string, IMapping>(string.Format("{0} => {1}", mapping.From.FullName, mapping.To.FullName), mapping.Mapping);
-			}
+			visitor.Visit(this);
 		}
 
 		public override bool CanSynchronize
@@ -224,6 +221,14 @@ namespace POCOMapper.mapping.common
 		}
 
 		#endregion
+
+		public IEnumerable<IObjectMemberMapping> Members
+		{
+			get
+			{
+				return this.aMemberPairs;
+			}
+		}
 
 		private Expression MakeBlock(IEnumerable<Expression> expressions)
 		{

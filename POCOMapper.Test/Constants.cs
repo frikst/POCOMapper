@@ -10,10 +10,10 @@ namespace POCOMapper.Test
 		public static readonly string SEPARATOR = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
 		public static readonly string STANDARD_MAPPINGS = SEPARATOR
-															+ "Cast`2<Int32, Double>\n" + SEPARATOR
-															+ "Cast`2<Double, Int32>\n" + SEPARATOR
-															+ "ToString`1<Int32>\n" + SEPARATOR
-															+ "Parse`1<Int32>\n" + SEPARATOR
-															+ "Copy`1<String>\n" + SEPARATOR;
+															+ "Cast<Int32, Double>\n" + SEPARATOR
+															+ "Cast<Double, Int32>\n" + SEPARATOR
+															+ "ToString<Int32>\n" + SEPARATOR
+															+ "Parse<Int32>\n" + SEPARATOR
+															+ "Copy<String>";
 	}
 }

@@ -7,7 +7,7 @@ using POCOMapper.mapping.@base;
 
 namespace POCOMapper.mapping.common.parser
 {
-	public class PairedMembers
+	public class PairedMembers : IObjectMemberMapping
 	{
 		public enum Action
 		{

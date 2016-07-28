@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.standard
 {
@@ -18,9 +19,9 @@ namespace POCOMapper.mapping.standard
 				throw new InvalidMapping(string.Format("You can use CastMapping only on primitive or enum types, not {0} and {1}", typeof(TFrom).Name, typeof(TTo).Name));
 		}
 
-		public override IEnumerable<Tuple<string, IMapping>> Children
+		public override void Accept(IMappingVisitor visitor)
 		{
-			get { return Enumerable.Empty<Tuple<string, IMapping>>(); }
+			visitor.Visit(this);
 		}
 
 		public override bool CanSynchronize

@@ -8,10 +8,11 @@ using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.collection
 {
-	public abstract class CompiledCollectionMapping<TFrom, TTo> : CompiledMapping<TFrom, TTo>
+	public abstract class CompiledCollectionMapping<TFrom, TTo> : CompiledMapping<TFrom, TTo>, ICollectionMapping
 	{
 		private class SynchronizationEnumerable<TId, TItemFrom, TItemTo> : IEnumerable<TItemTo>
 		{
@@ -63,9 +64,6 @@ namespace POCOMapper.mapping.collection
 		private readonly Delegate aSelectIdFrom;
 		private readonly Delegate aSelectIdTo;
 
-		protected Type ItemFrom { get; private set; }
-		protected Type ItemTo { get; private set; }
-
 		protected CompiledCollectionMapping(MappingImplementation mapping, Delegate selectIdFrom, Delegate selectIdTo)
 			: base(mapping)
 		{
@@ -87,14 +85,6 @@ namespace POCOMapper.mapping.collection
 				this.ItemTo = typeof(TTo).GetInterfaces().First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments()[0];
 		}
 
-		public override IEnumerable<Tuple<string, IMapping>> Children
-		{
-			get
-			{
-				yield return new Tuple<string, IMapping>("[item]", this.GetMapping());
-			}
-		}
-
 		public override bool CanSynchronize
 		{
 			get { return this.aSelectIdFrom != null && this.aSelectIdTo != null; }
@@ -113,6 +103,22 @@ namespace POCOMapper.mapping.collection
 		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
 		{
 			throw new NotImplementedException();
+		}
+
+		public override void Accept(IMappingVisitor visitor)
+		{
+			visitor.Visit(this);
+		}
+
+		public Type ItemFrom { get; private set; }
+		public Type ItemTo { get; private set; }
+
+		public IMapping ItemMapping
+		{
+			get
+			{
+				return this.GetMapping();
+			}
 		}
 
 		protected IMapping GetMapping()

@@ -6,6 +6,7 @@ using POCOMapper.conventions;
 using POCOMapper.exceptions;
 using POCOMapper.mapping.@base;
 using POCOMapper.mapping.standard;
+using POCOMapper.visitor;
 
 namespace POCOMapper.definition
 {
@@ -120,86 +121,11 @@ namespace POCOMapper.definition
 				mapping.Synchronize(from, to);
 		}
 
-		private void MappingToString(IMapping mapping, StringBuilder output, int level, List<IMapping> allMappings = null, List<IMapping> mappingsRecursionDetection = null)
+		public void AcceptForAll(IMappingVisitor visitor)
 		{
-			if (mappingsRecursionDetection == null)
-				mappingsRecursionDetection = new List<IMapping>();
+			visitor.Begin();
 
-			string indent = string.Concat(Enumerable.Range(0, level).Select(x => "    "));
-
-			if (mapping == null)
-			{
-				output.Append("(null)\n");
-			}
-			else 
-			{
-				Type mappingType = mapping.GetType();
-				output.Append(mappingType.Name);
-
-				if (mappingType.IsGenericType)
-				{
-					bool begining = true;
-					output.Append("<");
-
-					foreach (Type genericArgument in mappingType.GetGenericArguments())
-					{
-						if (!begining)
-							output.Append(", ");
-						output.Append(genericArgument.Name);
-						begining = false;
-					}
-
-					output.Append(">");
-				}
-
-				output.Append("\n");
-				if (mappingsRecursionDetection.Contains(mapping))
-				{
-					output.Append(indent + "...\n");
-				}
-				else
-				{
-					mappingsRecursionDetection.Add(mapping);
-
-					foreach (Tuple<string, IMapping> child in mapping.Children)
-					{
-						output.Append(indent);
-						output.Append(child.Item1);
-						output.Append(" ");
-
-						if (allMappings != null)
-							allMappings.Add(child.Item2);
-
-						this.MappingToString(child.Item2, output, level + 1, allMappings, mappingsRecursionDetection);
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Builds the debug string of the mapping given mapping.
-		/// </summary>
-		/// <typeparam name="TFrom">Class from the source model.</typeparam>
-		/// <typeparam name="TTo">Class from the destination model.</typeparam>
-		/// <returns></returns>
-		public string MappingToString<TFrom, TTo>()
-		{
-			StringBuilder output = new StringBuilder();
-
-			this.MappingToString(this.GetMapping<TFrom, TTo>(), output, 1);
-
-			return output.ToString();
-		}
-
-		///<summary>
-		/// Buields the debug string for all the mappings
-		///</summary>
-		///<returns></returns>
-		public string AllMappingsToString()
-		{
-			List<Tuple<IMapping, StringBuilder>> results = new List<Tuple<IMapping, StringBuilder>>();
-			List<IMapping> toIgnore = new List<IMapping>();
-
+			bool first = true;
 			foreach (IMappingDefinition mappingDefinition in this.aMappingDefinitions)
 			{
 				Tuple<Type, Type> key = mappingDefinition.GetKey();
@@ -208,24 +134,15 @@ namespace POCOMapper.definition
 				{
 					IMapping mapping = this.GetMapping(key.Item1, key.Item2);
 
-					StringBuilder output = new StringBuilder();
-					this.MappingToString(mapping, output, 1, toIgnore);
-					results.Add(new Tuple<IMapping, StringBuilder>(mapping, output));
+					if (!first)
+						visitor.Next();
+					first = false;
+
+					mapping.Accept(visitor);
 				}
 			}
 
-			StringBuilder ret = new StringBuilder();
-
-			foreach (Tuple<IMapping, StringBuilder> result in results)
-			{
-				if (!toIgnore.Contains(result.Item1))
-				{
-					ret.Append(result.Item2.ToString());
-					ret.Append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				}
-			}
-
-			return ret.ToString();
+			visitor.End();
 		}
 
 		/// <summary>

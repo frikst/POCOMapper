@@ -6,6 +6,7 @@ using POCOMapper.definition;
 using POCOMapper.exceptions;
 using POCOMapper.@internal;
 using POCOMapper.mapping.@base;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.standard
 {
@@ -19,9 +20,9 @@ namespace POCOMapper.mapping.standard
 
 		#region Overrides of CompiledMapping<string,TTo>
 
-		public override IEnumerable<Tuple<string, IMapping>> Children
+		public override void Accept(IMappingVisitor visitor)
 		{
-			get { return Enumerable.Empty<Tuple<string, IMapping>>(); }
+			visitor.Visit(this);
 		}
 
 		public override bool CanSynchronize

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using POCOMapper.mapping.@base;
+using POCOMapper.visitor;
 
 namespace POCOMapper.mapping.special
 {
@@ -19,9 +20,9 @@ namespace POCOMapper.mapping.special
 
 		#region Implementation of IMapping
 
-		public IEnumerable<Tuple<string, IMapping>> Children
+		public void Accept(IMappingVisitor visitor)
 		{
-			get { return this.aInnerMapping.Children; }
+			this.aInnerMapping.Accept(visitor);
 		}
 
 		public bool CanSynchronize
@@ -52,6 +53,16 @@ namespace POCOMapper.mapping.special
 		public string SynchronizationSource
 		{
 			get { return null; }
+		}
+
+		public Type From
+		{
+			get { return typeof(TFrom); }
+		}
+
+		public Type To
+		{
+			get { return typeof(TTo); }
 		}
 
 		#endregion
