@@ -55,7 +55,8 @@ namespace POCOMapper.visitor
 
 			this.aLevel++;
 			this.aTypeIdentification = "[item]";
-			mapping.ItemMapping.Accept(this);
+			if (mapping.ItemMapping != null)
+				mapping.ItemMapping.Accept(this);
 			this.aLevel--;
 
 			this.aProcessed.Remove(mapping.GetType());
