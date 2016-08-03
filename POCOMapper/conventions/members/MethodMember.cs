@@ -27,6 +27,17 @@ namespace POCOMapper.conventions.members
 
 		public IMember Parent { get; private set; }
 
+		public int Depth
+		{
+			get
+			{
+				if (this.Parent == null)
+					return 0;
+				else
+					return this.Parent.Depth + 1;
+			}
+		}
+
 		public Symbol Symbol { get; private set; }
 
 		public Type Type

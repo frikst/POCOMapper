@@ -9,6 +9,8 @@ namespace POCOMapper.conventions.members
 	{
 		IMember Parent { get; }
 
+		int Depth { get; }
+
 		Symbol Symbol { get; }
 		Type Type { get; }
 

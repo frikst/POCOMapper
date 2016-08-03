@@ -22,6 +22,11 @@ namespace POCOMapper.conventions.members
 			get { return null; }
 		}
 
+		public int Depth
+		{
+			get { return 0; }
+		}
+
 		public Symbol Symbol
 		{
 			get { return new Symbol(new string[] { "this" }); }

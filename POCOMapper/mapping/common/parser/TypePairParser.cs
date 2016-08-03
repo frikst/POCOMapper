@@ -119,9 +119,7 @@ namespace POCOMapper.mapping.common.parser
 			return this.aMapping.ToConventions.GetAllMembers(type, parent).Where(x => x.Setter != null).ToList();
 		}
 
-		#region Implementation of IEnumerable
-
-		public IEnumerator<PairedMembers> GetEnumerator()
+		private IEnumerable<PairedMembers> FindPairs()
 		{
 			IEnumerable<IMember> fromAll = this.GetFromMembers(this.aFrom);
 			IEnumerable<IMember> toAll = this.GetToMembers(this.aTo);
@@ -177,6 +175,18 @@ namespace POCOMapper.mapping.common.parser
 					}
 				}
 			}
+		}
+
+		private PairedMembers MemberPairWithMinFromDepth(IEnumerable<PairedMembers> pairs)
+		{
+			return pairs.Aggregate((a, b) => a.From.Depth < b.From.Depth ? a : b);
+		}
+
+		#region Implementation of IEnumerable
+
+		public IEnumerator<PairedMembers> GetEnumerator()
+		{
+			return this.FindPairs().GroupBy(x => x.To).Select(this.MemberPairWithMinFromDepth).GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
