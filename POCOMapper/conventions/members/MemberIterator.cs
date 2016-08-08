@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using POCOMapper.conventions.symbol;
 
 namespace POCOMapper.conventions.members
@@ -40,12 +42,27 @@ namespace POCOMapper.conventions.members
 							yield return member;
 						break;
 					case MemberType.Property:
-						foreach (IMember member in this.GetProperties())
+						foreach (IMember member in this.GetProperties(codeProperties: true, autoProperties: true))
+							yield return member;
+						break;
+					case MemberType.AutoProperty:
+						foreach (IMember member in this.GetProperties(autoProperties: true))
+							yield return member;
+						break;
+					case MemberType.CodeProperty:
+						foreach (IMember member in this.GetProperties(codeProperties: true))
 							yield return member;
 						break;
 				}
 			}
 		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return this.GetEnumerator();
+		}
+
+		#endregion
 
 		private IEnumerable<IMember> GetFields()
 		{
@@ -108,7 +125,7 @@ namespace POCOMapper.conventions.members
 			}
 		}
 
-		private IEnumerable<IMember> GetProperties()
+		private IEnumerable<IMember> GetProperties(bool codeProperties = false, bool autoProperties = false)
 		{
 			HashSet<Symbol> used = new HashSet<Symbol>();
 
@@ -120,18 +137,37 @@ namespace POCOMapper.conventions.members
 
 					if (!used.Contains(symbol))
 					{
-						yield return new PropertyMember(this.aParent, symbol, property, this.aConventions);
+						bool isAutoProperty = this.IsAutoProperty(property);
+
+						if ((isAutoProperty && autoProperties) || (!isAutoProperty && codeProperties))
+							yield return new PropertyMember(this.aParent, symbol, property, this.aConventions);
+
 						used.Add(symbol);
 					}
 				}
 			}
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+		private bool IsAutoProperty(PropertyInfo property)
 		{
-			return this.GetEnumerator();
-		}
+			if (property.GetCustomAttributes(typeof(CompilerGeneratedAttribute), true).Any())
+				return false;
 
-		#endregion
+			var getter = property.GetGetMethod();
+			var setter = property.GetSetMethod();
+
+			if (getter == null)
+				return false;
+
+			if (setter == null)
+				return false;
+
+			if (!getter.GetCustomAttributes(typeof(CompilerGeneratedAttribute), true).Any())
+				return false;
+			if (!setter.GetCustomAttributes(typeof(CompilerGeneratedAttribute), true).Any())
+				return false;
+
+			return true;
+		}
 	}
 }

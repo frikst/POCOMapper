@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeMemberProcesingOrder.cs" />
+    <Compile Include="ChangeMemberProcesingOrderWithAutoProps.cs" />
     <Compile Include="ChildSetParent.cs" />
     <Compile Include="CollectionChildSetParent.cs" />
     <Compile Include="Collections.cs" />

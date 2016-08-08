@@ -68,6 +68,9 @@ namespace POCOMapper.conventions
 			if (precedence.GroupBy(x => x).Any(x => x.Count() > 1))
 				throw new InvalidConvention("Parameters of the SetMemberScanningPrecedence method must be uniqe");
 
+			if (precedence.Any(x => x == MemberType.Property) && precedence.Any(x => x == MemberType.AutoProperty || x == MemberType.CodeProperty))
+				throw new InvalidConvention("Parameters of the SetMemberScanningPrecedence method must be uniqe");
+
 			this.aMemberScanningPrecedence = precedence;
 			return this;
 		}

@@ -179,7 +179,7 @@ namespace POCOMapper.mapping.common.parser
 
 		private PairedMembers MemberPairWithMinFromDepth(IEnumerable<PairedMembers> pairs)
 		{
-			return pairs.Aggregate((a, b) => a.From.Depth < b.From.Depth ? a : b);
+			return pairs.Aggregate((a, b) => a.From.Depth <= b.From.Depth ? a : b);
 		}
 
 		#region Implementation of IEnumerable
