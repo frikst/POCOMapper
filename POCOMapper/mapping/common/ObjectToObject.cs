@@ -106,11 +106,11 @@ namespace POCOMapper.mapping.common
 			if (implicitMappings)
 			{
 				List<PairedMembers> explicitPairsList = explicitPairs.ToList();
-				HashSet<Symbol> explicitSymbols = new HashSet<Symbol>(explicitPairsList.Select(x => x.To.Symbol));
+				HashSet<string> explicitSymbols = new HashSet<string>(explicitPairsList.Select(x => x.To.FullName));
 
 				this.aMemberPairs = explicitPairsList.Concat(
 					new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo))
-						.Where(x => !explicitSymbols.Contains(x.To.Symbol))
+						.Where(x => !explicitSymbols.Contains(x.To.FullName))
 				);
 			}
 			else

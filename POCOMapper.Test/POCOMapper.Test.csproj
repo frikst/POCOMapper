@@ -59,6 +59,7 @@
     <Compile Include="CompositeStructure.cs" />
     <Compile Include="ConditionalConventions.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ImplicitAndExplicitMapping.cs" />
     <Compile Include="MultipleToAttributeMappingPossibilities.cs" />
     <Compile Include="MultipleFromAttributeMappingPossibilities.cs" />
     <Compile Include="UntypedPostprocessTest.cs" />
