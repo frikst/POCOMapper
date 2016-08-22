@@ -153,8 +153,8 @@ namespace POCOMapper.conventions.members
 			if (property.GetCustomAttributes(typeof(CompilerGeneratedAttribute), true).Any())
 				return false;
 
-			var getter = property.GetGetMethod();
-			var setter = property.GetSetMethod();
+			var getter = property.GetGetMethod(true);
+			var setter = property.GetSetMethod(true);
 
 			if (getter == null)
 				return false;
