@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{33f37c47-a7bd-4e10-a4ac-db4ed7cf10d6}</ProjectGuid>
-    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>POCOMapper.Documentation</AssemblyName>
@@ -27,8 +27,8 @@
     <CleanIntermediates>True</CleanIntermediates>
     <SyntaxFilters>CSharp, VisualBasic</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <RootNamespaceContainer>False</RootNamespaceContainer>
-    <PresentationStyle>Prototype</PresentationStyle>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>Guid</NamingMethod>
     <HelpTitle>A Plain Old CLR Object Mapper</HelpTitle>
@@ -43,7 +43,7 @@
     <NamespaceSummaries>
       <NamespaceSummaryItem name="POCOMapper.conventions" isDocumented="True" />
     </NamespaceSummaries>
-    <VisibleItems>InheritedMembers, Protected</VisibleItems>
+    <VisibleItems>InheritedMembers, Protected, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <ApiFilter />
     <ComponentConfigurations />
@@ -55,6 +55,9 @@
     <SandcastlePath />
     <WorkingPath />
     <ComponentPath />
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <NamespaceGrouping>False</NamespaceGrouping>
+    <MaximumGroupParts>2</MaximumGroupParts>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
