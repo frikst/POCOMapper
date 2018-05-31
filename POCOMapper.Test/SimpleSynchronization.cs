@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using POCOMapper.definition;
+﻿using KST.POCOMapper.definition;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace POCOMapper.Test
+namespace KST.POCOMapper.Test
 {
 	[TestClass]
 	public class SimpleSynchronization

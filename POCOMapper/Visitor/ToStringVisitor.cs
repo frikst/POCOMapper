@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.collection;
-using POCOMapper.mapping.common;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.mapping.collection;
+using KST.POCOMapper.mapping.common;
 
-namespace POCOMapper.visitor
+namespace KST.POCOMapper.visitor
 {
 	public class ToStringVisitor : IMappingVisitor
 	{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace POCOMapper.@internal
+namespace KST.POCOMapper.@internal
 {
 	internal static class LinqMethods
 	{

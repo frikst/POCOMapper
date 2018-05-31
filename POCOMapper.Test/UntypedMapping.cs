@@ -1,12 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using KST.POCOMapper.definition;
+using KST.POCOMapper.visitor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using POCOMapper.definition;
-using POCOMapper.visitor;
 
-namespace POCOMapper.Test
+namespace KST.POCOMapper.Test
 {
 	[TestClass]
 	public class UntypedMapping

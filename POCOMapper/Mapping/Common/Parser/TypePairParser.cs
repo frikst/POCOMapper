@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using POCOMapper.conventions.members;
-using POCOMapper.conventions.symbol;
-using POCOMapper.definition;
-using POCOMapper.mapping.@base;
+using KST.POCOMapper.conventions.members;
+using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.mapping.common.parser
+namespace KST.POCOMapper.mapping.common.parser
 {
 	public class TypePairParser : IEnumerable<PairedMembers>
 	{
@@ -48,7 +48,7 @@ namespace POCOMapper.mapping.common.parser
 			if (from.Symbol != to.Symbol || !from.CanPairWith(to))
 				return null;
 
-			return CreateMemberPair(from, to);
+			return this.CreateMemberPair(from, to);
 		}
 
 		private PairedMembers DetectPairLeft(IMember from, IMember to, Symbol foundPart)

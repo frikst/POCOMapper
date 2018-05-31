@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using POCOMapper.conventions.symbol;
+using KST.POCOMapper.conventions.symbol;
 
-namespace POCOMapper.conventions.members
+namespace KST.POCOMapper.conventions.members
 {
 	public class MethodMember : IMember
 	{
@@ -116,7 +116,7 @@ namespace POCOMapper.conventions.members
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != typeof (MethodMember)) return false;
-			return Equals((MethodMember) obj);
+			return this.Equals((MethodMember) obj);
 		}
 
 		public override int GetHashCode()

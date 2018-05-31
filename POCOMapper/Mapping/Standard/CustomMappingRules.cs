@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using POCOMapper.definition;
-using POCOMapper.mapping.@base;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.mapping.standard
+namespace KST.POCOMapper.mapping.standard
 {
 	public class CustomMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 	{

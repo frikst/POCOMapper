@@ -1,4 +1,4 @@
-﻿namespace POCOMapper.conventions.symbol
+﻿namespace KST.POCOMapper.conventions.symbol
 {
 	public interface ISymbolParser
 	{

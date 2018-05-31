@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.common;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.mapping.common;
 
-namespace POCOMapper.definition
+namespace KST.POCOMapper.definition
 {
 	/// <summary>
 	/// Untyped mapping specification definition class.

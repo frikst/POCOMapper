@@ -1,6 +1,6 @@
-﻿using POCOMapper.mapping.@base;
+﻿using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.definition
+namespace KST.POCOMapper.definition
 {
 	public interface IRulesDefinition
 	{

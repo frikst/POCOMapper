@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using POCOMapper.definition;
-using POCOMapper.exceptions;
-using POCOMapper.@internal;
-using POCOMapper.mapping.@base;
-using POCOMapper.visitor;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.exceptions;
+using KST.POCOMapper.@internal;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.visitor;
 
-namespace POCOMapper.mapping.common
+namespace KST.POCOMapper.mapping.common
 {
 	public class SubClassToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>, ISubClassMapping
 	{
@@ -35,7 +35,7 @@ namespace POCOMapper.mapping.common
 
 		public SubClassToObject(MappingImplementation mapping, IEnumerable<Tuple<Type, Type>> fromTo, IMapping<TFrom, TTo> defaultMapping) : base(mapping)
 		{
-			aDefaultMapping = defaultMapping;
+			this.aDefaultMapping = defaultMapping;
 
 			List<Tuple<Type, Type>> subclassMappings = new List<Tuple<Type, Type>>(fromTo);
 			this.aConversions = subclassMappings.AsReadOnly();

@@ -3,8 +3,9 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
-		<RootNamespace>POCOMapper</RootNamespace>
+		<RootNamespace>KST.POCOMapper</RootNamespace>
 		<Configurations>Debug;Release</Configurations>
+		<AssemblyName>KST.POCOMapper</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">

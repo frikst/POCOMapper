@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using POCOMapper.exceptions;
+using KST.POCOMapper.exceptions;
 
-namespace POCOMapper.conventions.members
+namespace KST.POCOMapper.conventions.members
 {
 	public class MemberFromNameParser
 	{

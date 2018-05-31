@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using POCOMapper.conventions;
-using POCOMapper.mapping.collection;
-using POCOMapper.mapping.standard;
-using POCOMapper.typePatterns;
+using KST.POCOMapper.conventions;
+using KST.POCOMapper.mapping.collection;
+using KST.POCOMapper.mapping.standard;
+using KST.POCOMapper.typePatterns;
 
-namespace POCOMapper.definition
+namespace KST.POCOMapper.definition
 {
 	/// <summary>
 	/// Generic singleton container of one set of mappings.
@@ -84,7 +84,7 @@ namespace POCOMapper.definition
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
 		protected ExactMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
 		{
-			if (aFinished)
+			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
 			ExactMappingDefinition<TFrom, TTo> mappingDefinitionDef = new ExactMappingDefinition<TFrom, TTo>();
@@ -100,7 +100,7 @@ namespace POCOMapper.definition
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
 		protected UntypedMappingDefinition Map(Type from, Type to)
 		{
-			if (aFinished)
+			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
 			UntypedMappingDefinition mappingDefinitionDef = new UntypedMappingDefinition(from, to);
@@ -117,7 +117,7 @@ namespace POCOMapper.definition
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
 		protected PatternMappingDefinition Map(IPattern patternFrom, IPattern patternTo)
 		{
-			if (aFinished)
+			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
 			PatternMappingDefinition mappingDefinitionDef = new PatternMappingDefinition(patternFrom, patternTo);
@@ -127,7 +127,7 @@ namespace POCOMapper.definition
 
 		protected ChildAssociationPostprocessing<TParent, TChild> Child<TParent, TChild>()
 		{
-			if (aFinished)
+			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
 			ChildAssociationPostprocessing<TParent, TChild> mappingDefinitionDef = new ChildAssociationPostprocessing<TParent, TChild>();

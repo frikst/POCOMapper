@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using POCOMapper.conventions.members;
-using POCOMapper.typePatterns;
+using KST.POCOMapper.conventions.members;
+using KST.POCOMapper.typePatterns;
 
-namespace POCOMapper.conventions
+namespace KST.POCOMapper.conventions
 {
 	public class ConditionalConventions : Conventions
 	{

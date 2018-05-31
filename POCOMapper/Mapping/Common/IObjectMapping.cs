@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using POCOMapper.conventions.members;
-using POCOMapper.mapping.@base;
+using KST.POCOMapper.conventions.members;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.mapping.common
+namespace KST.POCOMapper.mapping.common
 {
 	public interface IObjectMemberMapping
 	{

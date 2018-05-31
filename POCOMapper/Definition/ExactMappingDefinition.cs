@@ -1,8 +1,8 @@
 ﻿using System;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.common;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.mapping.common;
 
-namespace POCOMapper.definition
+namespace KST.POCOMapper.definition
 {
 	/// <summary>
 	/// Class mapping specification definition class.
@@ -24,7 +24,7 @@ namespace POCOMapper.definition
 
 		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
-			return aRules.Create(allMappings);
+			return this.aRules.Create(allMappings);
 		}
 
 		bool IMappingDefinition.IsFrom(Type from)

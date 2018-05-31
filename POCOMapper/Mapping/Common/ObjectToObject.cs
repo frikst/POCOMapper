@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using POCOMapper.conventions.members;
-using POCOMapper.conventions.symbol;
-using POCOMapper.definition;
-using POCOMapper.exceptions;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.common.parser;
-using POCOMapper.visitor;
+using KST.POCOMapper.conventions.members;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.exceptions;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.mapping.common.parser;
+using KST.POCOMapper.visitor;
 
-namespace POCOMapper.mapping.common
+namespace KST.POCOMapper.mapping.common
 {
 	public class ObjectToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>, IObjectMapping
 	{
@@ -21,9 +20,9 @@ namespace POCOMapper.mapping.common
 
 			public TemporaryVariables(IEnumerable<PairedMembers> memberPairs, ParameterExpression from, ParameterExpression to)
 			{
-				aTemporaryVariables = new Dictionary<IMember, ParameterExpression>();
-				InitialAssignments = new List<Expression>();
-				FinalAssignments = new List<Expression>();
+				this.aTemporaryVariables = new Dictionary<IMember, ParameterExpression>();
+				this.InitialAssignments = new List<Expression>();
+				this.FinalAssignments = new List<Expression>();
 
 				foreach (PairedMembers memberPair in memberPairs)
 				{
@@ -67,7 +66,7 @@ namespace POCOMapper.mapping.common
 
 			public IEnumerable<ParameterExpression> Variables
 			{
-				get { return aTemporaryVariables.Values; }
+				get { return this.aTemporaryVariables.Values; }
 			}
 
 			public List<Expression> InitialAssignments { get; private set; }

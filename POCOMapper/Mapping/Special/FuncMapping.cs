@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using POCOMapper.mapping.@base;
-using POCOMapper.visitor;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.visitor;
 
-namespace POCOMapper.mapping.special
+namespace KST.POCOMapper.mapping.special
 {
 	public class FuncMapping<TFrom, TTo> : IMapping<TFrom, TTo>
 	{
@@ -33,12 +30,12 @@ namespace POCOMapper.mapping.special
 
 		public bool CanSynchronize
 		{
-			get { return aMappingAction != null; }
+			get { return this.aMappingAction != null; }
 		}
 
 		public bool CanMap
 		{
-			get { return aMappingFunc != null; }
+			get { return this.aMappingFunc != null; }
 		}
 
 		public bool IsDirect

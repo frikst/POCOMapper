@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace POCOMapper.@internal
+namespace KST.POCOMapper.@internal
 {
 	internal static class ObjectMethods
 	{

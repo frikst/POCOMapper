@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POCOMapper.exceptions
+namespace KST.POCOMapper.exceptions
 {
 	public class UnknownMapping : Exception
 	{

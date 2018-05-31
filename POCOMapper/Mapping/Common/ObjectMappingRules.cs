@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using POCOMapper.definition;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.common.memberMappings;
-using POCOMapper.mapping.common.parser;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.mapping.common.memberMappings;
+using KST.POCOMapper.mapping.common.parser;
 
-namespace POCOMapper.mapping.common
+namespace KST.POCOMapper.mapping.common
 {
 	public class ObjectMappingRules : IMappingRules
 	{

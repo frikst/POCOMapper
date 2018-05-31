@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using POCOMapper.mapping.@base;
-using POCOMapper.visitor;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.visitor;
 
-namespace POCOMapper.mapping.special
+namespace KST.POCOMapper.mapping.special
 {
 	public class Postprocess<TFrom, TTo> : IMapping<TFrom, TTo>
 	{

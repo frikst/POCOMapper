@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using POCOMapper.conventions.members;
-using POCOMapper.conventions.symbol;
-using POCOMapper.exceptions;
+using System.Linq;
+using KST.POCOMapper.conventions.members;
+using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.exceptions;
 
-namespace POCOMapper.conventions
+namespace KST.POCOMapper.conventions
 {
 	public abstract class Conventions
 	{

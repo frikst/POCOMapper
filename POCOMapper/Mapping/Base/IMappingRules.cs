@@ -1,6 +1,6 @@
-﻿using POCOMapper.definition;
+﻿using KST.POCOMapper.definition;
 
-namespace POCOMapper.mapping.@base
+namespace KST.POCOMapper.mapping.@base
 {
 	public interface IMappingRules
 	{

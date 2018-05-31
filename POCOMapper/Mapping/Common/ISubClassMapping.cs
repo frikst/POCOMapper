@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using POCOMapper.mapping.@base;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.mapping.common
+namespace KST.POCOMapper.mapping.common
 {
 	public interface ISubClassConversionMapping
 	{

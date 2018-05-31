@@ -1,4 +1,4 @@
-﻿namespace POCOMapper.mapping.collection
+﻿namespace KST.POCOMapper.mapping.collection
 {
 	public enum CollectionMappingType
 	{

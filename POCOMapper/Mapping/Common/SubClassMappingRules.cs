@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using POCOMapper.definition;
-using POCOMapper.mapping.@base;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.mapping.common
+namespace KST.POCOMapper.mapping.common
 {
 	public class SubClassMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 	{

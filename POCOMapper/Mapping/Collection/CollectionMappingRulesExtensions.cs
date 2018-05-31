@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
-using POCOMapper.definition;
+﻿using System.Collections;
+using KST.POCOMapper.definition;
 
-namespace POCOMapper.mapping.collection
+namespace KST.POCOMapper.mapping.collection
 {
 	public static class CollectionMappingRulesExtensions
 	{

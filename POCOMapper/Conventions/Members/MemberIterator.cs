@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using POCOMapper.conventions.symbol;
+using KST.POCOMapper.conventions.symbol;
 
-namespace POCOMapper.conventions.members
+namespace KST.POCOMapper.conventions.members
 {
 	public class MemberIterator : IEnumerable<IMember>
 	{

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using POCOMapper.definition;
-using POCOMapper.exceptions;
-using POCOMapper.@internal;
-using POCOMapper.mapping.@base;
-using POCOMapper.visitor;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.exceptions;
+using KST.POCOMapper.@internal;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.visitor;
 
-namespace POCOMapper.mapping.collection
+namespace KST.POCOMapper.mapping.collection
 {
 	public abstract class CompiledCollectionMapping<TFrom, TTo> : CompiledMapping<TFrom, TTo>, ICollectionMapping
 	{

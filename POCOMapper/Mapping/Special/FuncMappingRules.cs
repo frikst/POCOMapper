@@ -1,9 +1,9 @@
 ﻿using System;
-using POCOMapper.definition;
-using POCOMapper.exceptions;
-using POCOMapper.mapping.@base;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.exceptions;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.mapping.special
+namespace KST.POCOMapper.mapping.special
 {
 	public class FuncMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 	{

@@ -1,10 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using POCOMapper.definition;
-using POCOMapper.exceptions;
-using POCOMapper.mapping.common;
-using POCOMapper.visitor;
+﻿using KST.POCOMapper.definition;
+using KST.POCOMapper.exceptions;
+using KST.POCOMapper.mapping.common;
+using KST.POCOMapper.visitor;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace POCOMapper.Test
+namespace KST.POCOMapper.Test
 {
 	[TestClass]
 	public class SubClassMapping

@@ -1,7 +1,6 @@
-﻿using System;
-using POCOMapper.definition;
+﻿using KST.POCOMapper.definition;
 
-namespace POCOMapper.mapping.special
+namespace KST.POCOMapper.mapping.special
 {
 	public static class SpecialRulesExtensions
 	{

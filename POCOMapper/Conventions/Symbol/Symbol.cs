@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace POCOMapper.conventions.symbol
+namespace KST.POCOMapper.conventions.symbol
 {
 	public struct Symbol
 	{
@@ -30,7 +30,7 @@ namespace POCOMapper.conventions.symbol
 			if (!(other is Symbol))
 				return false;
 
-			return Equals((Symbol) other);
+			return this.Equals((Symbol) other);
 		}
 
 		public override int GetHashCode()
@@ -69,7 +69,7 @@ namespace POCOMapper.conventions.symbol
 		{
 			if (this.aParts.Length < prefix.aParts.Length)
 				return false;
-			foreach (Tuple<string, string> part in Enumerable.Zip(aParts, prefix.aParts, (a, b) => new Tuple<string, string>(a, b)))
+			foreach (Tuple<string, string> part in Enumerable.Zip(this.aParts, prefix.aParts, (a, b) => new Tuple<string, string>(a, b)))
 			{
 				if (part.Item1 != part.Item2)
 					return false;
@@ -79,12 +79,12 @@ namespace POCOMapper.conventions.symbol
 
 		public Symbol GetWithoutPrefix()
 		{
-			return new Symbol(aParts.Skip(1));
+			return new Symbol(this.aParts.Skip(1));
 		}
 
 		public Symbol GetWithoutPrefix(Symbol prefix)
 		{
-			return new Symbol(aParts.Skip(prefix.aParts.Length));
+			return new Symbol(this.aParts.Skip(prefix.aParts.Length));
 		}
 	}
 }

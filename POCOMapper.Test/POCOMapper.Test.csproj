@@ -13,6 +13,10 @@
 		<OutputType>Library</OutputType>
 
 		<StartupObject />
+
+		<AssemblyName>KST.POCOMapper.Test</AssemblyName>
+
+		<RootNamespace>KST.POCOMapper.Test</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

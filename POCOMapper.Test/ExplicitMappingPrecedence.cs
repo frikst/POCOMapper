@@ -1,13 +1,9 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using KST.POCOMapper.definition;
+using KST.POCOMapper.mapping.common;
+using KST.POCOMapper.visitor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using POCOMapper.definition;
-using POCOMapper.mapping.common;
-using POCOMapper.visitor;
 
-namespace POCOMapper.Test
+namespace KST.POCOMapper.Test
 {
 	[TestClass]
 	public class ExplicitMappingPrecedence

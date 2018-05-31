@@ -1,8 +1,7 @@
 ﻿using System;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.common.parser;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.definition
+namespace KST.POCOMapper.definition
 {
 	internal interface IMappingDefinition
 	{

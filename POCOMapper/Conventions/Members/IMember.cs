@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using POCOMapper.conventions.symbol;
+using KST.POCOMapper.conventions.symbol;
 
-namespace POCOMapper.conventions.members
+namespace KST.POCOMapper.conventions.members
 {
 	public interface IMember
 	{

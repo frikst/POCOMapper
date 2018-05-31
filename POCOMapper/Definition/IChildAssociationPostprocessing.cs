@@ -1,8 +1,6 @@
 ﻿using System;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.common.parser;
 
-namespace POCOMapper.definition
+namespace KST.POCOMapper.definition
 {
 	internal interface IChildAssociationPostprocessing
 	{

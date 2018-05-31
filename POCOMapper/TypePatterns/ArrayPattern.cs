@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace POCOMapper.typePatterns
+namespace KST.POCOMapper.typePatterns
 {
 	internal class ArrayPattern : IPattern
 	{

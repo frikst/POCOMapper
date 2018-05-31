@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace POCOMapper.typePatterns
+namespace KST.POCOMapper.typePatterns
 {
 	internal class GenericPattern : IPattern
 	{

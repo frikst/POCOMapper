@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using POCOMapper.conventions;
-using POCOMapper.exceptions;
-using POCOMapper.mapping.@base;
-using POCOMapper.mapping.standard;
-using POCOMapper.visitor;
+using KST.POCOMapper.conventions;
+using KST.POCOMapper.exceptions;
+using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.mapping.standard;
+using KST.POCOMapper.visitor;
 
-namespace POCOMapper.definition
+namespace KST.POCOMapper.definition
 {
 	/// <summary>
 	/// One defined and compiled mappings set.
@@ -49,7 +48,7 @@ namespace POCOMapper.definition
 			if (this.aMappings.ContainsKey(key))
 				return this.aMappings[key];
 
-			foreach (IMappingDefinition mappingDefinition in aMappingDefinitions)
+			foreach (IMappingDefinition mappingDefinition in this.aMappingDefinitions)
 			{
 				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
 				{
@@ -74,7 +73,7 @@ namespace POCOMapper.definition
 		/// <returns>The mapping specified by the type parameters.</returns>
 		public IMapping<TFrom, TTo> GetMapping<TFrom, TTo>()
 		{
-			return (IMapping<TFrom, TTo>)GetMapping(typeof(TFrom), typeof(TTo));
+			return (IMapping<TFrom, TTo>)this.GetMapping(typeof(TFrom), typeof(TTo));
 		}
 
 		/// <summary>
@@ -191,7 +190,7 @@ namespace POCOMapper.definition
 
 		internal Delegate GetChildPostprocessing(Type parent, Type child)
 		{
-			foreach (IChildAssociationPostprocessing item in aChildPostprocessings)
+			foreach (IChildAssociationPostprocessing item in this.aChildPostprocessings)
 			{
 				if (item.Parent.IsAssignableFrom(parent) && item.Child.IsAssignableFrom(child))
 					return item.PostprocessDelegate;

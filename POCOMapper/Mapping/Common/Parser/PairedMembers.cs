@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq.Expressions;
-using POCOMapper.conventions.members;
-using POCOMapper.exceptions;
-using POCOMapper.@internal;
-using POCOMapper.mapping.@base;
+using KST.POCOMapper.conventions.members;
+using KST.POCOMapper.exceptions;
+using KST.POCOMapper.@internal;
+using KST.POCOMapper.mapping.@base;
 
-namespace POCOMapper.mapping.common.parser
+namespace KST.POCOMapper.mapping.common.parser
 {
 	public class PairedMembers : IObjectMemberMapping
 	{
@@ -35,17 +35,17 @@ namespace POCOMapper.mapping.common.parser
 
 		public IMember From
 		{
-			get { return aFrom; }
+			get { return this.aFrom; }
 		}
 
 		public IMember To
 		{
-			get { return aTo; }
+			get { return this.aTo; }
 		}
 
 		public IMapping Mapping
 		{
-			get { return aMapping; }
+			get { return this.aMapping; }
 		}
 
 		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action, Delegate postprocess, ParameterExpression parent)

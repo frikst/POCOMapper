@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace POCOMapper.conventions.symbol
+namespace KST.POCOMapper.conventions.symbol
 {
 	public class BigCammelCase : ISymbolParser
 	{

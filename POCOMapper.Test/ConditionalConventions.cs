@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.definition;
+using KST.POCOMapper.mapping.special;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using POCOMapper.conventions.symbol;
-using POCOMapper.definition;
-using POCOMapper.mapping.special;
 
-namespace POCOMapper.Test
+namespace KST.POCOMapper.Test
 {
 	[TestClass]
 	public class ConditionalConventions
