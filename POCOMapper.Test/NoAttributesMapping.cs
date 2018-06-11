@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Visitor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class NoAttributesMapping
 	{
 		private class From
@@ -25,13 +25,13 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void CheckCorrectTypeTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToStringTest()
 		{
 			string correct = "ObjectToObject<From, To>\n" + Constants.STANDARD_MAPPINGS;

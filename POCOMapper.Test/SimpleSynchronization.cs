@@ -1,9 +1,9 @@
 ﻿using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class SimpleSynchronization
 	{
 		private class From
@@ -34,7 +34,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void SyncToEmpty()
 		{
 			From val = new From("test");
@@ -45,7 +45,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(val.GetValue(), valNew.Value);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SyncToNonEmpty()
 		{
 			From val = new From("test");
@@ -57,7 +57,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(val.GetValue(), valNew.Value);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SyncEmptyToEmpty()
 		{
 			From val = new From(null);
@@ -68,7 +68,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(val.GetValue(), valNew.Value);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SyncEmptyToNonEmpty()
 		{
 			From val = new From(null);

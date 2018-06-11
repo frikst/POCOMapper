@@ -1,9 +1,9 @@
 ﻿using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class ChildSetParent
 	{
 		private class FromInner
@@ -38,14 +38,14 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void InnerParentIsParentMap()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 			Assert.AreSame(ret, ret.Inner.Parent);
 		}
 
-		[TestMethod]
+		[Test]
 		public void InnerParentIsParentSync()
 		{
 			To ret = new To();

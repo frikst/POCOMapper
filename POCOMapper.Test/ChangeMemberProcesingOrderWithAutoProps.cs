@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class ChangeMemberProcesingOrderWithAutoProps
 	{
 		private class From
@@ -61,7 +61,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void AutoMapping()
 		{
 			ToAuto retAuto = MappingAuto.Instance.Map<From, ToAuto>(new From());
@@ -70,7 +70,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsNull(retCode.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CodeMapping()
 		{
 			ToAuto retAuto = MappingCode.Instance.Map<From, ToAuto>(new From());
@@ -79,7 +79,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual("hello world", retCode.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void PropertyMapping()
 		{
 			ToAuto retAuto = MappingProperty.Instance.Map<From, ToAuto>(new From());

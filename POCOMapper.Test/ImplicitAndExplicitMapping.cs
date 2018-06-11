@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class ImplicitAndExplicitMapping
 	{
 
@@ -35,7 +35,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestMethod1()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());

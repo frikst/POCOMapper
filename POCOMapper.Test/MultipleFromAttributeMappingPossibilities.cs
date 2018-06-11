@@ -1,9 +1,9 @@
 ﻿using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class MultipleFromAttributeMappingPossibilities
 	{
 		private class FromInner
@@ -34,7 +34,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void StructuringMapTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());

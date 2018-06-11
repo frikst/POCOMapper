@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Collection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class CollectionSynchronization
 	{
 		private class ItemFrom
@@ -35,7 +35,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void SimpleSynchronization()
 		{
 			ItemFrom[] from = new ItemFrom[]
@@ -66,7 +66,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(1, to[4].value);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SimpleSynchronizationWithAdditionalData()
 		{
 			ItemFrom[] from = new ItemFrom[]
@@ -102,7 +102,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(19, to[4].anotherValue);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SimpleSynchronizationWithAdditionalDataAndItemAddition()
 		{
 			ItemFrom[] from = new ItemFrom[]
@@ -137,7 +137,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(19, to[4].anotherValue);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SimpleSynchronizationWithAdditionalDataAndItemRemoval()
 		{
 			ItemFrom[] from = new ItemFrom[]

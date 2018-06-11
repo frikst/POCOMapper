@@ -1,9 +1,9 @@
 ﻿using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class CompositeStructure
 	{
 		private class From
@@ -24,7 +24,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void CompositeMapping()
 		{
 			From from = new From { child = new From { child = new From() } };
@@ -35,7 +35,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsNull(to.child.child.child);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CompositeSynchronization()
 		{
 			From from = new From { child = new From { child = new From() } };
@@ -47,7 +47,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsNull(to.child.child.child);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CompositeSynchronizationWithNonNullDestinationField()
 		{
 			From from = new From { child = new From { child = new From() } };

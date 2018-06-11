@@ -1,11 +1,11 @@
 ﻿using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Conventions.Symbols;
 using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class ChangeMemberProcesingOrder
 	{
 		private class From
@@ -51,28 +51,28 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void FieldSourceMapping()
 		{
 			To ret = MappingFields.Instance.Map<From, To>(new From());
 			Assert.AreEqual("field", ret.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MethodSourceMapping()
 		{
 			To ret = MappingMethods.Instance.Map<From, To>(new From());
 			Assert.AreEqual("meth", ret.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void PropertySourceMapping()
 		{
 			To ret = MappingProps.Instance.Map<From, To>(new From());
 			Assert.AreEqual("prop", ret.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FieldSourceSynchronization()
 		{
 			To ret = new To();
@@ -80,7 +80,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual("field", ret.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MethodSourceSynchronization()
 		{
 			To ret = new To();
@@ -88,7 +88,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual("meth", ret.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void PropertySourceSynchronization()
 		{
 			To ret = new To();

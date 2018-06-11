@@ -1,11 +1,11 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Common;
 using KST.POCOMapper.Mapping.Special;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class MemberMappingNto1
 	{
 		private class From
@@ -32,7 +32,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void Mappping0Test()
 		{
 			From from = new From { i1 = false, i2 = false };
@@ -41,7 +41,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(0, to.i);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Mappping1Test()
 		{
 			From from = new From { i1 = true, i2 = false };
@@ -50,7 +50,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(1, to.i);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Mappping2Test()
 		{
 			From from = new From { i1 = false, i2 = true };
@@ -59,7 +59,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(2, to.i);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Mappping3Test()
 		{
 			From from = new From { i1 = true, i2 = true };
@@ -68,7 +68,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(3, to.i);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Synchronization0Test()
 		{
 			From from = new From { i1 = false, i2 = false };
@@ -78,7 +78,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(0, to.i);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Synchronization1Test()
 		{
 			From from = new From { i1 = true, i2 = false };
@@ -88,7 +88,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(1, to.i);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Synchronization2Test()
 		{
 			From from = new From { i1 = false, i2 = true };
@@ -98,7 +98,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(2, to.i);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Synchronization3Test()
 		{
 			From from = new From { i1 = true, i2 = true };

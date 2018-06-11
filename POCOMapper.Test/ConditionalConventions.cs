@@ -2,11 +2,11 @@
 using KST.POCOMapper.Conventions.Symbols;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Special;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class ConditionalConventions
 	{
 		private class From
@@ -51,7 +51,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void ConditionalMapping()
 		{
 			From from = new From { aFirstID = 1, aSecondID = 2 };

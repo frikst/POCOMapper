@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class InvalidConstructorMapping
 	{
 		private class From
@@ -52,18 +52,16 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(InvalidMapping))]
+		[Test]
 		public void TestInvalidObjectConstructor()
 		{
-			To ret = Mapping.Instance.Map<From, To>(new From());
+			Assert.Throws<InvalidMapping>(() => Mapping.Instance.Map<From, To>(new From()));
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(InvalidMapping))]
+		[Test]
 		public void TestInvalidCollectionConstructor()
 		{
-			ToCollection<Int32> ret = Mapping.Instance.Map<Int32[], ToCollection<Int32>>(new Int32[] { }); 
+			Assert.Throws<InvalidMapping>(() => Mapping.Instance.Map<Int32[], ToCollection<Int32>>(new Int32[] { }));
 		}
 	}
 }

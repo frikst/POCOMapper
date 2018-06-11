@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class FactoryMethod
 	{
 		private class From
@@ -32,7 +32,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void MapppingTest()
 		{
 			From from = new From();

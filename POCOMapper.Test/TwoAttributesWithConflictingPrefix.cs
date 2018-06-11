@@ -1,9 +1,9 @@
 ﻿using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class TwoAttributesWithConflictingPrefix
 	{
 		private class FromChild
@@ -30,7 +30,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void MappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From { prefix = new FromChild { id = 5 } });

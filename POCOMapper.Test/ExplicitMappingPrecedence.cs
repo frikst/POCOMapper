@@ -1,11 +1,11 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Common;
 using KST.POCOMapper.Visitor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class ExplicitMappingPrecedence
 	{
 		private class From
@@ -29,7 +29,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void MapppingTest()
 		{
 			From from = new From();
@@ -38,7 +38,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual("correct", to.attr);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToStringTest()
 		{
 			string correct = "ObjectToObject<From, To>\n    attrSrc => attr (null)\n" + Constants.STANDARD_MAPPINGS;

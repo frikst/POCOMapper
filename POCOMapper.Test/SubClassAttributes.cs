@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Visitor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class SubClassAttributes
 	{
 		private class From
@@ -52,7 +52,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void MappingTest()
 		{
 			SubTo to = Mapping.Instance.Map<SubFrom, SubTo>(new SubFrom());
@@ -61,7 +61,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual("from3", to.GetValue3());
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToStringTest()
 		{
 			string correct = "ObjectToObject<SubFrom, SubTo>\n    GetValue2 => Value2 (null)\n    GetValue => Value (null)\n    GetValue3 => value3 (null)\n" + Constants.STANDARD_MAPPINGS;

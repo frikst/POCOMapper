@@ -3,11 +3,11 @@ using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Standard;
 using KST.POCOMapper.Visitor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class SynchronizationWithValueChange
 	{
 		private class From
@@ -66,14 +66,14 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void MappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 			Assert.AreEqual(5, ret.child);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SynchronizationTest()
 		{
 			To to = new To();

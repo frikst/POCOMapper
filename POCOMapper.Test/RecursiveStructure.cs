@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Visitor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class RecursiveStructure
 	{
 		private class From
@@ -25,7 +25,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void MapEmpty()
 		{
 			From from = new From { };
@@ -36,7 +36,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsNull(to.Inner);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MapOneLevel()
 		{
 			From from = new From { Inner = new From { } };
@@ -48,7 +48,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsNull(to.Inner.Inner);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MapTwoLevels()
 		{
 			From from = new From { Inner = new From { Inner = new From { } } };
@@ -61,7 +61,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsNull(to.Inner.Inner.Inner);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MappingToString()
 		{
 			string expected = "ObjectToObject<From, To>\n    Inner => Inner ObjectToObject<From, To>\n        ...\n" + Constants.STANDARD_MAPPINGS;

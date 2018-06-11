@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class SpecializedCollection
 	{
 		private class ListOfInts : List<int>
@@ -26,7 +26,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void SpecializedToGenericMapping()
 		{
 			List<int> ret = Mapping.Instance.Map<ListOfInts, List<int>>(new ListOfInts { 1, 2, 3 });
@@ -37,7 +37,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(3, ret[2]);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GenericToSpecializedMapping()
 		{
 			ListOfInts ret = Mapping.Instance.Map<List<int>, ListOfInts>(new List<int> { 1, 2, 3 });

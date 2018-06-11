@@ -1,11 +1,11 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Mapping.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class SubClassSynchronization
 	{
 		private class From { }
@@ -34,14 +34,14 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParentToParentTest()
 		{
 			To ret = new To();
 			Mapping.Instance.Synchronize<From, To>(new From(), ref ret);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom1ToSubTo1Test()
 		{
 			To ret = new SubTo1();
@@ -49,7 +49,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom2ToSubTo1Test()
 		{
 			To ret = new SubTo1();
@@ -57,7 +57,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom3ToSubTo2Test()
 		{
 			To ret = new SubTo2();
@@ -65,7 +65,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(typeof(SubTo2), ret.GetType());
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom4FailTest()
 		{
 			bool error = false;

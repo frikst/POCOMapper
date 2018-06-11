@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class Collections
 	{
 		private class Mapping : MappingDefinition<Mapping>
@@ -16,7 +16,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToArray()
 		{
 			int[] ret = Mapping.Instance.Map<int[], int[]>(new int[] {1, 2, 3});
@@ -26,7 +26,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(ret[2], 3);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToList()
 		{
 			List<int> ret = Mapping.Instance.Map<int[], List<int>>(new int[] { 1, 2, 3 });
@@ -36,7 +36,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(ret[2], 3);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToHashSet()
 		{
 			HashSet<int> ret = Mapping.Instance.Map<int[], HashSet<int>>(new int[] { 1, 2, 3 });
@@ -46,7 +46,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsTrue(ret.Contains(3));
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToIEnumerable()
 		{
 			IEnumerable<int> ret = Mapping.Instance.Map<int[], IEnumerable<int>>(new int[] { 1, 2, 3 });

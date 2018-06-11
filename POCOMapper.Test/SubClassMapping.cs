@@ -2,11 +2,11 @@
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Mapping.Common;
 using KST.POCOMapper.Visitor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class SubClassMapping
 	{
 		private class From { }
@@ -35,34 +35,34 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParentToParentTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom1ToSubTo1Test()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom1());
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom2ToSubTo1Test()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom2());
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom3ToSubTo2Test()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom3());
 			Assert.AreEqual(typeof(SubTo2), ret.GetType());
 		}
 
-		[TestMethod]
+		[Test]
 		public void SubFrom4FailTest()
 		{
 			bool error = false;
@@ -79,7 +79,7 @@ namespace KST.POCOMapper.Test
 			Assert.IsTrue(error, "Should throw the UnknownMapping exception");
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToStringTest()
 		{
 			string correct = "SubClassToObject<From, To>\n    SubFrom1 => SubTo1 ObjectToObject<SubFrom1, SubTo1>\n    SubFrom2 => SubTo1 ObjectToObject<SubFrom2, SubTo1>\n    SubFrom3 => SubTo2 ObjectToObject<SubFrom3, SubTo2>\n    From => To ObjectToObject<From, To>\n"

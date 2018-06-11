@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Special;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class PostprocessTest
 	{
 		private class From
@@ -27,14 +27,14 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestPostprocessMap()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 			Assert.AreEqual("Hi", ret.Value);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestPostprocessSnychronize()
 		{
 			To ret = new To();

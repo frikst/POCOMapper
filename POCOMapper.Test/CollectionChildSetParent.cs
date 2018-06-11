@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using KST.POCOMapper.Definition;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class CollectionChildSetParent
 	{
 		private class From
@@ -29,7 +29,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void InnerParentIsParentMap()
 		{
 			List<To> ret = Mapping.Instance.Map<IEnumerable<From>, List<To>>(new List<From> { new From() });

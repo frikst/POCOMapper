@@ -1,10 +1,10 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Visitor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
 {
-	[TestClass]
+	[TestFixture]
 	public class Flattering
 	{
 		private class FromInner
@@ -32,7 +32,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void FlatteringMapTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
@@ -40,7 +40,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual("world", ret.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FlatteringSynchronizationTest()
 		{
 			To to = new To();
@@ -52,7 +52,7 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual("world", to.Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FlatteringToStringTest()
 		{
 			string correct = "ObjectToObject<From, To>\n    Inner.Data => InnerData (null)\n    Data => Data (null)\n" + Constants.STANDARD_MAPPINGS;
