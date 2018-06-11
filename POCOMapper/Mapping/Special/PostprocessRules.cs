@@ -1,9 +1,9 @@
 ﻿using System;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.mapping.common;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.Common;
 
-namespace KST.POCOMapper.mapping.special
+namespace KST.POCOMapper.Mapping.Special
 {
 	public class PostprocessRules<TFrom, TTo> : IMappingRules<TFrom, TTo>, IRulesDefinition<TFrom, TTo>
 	{

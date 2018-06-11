@@ -1,10 +1,10 @@
 ﻿using System;
-using KST.POCOMapper.conventions.members;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.mapping.common.parser;
+using KST.POCOMapper.Conventions.Members;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.Common.Parser;
 
-namespace KST.POCOMapper.mapping.common.memberMappings
+namespace KST.POCOMapper.Mapping.Common.MemberMappings
 {
 	public class SimpleMemberMappingDefinition : IMemberMappingDefinition
 	{

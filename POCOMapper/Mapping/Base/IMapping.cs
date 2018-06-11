@@ -1,7 +1,7 @@
 ﻿using System;
-using KST.POCOMapper.visitor;
+using KST.POCOMapper.Visitor;
 
-namespace KST.POCOMapper.mapping.@base
+namespace KST.POCOMapper.Mapping.Base
 {
 	public interface IMapping
 	{

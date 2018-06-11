@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.@internal;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Internal;
 
-namespace KST.POCOMapper.mapping.collection
+namespace KST.POCOMapper.Mapping.Collection
 {
 	public class EnumerableToList<TFrom, TTo> : CompiledCollectionMapping<TFrom, TTo>
 	{

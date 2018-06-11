@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq.Expressions;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.@internal;
-using KST.POCOMapper.visitor;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Internal;
+using KST.POCOMapper.Visitor;
 
-namespace KST.POCOMapper.mapping.@base
+namespace KST.POCOMapper.Mapping.Base
 {
 	public abstract class CompiledMapping<TFrom, TTo> : IMapping<TFrom, TTo>
 	{

@@ -1,4 +1,4 @@
-﻿namespace KST.POCOMapper.typePatterns
+﻿namespace KST.POCOMapper.TypePatterns
 {
 	public sealed class SubClass<TBase>
 	{

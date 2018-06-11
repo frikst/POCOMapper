@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.conventions;
-using KST.POCOMapper.exceptions;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.mapping.standard;
-using KST.POCOMapper.visitor;
+using KST.POCOMapper.Conventions;
+using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.Standard;
+using KST.POCOMapper.Visitor;
 
-namespace KST.POCOMapper.definition
+namespace KST.POCOMapper.Definition
 {
 	/// <summary>
 	/// One defined and compiled mappings set.
@@ -19,7 +19,7 @@ namespace KST.POCOMapper.definition
 		private readonly Dictionary<Tuple<Type, Type>, IMapping> aMappings;
 		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 
-		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, Conventions fromConventions, Conventions toConventions)
+		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, NamingConventions fromConventions, NamingConventions toConventions)
 		{
 			this.aMappings = new Dictionary<Tuple<Type, Type>, IMapping>();
 
@@ -31,8 +31,8 @@ namespace KST.POCOMapper.definition
 			this.ToConventions = toConventions;
 		}
 
-		internal Conventions FromConventions { get; private set; }
-		internal Conventions ToConventions { get; private set; }
+		internal NamingConventions FromConventions { get; private set; }
+		internal NamingConventions ToConventions { get; private set; }
 
 		/// <summary>
 		/// Finds the mapping from the type specified by the <paramref name="from"/> parameter to the type specified

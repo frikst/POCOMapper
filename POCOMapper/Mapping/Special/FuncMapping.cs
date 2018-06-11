@@ -1,8 +1,8 @@
 ﻿using System;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.visitor;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Visitor;
 
-namespace KST.POCOMapper.mapping.special
+namespace KST.POCOMapper.Mapping.Special
 {
 	public class FuncMapping<TFrom, TTo> : IMapping<TFrom, TTo>
 	{

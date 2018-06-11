@@ -1,7 +1,7 @@
 ﻿using System;
-using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.mapping.collection
+namespace KST.POCOMapper.Mapping.Collection
 {
 	public interface ICollectionMapping : IMapping
 	{

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KST.POCOMapper.typePatterns
+namespace KST.POCOMapper.TypePatterns
 {
 	internal class ClassPattern : IPattern
 	{

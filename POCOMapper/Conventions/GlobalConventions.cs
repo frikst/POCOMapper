@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using KST.POCOMapper.conventions.members;
-using KST.POCOMapper.typePatterns;
+using KST.POCOMapper.Conventions.Members;
+using KST.POCOMapper.TypePatterns;
 
-namespace KST.POCOMapper.conventions
+namespace KST.POCOMapper.Conventions
 {
-	public class GlobalConventions : Conventions
+	public class GlobalConventions : NamingConventions
 	{
-		private readonly List<Conventions> aConditionalConventionList;
+		private readonly List<NamingConventions> aConditionalConventionList;
 
-		internal GlobalConventions(Conventions.Direction direction)
+		internal GlobalConventions(NamingConventions.Direction direction)
 			: base(direction)
 		{
-			this.aConditionalConventionList = new List<Conventions>();
+			this.aConditionalConventionList = new List<NamingConventions>();
 		}
 
-		public GlobalConventions ConditionalConventions<TMemberFrom, TMemberTo>(Action<Conventions> conventions)
+		public GlobalConventions ConditionalConventions<TMemberFrom, TMemberTo>(Action<NamingConventions> conventions)
 		{
-			Conventions conv = new ConditionalConventions(new Pattern<TMemberFrom>(), new Pattern<TMemberTo>(), this.ConventionDirection);
+			NamingConventions conv = new ConditionalConventions(new Pattern<TMemberFrom>(), new Pattern<TMemberTo>(), this.ConventionDirection);
 			conventions(conv);
 
 			this.aConditionalConventionList.Add(conv);
@@ -25,9 +25,9 @@ namespace KST.POCOMapper.conventions
 			return this;
 		}
 
-		public GlobalConventions ConditionalConventions(IPattern from, IPattern to, Action<Conventions> conventions)
+		public GlobalConventions ConditionalConventions(IPattern from, IPattern to, Action<NamingConventions> conventions)
 		{
-			Conventions conv = new ConditionalConventions(from, to, this.ConventionDirection);
+			NamingConventions conv = new ConditionalConventions(from, to, this.ConventionDirection);
 			conventions(conv);
 
 			this.aConditionalConventionList.Add(conv);
@@ -37,9 +37,9 @@ namespace KST.POCOMapper.conventions
 
 		#region Overrides of Conventions
 
-		public override IEnumerable<Conventions> GetChildConventions()
+		public override IEnumerable<NamingConventions> GetChildConventions()
 		{
-			foreach (Conventions convention in this.aConditionalConventionList)
+			foreach (NamingConventions convention in this.aConditionalConventionList)
 				yield return convention;
 		}
 

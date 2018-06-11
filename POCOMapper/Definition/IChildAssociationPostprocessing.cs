@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KST.POCOMapper.definition
+namespace KST.POCOMapper.Definition
 {
 	internal interface IChildAssociationPostprocessing
 	{

@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.Conventions.Symbols;
 
-namespace KST.POCOMapper.conventions.members
+namespace KST.POCOMapper.Conventions.Members
 {
 	public class MemberIterator : IEnumerable<IMember>
 	{
 		private readonly Type aType;
-		private readonly Conventions aConventions;
+		private readonly NamingConventions aConventions;
 		private readonly IMember aParent;
 
-		public MemberIterator(Type type, Conventions conventions, IMember parent)
+		public MemberIterator(Type type, NamingConventions conventions, IMember parent)
 		{
 			this.aType = type;
 			this.aConventions = conventions;
@@ -25,7 +25,7 @@ namespace KST.POCOMapper.conventions.members
 
 		public IEnumerator<IMember> GetEnumerator()
 		{
-			foreach (Conventions child in this.aConventions.GetChildConventions())
+			foreach (NamingConventions child in this.aConventions.GetChildConventions())
 				foreach (IMember member in child.GetAllMembers(this.aType, this.aParent))
 					yield return member;
 

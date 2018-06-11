@@ -1,8 +1,8 @@
 ﻿using System;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.mapping.standard
+namespace KST.POCOMapper.Mapping.Standard
 {
 	public class CustomMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 	{

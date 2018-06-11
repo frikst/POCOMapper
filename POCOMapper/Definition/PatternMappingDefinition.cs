@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.typePatterns;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.TypePatterns;
 
-namespace KST.POCOMapper.definition
+namespace KST.POCOMapper.Definition
 {
 	/// <summary>
 	/// Pattern mapping specification definition class.

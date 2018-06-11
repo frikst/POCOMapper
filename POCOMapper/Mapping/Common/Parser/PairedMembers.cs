@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq.Expressions;
-using KST.POCOMapper.conventions.members;
-using KST.POCOMapper.exceptions;
-using KST.POCOMapper.@internal;
-using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.Conventions.Members;
+using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Internal;
+using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.mapping.common.parser
+namespace KST.POCOMapper.Mapping.Common.Parser
 {
 	public class PairedMembers : IObjectMemberMapping
 	{

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.@internal
+namespace KST.POCOMapper.Internal
 {
 	internal static class MappingMethods
 	{

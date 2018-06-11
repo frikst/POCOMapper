@@ -1,4 +1,4 @@
-﻿namespace KST.POCOMapper.conventions
+﻿namespace KST.POCOMapper.Conventions
 {
 	public enum MemberType
 	{

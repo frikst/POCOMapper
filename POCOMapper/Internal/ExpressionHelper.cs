@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace KST.POCOMapper.@internal
+namespace KST.POCOMapper.Internal
 {
 	internal class ExpressionHelper
 	{

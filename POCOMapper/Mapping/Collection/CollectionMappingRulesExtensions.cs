@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using KST.POCOMapper.definition;
+using KST.POCOMapper.Definition;
 
-namespace KST.POCOMapper.mapping.collection
+namespace KST.POCOMapper.Mapping.Collection
 {
 	public static class CollectionMappingRulesExtensions
 	{

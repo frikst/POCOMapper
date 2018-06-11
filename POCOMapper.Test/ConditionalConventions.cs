@@ -1,7 +1,7 @@
 ﻿using System;
-using KST.POCOMapper.conventions.symbol;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.special;
+using KST.POCOMapper.Conventions.Symbols;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Special;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KST.POCOMapper.Test

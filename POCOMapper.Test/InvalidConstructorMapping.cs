@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.exceptions;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KST.POCOMapper.Test

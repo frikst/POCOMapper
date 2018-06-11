@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using KST.POCOMapper.exceptions;
+using KST.POCOMapper.Exceptions;
 
-namespace KST.POCOMapper.typePatterns
+namespace KST.POCOMapper.TypePatterns
 {
 	public class Pattern<TPattern> : IPattern
 	{

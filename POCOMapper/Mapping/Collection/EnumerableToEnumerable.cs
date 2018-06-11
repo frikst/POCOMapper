@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.exceptions;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Exceptions;
 
-namespace KST.POCOMapper.mapping.collection
+namespace KST.POCOMapper.Mapping.Collection
 {
 	public class EnumerableToEnumerable<TFrom, TTo> : CompiledCollectionMapping<TFrom, TTo>
 	{

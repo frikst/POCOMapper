@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.Conventions.Symbols;
 
-namespace KST.POCOMapper.conventions.members
+namespace KST.POCOMapper.Conventions.Members
 {
 	public class MethodMember : IMember
 	{
 		private readonly MethodInfo aGetMethod;
 		private readonly MethodInfo aSetMethod;
-		private readonly Conventions aConventions;
+		private readonly NamingConventions aConventions;
 
-		public MethodMember(IMember parent, Symbol symbol, MethodInfo getMethod, MethodInfo setMethod, Conventions conventions)
+		public MethodMember(IMember parent, Symbol symbol, MethodInfo getMethod, MethodInfo setMethod, NamingConventions conventions)
 		{
 			this.Parent = parent;
 

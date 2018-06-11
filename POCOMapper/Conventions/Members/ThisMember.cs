@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.Conventions.Symbols;
 
-namespace KST.POCOMapper.conventions.members
+namespace KST.POCOMapper.Conventions.Members
 {
 	public class ThisMember<TClass> : IMember
 	{

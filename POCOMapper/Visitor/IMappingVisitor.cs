@@ -1,8 +1,8 @@
-﻿using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.mapping.collection;
-using KST.POCOMapper.mapping.common;
+﻿using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.Collection;
+using KST.POCOMapper.Mapping.Common;
 
-namespace KST.POCOMapper.visitor
+namespace KST.POCOMapper.Visitor
 {
 	public interface IMappingVisitor
 	{

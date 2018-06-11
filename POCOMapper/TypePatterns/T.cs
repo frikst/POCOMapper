@@ -1,4 +1,4 @@
-﻿namespace KST.POCOMapper.typePatterns
+﻿namespace KST.POCOMapper.TypePatterns
 {
 	/// <summary>
 	/// Placeholder for the generic type mappings.

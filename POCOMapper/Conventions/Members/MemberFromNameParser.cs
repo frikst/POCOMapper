@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using KST.POCOMapper.exceptions;
+using KST.POCOMapper.Exceptions;
 
-namespace KST.POCOMapper.conventions.members
+namespace KST.POCOMapper.Conventions.Members
 {
 	public class MemberFromNameParser
 	{
-		public IMember Parse(Conventions conventions, Type type, string name, bool write)
+		public IMember Parse(NamingConventions conventions, Type type, string name, bool write)
 		{
 			return this.WrapMember(conventions, this.GetMember(type, name), write);
 		}
 
-		private IMember WrapMember(Conventions conventions, Stack<MemberInfo> members, bool write)
+		private IMember WrapMember(NamingConventions conventions, Stack<MemberInfo> members, bool write)
 		{
 			MemberInfo current = members.Pop();
 			IMember parent;

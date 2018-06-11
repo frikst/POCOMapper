@@ -1,8 +1,8 @@
 ﻿using System;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.mapping.common;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.Common;
 
-namespace KST.POCOMapper.definition
+namespace KST.POCOMapper.Definition
 {
 	/// <summary>
 	/// Class mapping specification definition class.

@@ -1,8 +1,8 @@
 ﻿using System;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.mapping.standard;
-using KST.POCOMapper.visitor;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.Standard;
+using KST.POCOMapper.Visitor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KST.POCOMapper.Test

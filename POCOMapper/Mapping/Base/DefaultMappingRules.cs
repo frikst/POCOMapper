@@ -1,6 +1,6 @@
-﻿using KST.POCOMapper.definition;
+﻿using KST.POCOMapper.Definition;
 
-namespace KST.POCOMapper.mapping.@base
+namespace KST.POCOMapper.Mapping.Base
 {
 	/// <summary>
 	/// For internal use only. Use with caution: Can cause infinite recursion.

@@ -1,5 +1,5 @@
-﻿using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.collection;
+﻿using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Collection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KST.POCOMapper.Test

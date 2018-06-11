@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.Conventions.Symbols;
 
-namespace KST.POCOMapper.conventions.members
+namespace KST.POCOMapper.Conventions.Members
 {
 	public class FieldMember : IMember
 	{
 		private readonly FieldInfo aField;
-		private readonly Conventions aConventions;
+		private readonly NamingConventions aConventions;
 
-		public FieldMember(IMember parent, Symbol symbol, FieldInfo field, Conventions conventions)
+		public FieldMember(IMember parent, Symbol symbol, FieldInfo field, NamingConventions conventions)
 		{
 			this.Parent = parent;
 

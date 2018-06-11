@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.conventions.members;
-using KST.POCOMapper.conventions.symbol;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.Conventions.Members;
+using KST.POCOMapper.Conventions.Symbols;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.mapping.common.parser
+namespace KST.POCOMapper.Mapping.Common.Parser
 {
 	public class TypePairParser : IEnumerable<PairedMembers>
 	{

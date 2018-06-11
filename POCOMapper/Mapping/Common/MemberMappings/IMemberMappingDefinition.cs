@@ -1,8 +1,8 @@
 ﻿using System;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.mapping.common.parser;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Common.Parser;
 
-namespace KST.POCOMapper.mapping.common.memberMappings
+namespace KST.POCOMapper.Mapping.Common.MemberMappings
 {
 	internal interface IMemberMappingDefinition
 	{

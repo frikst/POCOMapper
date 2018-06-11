@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using KST.POCOMapper.conventions;
-using KST.POCOMapper.mapping.collection;
-using KST.POCOMapper.mapping.standard;
-using KST.POCOMapper.typePatterns;
+using KST.POCOMapper.Conventions;
+using KST.POCOMapper.Mapping.Collection;
+using KST.POCOMapper.Mapping.Standard;
+using KST.POCOMapper.TypePatterns;
 
-namespace KST.POCOMapper.definition
+namespace KST.POCOMapper.Definition
 {
 	/// <summary>
 	/// Generic singleton container of one set of mappings.
@@ -27,8 +27,8 @@ namespace KST.POCOMapper.definition
 			this.aChildPostprocessings = new List<IChildAssociationPostprocessing>();
 			this.aFinished = false;
 
-			this.FromConventions = new GlobalConventions(Conventions.Direction.From);
-			this.ToConventions = new GlobalConventions(Conventions.Direction.To);
+			this.FromConventions = new GlobalConventions(NamingConventions.Direction.From);
+			this.ToConventions = new GlobalConventions(NamingConventions.Direction.To);
 
 			this.DefaultMappings();
 		}
@@ -136,7 +136,7 @@ namespace KST.POCOMapper.definition
 		}
 
 		/// <summary>
-		/// Instance of the singleton. Should be used only on the <see cref="POCOMapper.definition.MappingDefinition{T}"/> descendant.
+		/// Instance of the singleton. Should be used only on the <see cref="MappingDefinition{TMapping}"/> descendant.
 		/// </summary>
 		public static MappingImplementation Instance
 		{

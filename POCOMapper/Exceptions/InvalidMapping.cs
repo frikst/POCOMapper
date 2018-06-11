@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KST.POCOMapper.exceptions
+namespace KST.POCOMapper.Exceptions
 {
 	public class InvalidMapping : Exception
 	{

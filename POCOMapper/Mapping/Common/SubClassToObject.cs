@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.exceptions;
-using KST.POCOMapper.@internal;
-using KST.POCOMapper.mapping.@base;
-using KST.POCOMapper.visitor;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Internal;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Visitor;
 
-namespace KST.POCOMapper.mapping.common
+namespace KST.POCOMapper.Mapping.Common
 {
 	public class SubClassToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>, ISubClassMapping
 	{

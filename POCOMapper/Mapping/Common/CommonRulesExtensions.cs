@@ -1,6 +1,6 @@
-﻿using KST.POCOMapper.definition;
+﻿using KST.POCOMapper.Definition;
 
-namespace KST.POCOMapper.mapping.common
+namespace KST.POCOMapper.Mapping.Common
 {
 	public static class CommonRulesExtensions
 	{

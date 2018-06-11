@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.conventions.members;
-using KST.POCOMapper.typePatterns;
+using KST.POCOMapper.Conventions.Members;
+using KST.POCOMapper.TypePatterns;
 
-namespace KST.POCOMapper.conventions
+namespace KST.POCOMapper.Conventions
 {
-	public class ConditionalConventions : Conventions
+	public class ConditionalConventions : NamingConventions
 	{
 		private readonly IPattern aFrom;
 		private readonly IPattern aTo;
 
-		internal ConditionalConventions(IPattern from, IPattern to, Conventions.Direction direction)
+		internal ConditionalConventions(IPattern from, IPattern to, NamingConventions.Direction direction)
 			: base(direction)
 		{
 			this.aFrom = from;
@@ -19,9 +19,9 @@ namespace KST.POCOMapper.conventions
 
 		#region Overrides of Conventions
 
-		public override IEnumerable<Conventions> GetChildConventions()
+		public override IEnumerable<NamingConventions> GetChildConventions()
 		{
-			return Enumerable.Empty<Conventions>();
+			return Enumerable.Empty<NamingConventions>();
 		}
 
 		public override bool CanPair(IMember first, IMember second)

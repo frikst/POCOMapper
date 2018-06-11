@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using KST.POCOMapper.conventions.symbol;
+using KST.POCOMapper.Conventions.Symbols;
 
-namespace KST.POCOMapper.conventions.members
+namespace KST.POCOMapper.Conventions.Members
 {
 	public class PropertyMember : IMember
 	{
 		private readonly PropertyInfo aProperty;
-		private readonly Conventions aConventions;
+		private readonly NamingConventions aConventions;
 
-		public PropertyMember(IMember parent, Symbol symbol, PropertyInfo property, Conventions conventions)
+		public PropertyMember(IMember parent, Symbol symbol, PropertyInfo property, NamingConventions conventions)
 		{
 			this.Parent = parent;
 

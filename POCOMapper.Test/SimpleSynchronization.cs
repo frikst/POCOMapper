@@ -1,4 +1,4 @@
-﻿using KST.POCOMapper.definition;
+﻿using KST.POCOMapper.Definition;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KST.POCOMapper.Test

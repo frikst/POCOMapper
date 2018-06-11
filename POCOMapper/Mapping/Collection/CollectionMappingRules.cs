@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using KST.POCOMapper.definition;
-using KST.POCOMapper.exceptions;
-using KST.POCOMapper.mapping.@base;
+using KST.POCOMapper.Definition;
+using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.mapping.collection
+namespace KST.POCOMapper.Mapping.Collection
 {
 	public class CollectionMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 		where TFrom : IEnumerable

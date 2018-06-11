@@ -1,7 +1,7 @@
-﻿using KST.POCOMapper.definition;
-using KST.POCOMapper.exceptions;
-using KST.POCOMapper.mapping.common;
-using KST.POCOMapper.visitor;
+﻿using KST.POCOMapper.Definition;
+using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Mapping.Common;
+using KST.POCOMapper.Visitor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KST.POCOMapper.Test
