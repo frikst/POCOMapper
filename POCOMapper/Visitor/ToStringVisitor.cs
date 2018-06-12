@@ -72,7 +72,7 @@ namespace KST.POCOMapper.Visitor
 			this.aLevel++;
 			foreach (var member in mapping.Members)
 			{
-				this.aTypeIdentification = string.Format("{0} => {1}", member.From.FullName, member.To.FullName);
+				this.aTypeIdentification = $"{member.From.FullName} => {member.To.FullName}";
 				if (member.Mapping == null)
 					this.AddNullLine();
 				else
@@ -93,7 +93,7 @@ namespace KST.POCOMapper.Visitor
 			this.aLevel++;
 			foreach (var conversion in mapping.Conversions)
 			{
-				this.aTypeIdentification = string.Format("{0} => {1}", conversion.From.Name, conversion.To.Name);
+				this.aTypeIdentification = $"{conversion.From.Name} => {conversion.To.Name}";
 				conversion.Mapping.Accept(this);
 			}
 			this.aLevel--;

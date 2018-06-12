@@ -5,7 +5,7 @@ namespace KST.POCOMapper.Exceptions
 	public class UnknownMappingException : Exception
 	{
 		public UnknownMappingException(Type from, Type to)
-			: base(string.Format("Cannot convert from {0} to {1}", from.FullName, to.FullName))
+			: base($"Cannot convert from {from.FullName} to {to.FullName}")
 		{
 			this.From = from;
 			this.To = to;

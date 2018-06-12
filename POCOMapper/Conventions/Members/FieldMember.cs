@@ -78,8 +78,8 @@ namespace KST.POCOMapper.Conventions.Members
 		public override string ToString()
 		{
 			if (this.Parent != null)
-				return string.Format("{0}.[F]{1}", this.Parent, this.Symbol);
-			return string.Format("[F]{0}", this.Symbol);
+				return $"{this.Parent}.[F]{this.Symbol}";
+			return $"[F]{this.Symbol}";
 		}
 
 		public bool Equals(FieldMember other)

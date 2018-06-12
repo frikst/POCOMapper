@@ -28,9 +28,9 @@ namespace KST.POCOMapper.Mapping.Collection
 		public CollectionMappingRules<TFrom, TTo> EntityId<TItemFrom, TItemTo, TItemId>(Func<TItemFrom, TItemId> selectIdFrom, Func<TItemTo, TItemId> selectIdTo)
 		{
 			if (!typeof(IEnumerable<>).MakeGenericType(typeof(TItemFrom)).IsAssignableFrom(typeof(TFrom)))
-				throw new InvalidMappingException(string.Format("Collection item of {0} is not {1}", typeof(TFrom).Name, typeof(TItemFrom).Name));
+				throw new InvalidMappingException($"Collection item of {typeof(TFrom).Name} is not {typeof(TItemFrom).Name}");
 			if (!typeof(IEnumerable<>).MakeGenericType(typeof(TItemTo)).IsAssignableFrom(typeof(TTo)))
-				throw new InvalidMappingException(string.Format("Collection item of {0} is not {1}", typeof(TTo).Name, typeof(TItemTo).Name));
+				throw new InvalidMappingException($"Collection item of {typeof(TTo).Name} is not {typeof(TItemTo).Name}");
 
 			this.CfgSelectIdFrom = selectIdFrom;
 			this.CfgSelectIdTo = selectIdTo;
@@ -98,9 +98,9 @@ namespace KST.POCOMapper.Mapping.Collection
 				Type itemTo = this.CfgSelectIdTo.Method.GetParameters()[0].ParameterType;
 
 				if (!typeof(IEnumerable<>).MakeGenericType(itemFrom).IsAssignableFrom(typeof(TFrom)))
-					throw new InvalidMappingException(string.Format("Collection item of {0} is not {1}", typeof(TFrom).Name, itemFrom.Name));
+					throw new InvalidMappingException($"Collection item of {typeof(TFrom).Name} is not {itemFrom.Name}");
 				if (!typeof(IEnumerable<>).MakeGenericType(itemTo).IsAssignableFrom(typeof(TTo)))
-					throw new InvalidMappingException(string.Format("Collection item of {0} is not {1}", typeof(TTo).Name, itemTo.Name));
+					throw new InvalidMappingException($"Collection item of {typeof(TTo).Name} is not {itemTo.Name}");
 			}
 
 			switch (this.CfgType)

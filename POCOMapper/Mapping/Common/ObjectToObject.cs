@@ -82,7 +82,7 @@ namespace KST.POCOMapper.Mapping.Common
 				while (parent != null && !temporaryVariables.ContainsKey(parent))
 				{
 					allParents.Insert(0, parent);
-					temporaryVariables[parent] = Expression.Parameter(parent.Type, string.Format("tmp{0}", temporaryVariables.Count));
+					temporaryVariables[parent] = Expression.Parameter(parent.Type, $"tmp{temporaryVariables.Count}");
 
 					parent = parent.Parent;
 				}
@@ -228,7 +228,7 @@ namespace KST.POCOMapper.Mapping.Common
 			{
 				Expression newExpression = ObjectToObject<TFrom, TTo>.NewExpression(type);
 				if (newExpression == null)
-					throw new InvalidMappingException(string.Format("Cannot find constructor for type {0}", typeof(TTo).FullName));
+					throw new InvalidMappingException($"Cannot find constructor for type {typeof(TTo).FullName}");
 				return newExpression;
 			}
 			else

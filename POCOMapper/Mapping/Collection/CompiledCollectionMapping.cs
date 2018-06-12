@@ -24,9 +24,9 @@ namespace KST.POCOMapper.Mapping.Collection
 
 			private IMapping<TItemFrom, TItemTo> aMapping;
 
-			public SynchronizationEnumerable(IEnumerable<TItemFrom> @from, IEnumerable<TItemTo> to, Func<TItemTo, TId> selectIdTo, Func<TItemFrom, TId> selectIdFrom, IMapping<TItemFrom, TItemTo> mapping)
+			public SynchronizationEnumerable(IEnumerable<TItemFrom> from, IEnumerable<TItemTo> to, Func<TItemTo, TId> selectIdTo, Func<TItemFrom, TId> selectIdFrom, IMapping<TItemFrom, TItemTo> mapping)
 			{
-				this.aFrom = @from;
+				this.aFrom = from;
 				this.aTo = to;
 
 				this.aSelectIdTo = selectIdTo;
@@ -120,7 +120,7 @@ namespace KST.POCOMapper.Mapping.Collection
 					throw new UnknownMappingException(this.ItemFrom, this.ItemTo);
 
 				if (!mapping.CanMap)
-					throw new InvalidMappingException(string.Format("Collection items typed as {0} and {1} cannot be mapped to each other", this.ItemFrom.Name, this.ItemTo.Name));
+					throw new InvalidMappingException($"Collection items typed as {this.ItemFrom.Name} and {this.ItemTo.Name} cannot be mapped to each other");
 
 				return mapping;
 			}
@@ -184,7 +184,7 @@ namespace KST.POCOMapper.Mapping.Collection
 			}
 		}
 
-		protected Expression CreateItemSynchronizationExpression(ParameterExpression @from, ParameterExpression to)
+		protected Expression CreateItemSynchronizationExpression(ParameterExpression from, ParameterExpression to)
 		{
 			Expression ret;
 			IMapping itemMapping = this.GetMapping();
@@ -224,7 +224,7 @@ namespace KST.POCOMapper.Mapping.Collection
 			return ret;
 		}
 
-		protected Expression<Func<TFrom, TTo, TTo>> CreateSynchronizationEnvelope(ParameterExpression @from, ParameterExpression to, Expression body)
+		protected Expression<Func<TFrom, TTo, TTo>> CreateSynchronizationEnvelope(ParameterExpression from, ParameterExpression to, Expression body)
 		{
 			Delegate postprocess = this.Mapping.GetChildPostprocessing(typeof(TTo), this.ItemTo);
 

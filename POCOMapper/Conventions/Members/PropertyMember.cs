@@ -102,8 +102,8 @@ namespace KST.POCOMapper.Conventions.Members
 		public override string ToString()
 		{
 			if (this.Parent != null)
-				return string.Format("{0}.[P]{1}", this.Parent, this.Symbol);
-			return string.Format("[P]{0}", this.Symbol);
+				return $"{this.Parent}.[P]{this.Symbol}";
+			return $"[P]{this.Symbol}";
 		}
 
 		public bool Equals(PropertyMember other)

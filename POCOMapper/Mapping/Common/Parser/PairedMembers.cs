@@ -22,7 +22,7 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 		public PairedMembers(IMember from, IMember to, IMapping mapping)
 		{
 			if (!from.CanPairWith(to))
-				throw new Exception(string.Format("Cannot map {0} and {1} together", from, to));
+				throw new Exception($"Cannot map {from} and {to} together");
 
 			this.aFrom = from;
 			this.aTo = to;
@@ -74,11 +74,11 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 
 				if (this.aTo.Getter == null)
 					// TODO: ???
-					throw new InvalidMappingException(string.Format("Cannot synchronize object with setter method mapping destination without any getter method defined for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
+					throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.aTo} member of {this.aTo.DeclaringType} type");
 
 				if (this.aMapping == null)
 					// TODO: ???
-					throw new InvalidMappingException(string.Format("Cannot synchronize two reference objects with the same type for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
+					throw new InvalidMappingException($"Cannot synchronize two reference objects with the same type for {this.aTo} member of {this.aTo.DeclaringType} type");
 
 				Expression synchronize = Expression.Call(
 					Expression.Constant(this.aMapping),
@@ -149,7 +149,7 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 
 		public override string ToString()
 		{
-			return string.Format("{0} => {1}", this.aFrom, this.aTo);
+			return $"{this.aFrom} => {this.aTo}";
 		}
 	}
 }
