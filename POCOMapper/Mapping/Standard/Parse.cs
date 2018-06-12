@@ -24,24 +24,16 @@ namespace KST.POCOMapper.Mapping.Standard
 		}
 
 		public override bool CanSynchronize
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public override bool CanMap
-		{
-			get { return true; }
-		}
+			=> true;
 
 		public override bool IsDirect
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public override bool SynchronizeCanChangeObject
-		{
-			get { return false; }
-		}
+			=> false;
 
 		protected override Expression<Func<string, TTo>> CompileMapping()
 		{

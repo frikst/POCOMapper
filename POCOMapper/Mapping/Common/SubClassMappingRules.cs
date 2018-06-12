@@ -46,11 +46,9 @@ namespace KST.POCOMapper.Mapping.Common
 		}
 
 		public IRulesDefinition<TFrom, TTo> Default
-		{
-			get { return new DefaultRules(this); }
-		}
+			=> new DefaultRules(this);
 
-		protected List<Tuple<Type, Type>> CfgMappings { get; private set; }
+		protected List<Tuple<Type, Type>> CfgMappings { get; }
 		protected IMappingRules<TFrom, TTo> CfgDefaultRules { get; private set; }
 
 		#region Implementation of IMappingRules

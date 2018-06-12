@@ -15,54 +15,34 @@ namespace KST.POCOMapper.Conventions.Members
 		#region Implementation of IMember
 
 		public IMember Parent
-		{
-			get { return null; }
-		}
+			=> null;
 
 		public int Depth
-		{
-			get { return 0; }
-		}
+			=> 0;
 
 		public Symbol Symbol
-		{
-			get { return new Symbol(new string[] { "this" }); }
-		}
+			=> new Symbol(new string[] { "this" });
 
 		public Type Type
-		{
-			get { return typeof(TClass); }
-		}
+			=> typeof(TClass);
 
 		public Type DeclaringType
-		{
-			get { return typeof(TClass); }
-		}
+			=> typeof(TClass);
 
 		public MemberInfo Getter
-		{
-			get { throw new NotImplementedException(); }
-		}
+			=> throw new NotImplementedException();
 
 		public MemberInfo Setter
-		{
-			get { throw new NotImplementedException(); }
-		}
+			=> throw new NotImplementedException();
 
 		public string Name
-		{
-			get { return "this"; }
-		}
+			=> "this";
 
 		public string FullName
-		{
-			get { return this.Name; }
-		}
+			=> this.Name;
 
 		public bool CanPairWith(IMember other)
-		{
-			return true;
-		}
+			=> true;
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 		{
@@ -70,9 +50,7 @@ namespace KST.POCOMapper.Conventions.Members
 		}
 
 		public Expression CreateSetterExpression(ParameterExpression parentVariable, Expression value)
-		{
-			throw new NotImplementedException();
-		}
+			=> throw new NotImplementedException();
 
 		#endregion
 

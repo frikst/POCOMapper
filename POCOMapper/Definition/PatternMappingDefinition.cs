@@ -49,9 +49,7 @@ namespace KST.POCOMapper.Definition
 		}
 
 		int IMappingDefinition.Priority
-		{
-			get { return this.aPriority; }
-		}
+			=> this.aPriority;
 
 		#endregion
 

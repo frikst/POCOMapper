@@ -86,19 +86,13 @@ namespace KST.POCOMapper.Mapping.Collection
 		}
 
 		public override bool CanSynchronize
-		{
-			get { return this.aSelectIdFrom != null && this.aSelectIdTo != null; }
-		}
+			=> this.aSelectIdFrom != null && this.aSelectIdTo != null;
 
 		public override bool CanMap
-		{
-			get { return true; }
-		}
+			=> true;
 
 		public override bool  SynchronizeCanChangeObject
-		{
-			get { return true; }
-		}
+			=> true;
 
 		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
 		{
@@ -110,16 +104,11 @@ namespace KST.POCOMapper.Mapping.Collection
 			visitor.Visit(this);
 		}
 
-		public Type ItemFrom { get; private set; }
-		public Type ItemTo { get; private set; }
+		public Type ItemFrom { get; }
+		public Type ItemTo { get; }
 
 		public IMapping ItemMapping
-		{
-			get
-			{
-				return this.GetMapping();
-			}
-		}
+			=> this.GetMapping();
 
 		protected IMapping GetMapping()
 		{

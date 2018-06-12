@@ -19,14 +19,10 @@ namespace KST.POCOMapper.Mapping.Standard
 		}
 
 		public bool CanSynchronize
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public bool CanMap
-		{
-			get { return true; }
-		}
+			=> true;
 
 		public bool IsDirect
 		{
@@ -42,29 +38,19 @@ namespace KST.POCOMapper.Mapping.Standard
 		}
 
 		public bool SynchronizeCanChangeObject
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public string MappingSource
-		{
-			get { return null; }
-		}
+			=> null;
 
 		public string SynchronizationSource
-		{
-			get { return null; }
-		}
+			=> null;
 
 		public Type From
-		{
-			get { return typeof(TFromTo); }
-		}
+			=> typeof(TFromTo);
 
 		public Type To
-		{
-			get { return typeof(TFromTo); }
-		}
+			=> typeof(TFromTo);
 
 		#endregion
 
@@ -76,9 +62,7 @@ namespace KST.POCOMapper.Mapping.Standard
 		}
 
 		public TFromTo Synchronize(TFromTo from, TFromTo to)
-		{
-			throw new NotImplementedException();
-		}
+			=> throw new NotImplementedException();
 
 		#endregion
 	}

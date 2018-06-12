@@ -9,22 +9,13 @@ namespace KST.POCOMapper.Definition
 		#region Implementation of IChildAssociationPostprocessing
 
 		Type IChildAssociationPostprocessing.Parent
-		{
-			get { return typeof(TParent); }
-		}
+			=> typeof(TParent);
 
 		Type IChildAssociationPostprocessing.Child
-		{
-			get { return typeof(TChild); }
-		}
+			=> typeof(TChild);
 
 		Delegate IChildAssociationPostprocessing.PostprocessDelegate
-		{
-			get
-			{
-				return this.aPostprocessDelegate;
-			}
-		}
+			=> this.aPostprocessDelegate;
 
 		#endregion
 

@@ -20,9 +20,7 @@ namespace KST.POCOMapper.Conventions
 		#region Overrides of Conventions
 
 		public override IEnumerable<NamingConventions> GetChildConventions()
-		{
-			return Enumerable.Empty<NamingConventions>();
-		}
+			=> Enumerable.Empty<NamingConventions>();
 
 		public override bool CanPair(IMember first, IMember second)
 		{

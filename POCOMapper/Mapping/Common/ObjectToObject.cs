@@ -65,17 +65,13 @@ namespace KST.POCOMapper.Mapping.Common
 			}
 
 			public IEnumerable<ParameterExpression> Variables
-			{
-				get { return this.aTemporaryVariables.Values; }
-			}
+				=> this.aTemporaryVariables.Values;
 
-			public List<Expression> InitialAssignments { get; private set; }
-			public List<Expression> FinalAssignments { get; private set; }
+			public List<Expression> InitialAssignments { get; }
+			public List<Expression> FinalAssignments { get; }
 
 			public ParameterExpression this[IMember member]
-			{
-				get { return this.aTemporaryVariables[member]; }
-			}
+				=> this.aTemporaryVariables[member];
 
 			private IEnumerable<IMember> GetAllMemberParents(IMember member, IDictionary<IMember, ParameterExpression> temporaryVariables)
 			{
@@ -126,24 +122,16 @@ namespace KST.POCOMapper.Mapping.Common
 		}
 
 		public override bool CanSynchronize
-		{
-			get { return true; }
-		}
+			=> true;
 
 		public override bool CanMap
-		{
-			get { return true; }
-		}
+			=> true;
 
 		public override bool IsDirect
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public override bool SynchronizeCanChangeObject
-		{
-			get { return false; }
-		}
+			=> false;
 
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{
@@ -222,12 +210,7 @@ namespace KST.POCOMapper.Mapping.Common
 		#endregion
 
 		public IEnumerable<IObjectMemberMapping> Members
-		{
-			get
-			{
-				return this.aMemberPairs;
-			}
-		}
+			=> this.aMemberPairs;
 
 		private Expression MakeBlock(IEnumerable<Expression> expressions)
 		{

@@ -7,9 +7,7 @@ namespace KST.POCOMapper.TypePatterns
 		#region Implementation of IPattern
 
 		public bool Matches(Type type)
-		{
-			return true;
-		}
+			=> true;
 
 		public override string ToString()
 		{

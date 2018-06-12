@@ -23,9 +23,9 @@ namespace KST.POCOMapper.Mapping.Common
 
 			#region Implementation of ISubClassConversionMapping
 
-			public Type From { get; private set; }
-			public Type To { get; private set; }
-			public IMapping Mapping { get; private set; }
+			public Type From { get; }
+			public Type To { get; }
+			public IMapping Mapping { get; }
 
 			#endregion
 		}
@@ -49,24 +49,16 @@ namespace KST.POCOMapper.Mapping.Common
 		}
 
 		public override bool CanSynchronize
-		{
-			get { return true; }
-		}
+			=> true;
 
 		public override bool CanMap
-		{
-			get { return true; }
-		}
+			=> true;
 
 		public override bool IsDirect
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public override bool SynchronizeCanChangeObject
-		{
-			get { return false; }
-		}
+			=> false;
 
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{

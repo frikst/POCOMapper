@@ -26,9 +26,7 @@ namespace KST.POCOMapper.Mapping.Base
 		}
 
 		protected MappingImplementation Mapping
-		{
-			get { return this.aMapping; }
-		}
+			=> this.aMapping;
 
 		#region Implementation of IMapping<in TFrom,out TTo>
 
@@ -86,14 +84,10 @@ namespace KST.POCOMapper.Mapping.Base
 		}
 
 		public Type From
-		{
-			get { return typeof(TFrom); }
-		}
+			=> typeof(TFrom);
 
 		public Type To
-		{
-			get { return typeof(TTo); }
-		}
+			=> typeof(TTo);
 
 		#endregion
 

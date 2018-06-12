@@ -69,12 +69,12 @@ namespace KST.POCOMapper.Definition
 		/// <summary>
 		/// Conventions for the source model.
 		/// </summary>
-		protected GlobalConventions FromConventions { get; private set; }
+		protected GlobalConventions FromConventions { get; }
 
 		/// <summary>
 		/// Conventions for the destination model.
 		/// </summary>
-		protected GlobalConventions ToConventions { get; private set; }
+		protected GlobalConventions ToConventions { get; }
 
 		/// <summary>
 		/// Defines the mapping of one instance of the class TFrom onto the instance of the class TTo.

@@ -34,19 +34,13 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 		}
 
 		public IMember From
-		{
-			get { return this.aFrom; }
-		}
+			=> this.aFrom;
 
 		public IMember To
-		{
-			get { return this.aTo; }
-		}
+			=> this.aTo;
 
 		public IMapping Mapping
-		{
-			get { return this.aMapping; }
-		}
+			=> this.aMapping;
 
 		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action, Delegate postprocess, ParameterExpression parent)
 		{

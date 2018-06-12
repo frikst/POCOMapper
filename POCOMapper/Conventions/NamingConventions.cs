@@ -35,9 +35,7 @@ namespace KST.POCOMapper.Conventions
 		public ISymbolParser Properties { get; private set; }
 
 		public IEnumerable<IMember> GetAllMembers(Type type, IMember parent = null)
-		{
-			return this.aMemberIterator(type, this, parent);
-		}
+			=> this.aMemberIterator(type, this, parent);
 
 		public NamingConventions SetFieldConvention(ISymbolParser parser)
 		{
@@ -81,7 +79,7 @@ namespace KST.POCOMapper.Conventions
 				yield return memberType;
 		}
 
-		public Direction ConventionDirection { get; private set; }
+		public Direction ConventionDirection { get; }
 
 		public abstract IEnumerable<NamingConventions> GetChildConventions();
 		public abstract bool CanPair(IMember first, IMember second);

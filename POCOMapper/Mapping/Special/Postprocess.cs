@@ -23,44 +23,28 @@ namespace KST.POCOMapper.Mapping.Special
 		}
 
 		public bool CanSynchronize
-		{
-			get { return this.aInnerMapping.CanSynchronize; }
-		}
+			=> this.aInnerMapping.CanSynchronize;
 
 		public bool CanMap
-		{
-			get { return this.aInnerMapping.CanMap; }
-		}
+			=> this.aInnerMapping.CanMap;
 
 		public bool IsDirect
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public bool SynchronizeCanChangeObject
-		{
-			get { return false; }
-		}
+			=> false;
 
 		public string MappingSource
-		{
-			get { return null; }
-		}
+			=> null;
 
 		public string SynchronizationSource
-		{
-			get { return null; }
-		}
+			=> null;
 
 		public Type From
-		{
-			get { return typeof(TFrom); }
-		}
+			=> typeof(TFrom);
 
 		public Type To
-		{
-			get { return typeof(TTo); }
-		}
+			=> typeof(TTo);
 
 		#endregion
 

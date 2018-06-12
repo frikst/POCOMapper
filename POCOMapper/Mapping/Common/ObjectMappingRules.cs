@@ -46,7 +46,7 @@ namespace KST.POCOMapper.Mapping.Common
 		}
 
 		internal bool CfgUseImplicitMappings { get; private set; }
-		internal List<IMemberMappingDefinition> CfgExplicitMappings { get; private set; }
+		internal List<IMemberMappingDefinition> CfgExplicitMappings { get; }
 
 		#region Implementation of IMappingRules
 
@@ -123,7 +123,7 @@ namespace KST.POCOMapper.Mapping.Common
 		}
 
 		internal bool UseImplicitMappings { get; private set; }
-		internal List<IMemberMappingDefinition> ExplicitMappings { get; private set; }
+		internal List<IMemberMappingDefinition> ExplicitMappings { get; }
 		internal Func<TFrom, TTo> FactoryFunction { get; private set; }
 
 		#region Implementation of IMappingRules

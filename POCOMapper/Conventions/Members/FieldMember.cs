@@ -23,7 +23,7 @@ namespace KST.POCOMapper.Conventions.Members
 
 		#region Implementation of IMember
 
-		public IMember Parent { get; private set; }
+		public IMember Parent { get; }
 
 		public int Depth
 		{
@@ -36,27 +36,19 @@ namespace KST.POCOMapper.Conventions.Members
 			}
 		}
 
-		public Symbol Symbol { get; private set; }
+		public Symbol Symbol { get; }
 
 		public Type Type
-		{
-			get { return this.aField.FieldType; }
-		}
+			=> this.aField.FieldType;
 
 		public Type DeclaringType
-		{
-			get { return this.aField.DeclaringType; }
-		}
+			=> this.aField.DeclaringType;
 
 		public MemberInfo Setter
-		{
-			get { return this.aField; }
-		}
+			=> this.aField;
 
 		public string Name
-		{
-			get { return this.aField.Name; }
-		}
+			=> this.aField.Name;
 
 		public string FullName
 		{
@@ -70,24 +62,16 @@ namespace KST.POCOMapper.Conventions.Members
 		}
 
 		public MemberInfo Getter
-		{
-			get { return this.aField; }
-		}
+			=> this.aField;
 
 		public bool CanPairWith(IMember other)
-		{
-			return this.aConventions.CanPair(this, other);
-		}
+			=> this.aConventions.CanPair(this, other);
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
-		{
-			return Expression.Field(parentVariable, this.aField);
-		}
+			=> Expression.Field(parentVariable, this.aField);
 
 		public Expression CreateSetterExpression(ParameterExpression parentVariable, Expression value)
-		{
-			return Expression.Assign(Expression.Field(parentVariable, this.aField), value);
-		}
+			=> Expression.Assign(Expression.Field(parentVariable, this.aField), value);
 
 		#endregion
 

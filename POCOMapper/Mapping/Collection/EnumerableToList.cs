@@ -14,9 +14,7 @@ namespace KST.POCOMapper.Mapping.Collection
 		}
 
 		public override bool IsDirect
-		{
-			get { return false; }
-		}
+			=> false;
 
 		protected override Expression<Func<TFrom, TTo>> CompileMapping()
 		{

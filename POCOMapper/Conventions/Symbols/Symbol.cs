@@ -78,13 +78,9 @@ namespace KST.POCOMapper.Conventions.Symbols
 		}
 
 		public Symbol GetWithoutPrefix()
-		{
-			return new Symbol(this.aParts.Skip(1));
-		}
+			=> new Symbol(this.aParts.Skip(1));
 
 		public Symbol GetWithoutPrefix(Symbol prefix)
-		{
-			return new Symbol(this.aParts.Skip(prefix.aParts.Length));
-		}
+			=> new Symbol(this.aParts.Skip(prefix.aParts.Length));
 	}
 }
