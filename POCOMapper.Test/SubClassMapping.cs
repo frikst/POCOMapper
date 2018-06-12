@@ -70,7 +70,7 @@ namespace KST.POCOMapper.Test
 			{
 				To ret = Mapping.Instance.Map<From, To>(new SubFrom4());
 			}
-			catch (UnknownMapping e)
+			catch (UnknownMappingException e)
 			{
 				error = true;
 				Assert.AreEqual(typeof(SubFrom4), e.From);

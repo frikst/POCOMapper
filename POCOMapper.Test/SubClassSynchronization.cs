@@ -74,7 +74,7 @@ namespace KST.POCOMapper.Test
 				To ret = new To();
 				Mapping.Instance.Synchronize<From, To>(new SubFrom4(), ref ret);
 			}
-			catch (UnknownMapping e)
+			catch (UnknownMappingException e)
 			{
 				error = true;
 				Assert.AreEqual(typeof(SubFrom4), e.From);

@@ -45,7 +45,7 @@ namespace KST.POCOMapper.Conventions.Members
 				MemberInfo cur = this.GetOneMember(type, name);
 
 				if (cur == null)
-					throw new InvalidMapping(string.Format("{0} member not found in type {1}", name, type.Name));
+					throw new InvalidMappingException(string.Format("{0} member not found in type {1}", name, type.Name));
 				else if (cur is PropertyInfo)
 					type = ((PropertyInfo)cur).PropertyType;
 				else if (cur is FieldInfo)

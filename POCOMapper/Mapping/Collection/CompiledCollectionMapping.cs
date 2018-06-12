@@ -117,10 +117,10 @@ namespace KST.POCOMapper.Mapping.Collection
 				IMapping mapping = this.Mapping.GetMapping(this.ItemFrom, this.ItemTo);
 
 				if (mapping == null)
-					throw new UnknownMapping(this.ItemFrom, this.ItemTo);
+					throw new UnknownMappingException(this.ItemFrom, this.ItemTo);
 
 				if (!mapping.CanMap)
-					throw new InvalidMapping(string.Format("Collection items typed as {0} and {1} cannot be mapped to each other", this.ItemFrom.Name, this.ItemTo.Name));
+					throw new InvalidMappingException(string.Format("Collection items typed as {0} and {1} cannot be mapped to each other", this.ItemFrom.Name, this.ItemTo.Name));
 
 				return mapping;
 			}

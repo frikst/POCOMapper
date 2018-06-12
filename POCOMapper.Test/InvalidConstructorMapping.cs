@@ -55,13 +55,13 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void TestInvalidObjectConstructor()
 		{
-			Assert.Throws<InvalidMapping>(() => Mapping.Instance.Map<From, To>(new From()));
+			Assert.Throws<InvalidMappingException>(() => Mapping.Instance.Map<From, To>(new From()));
 		}
 
 		[Test]
 		public void TestInvalidCollectionConstructor()
 		{
-			Assert.Throws<InvalidMapping>(() => Mapping.Instance.Map<Int32[], ToCollection<Int32>>(new Int32[] { }));
+			Assert.Throws<InvalidMappingException>(() => Mapping.Instance.Map<Int32[], ToCollection<Int32>>(new Int32[] { }));
 		}
 	}
 }

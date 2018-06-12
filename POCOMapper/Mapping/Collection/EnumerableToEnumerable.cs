@@ -44,7 +44,7 @@ namespace KST.POCOMapper.Mapping.Collection
 				);
 
 				if (constructTo == null)
-					throw new InvalidMapping(string.Format("Cannot find constructor for type {0}", typeof(TTo).FullName));
+					throw new InvalidMappingException(string.Format("Cannot find constructor for type {0}", typeof(TTo).FullName));
 
 				return this.CreateMappingEnvelope(
 					from,

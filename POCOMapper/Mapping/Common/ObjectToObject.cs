@@ -228,7 +228,7 @@ namespace KST.POCOMapper.Mapping.Common
 			{
 				Expression newExpression = ObjectToObject<TFrom, TTo>.NewExpression(type);
 				if (newExpression == null)
-					throw new InvalidMapping(string.Format("Cannot find constructor for type {0}", typeof(TTo).FullName));
+					throw new InvalidMappingException(string.Format("Cannot find constructor for type {0}", typeof(TTo).FullName));
 				return newExpression;
 			}
 			else

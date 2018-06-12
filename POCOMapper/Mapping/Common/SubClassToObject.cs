@@ -77,7 +77,7 @@ namespace KST.POCOMapper.Mapping.Common
 					),
 					Expression.Throw(
 						Expression.New(
-							typeof(UnknownMapping).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
+							typeof(UnknownMappingException).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
 							Expression.Call(from, ObjectMethods.GetType()),
 							Expression.Constant(typeof(TTo))
 						)
@@ -105,7 +105,7 @@ namespace KST.POCOMapper.Mapping.Common
 					),
 					Expression.Throw(
 						Expression.New(
-							typeof(UnknownMapping).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
+							typeof(UnknownMappingException).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
 							Expression.Call(from, ObjectMethods.GetType()),
 							Expression.Constant(typeof(TTo))
 						)

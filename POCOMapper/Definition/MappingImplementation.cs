@@ -86,10 +86,10 @@ namespace KST.POCOMapper.Definition
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
 
 			if (mapping == null)
-				throw new UnknownMapping(typeof(TFrom), typeof(TTo));
+				throw new UnknownMappingException(typeof(TFrom), typeof(TTo));
 
 			if (!mapping.CanMap)
-				throw new CantMap(string.Format("Can't map {0} to {1}, mapping object does not support simple mapping", typeof(TFrom).Name, typeof(TTo).Name));
+				throw new CantMapException(string.Format("Can't map {0} to {1}, mapping object does not support simple mapping", typeof(TFrom).Name, typeof(TTo).Name));
 
 			return mapping.Map(from);
 		}
@@ -107,10 +107,10 @@ namespace KST.POCOMapper.Definition
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
 
 			if (mapping == null)
-				throw new UnknownMapping(typeof(TFrom), typeof(TTo));
+				throw new UnknownMappingException(typeof(TFrom), typeof(TTo));
 
 			if (!mapping.CanSynchronize)
-				throw new CantMap(string.Format("Can't synchronize {0} to {1}, mapping object does not support synchronization", typeof(TFrom).Name, typeof(TTo).Name));
+				throw new CantMapException(string.Format("Can't synchronize {0} to {1}, mapping object does not support synchronization", typeof(TFrom).Name, typeof(TTo).Name));
 
 			if (mapping.SynchronizeCanChangeObject)
 				to = mapping.Synchronize(from, to);

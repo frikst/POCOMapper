@@ -14,7 +14,7 @@ namespace KST.POCOMapper.Mapping.Standard
 		public Cast(MappingImplementation mapping) : base(mapping)
 		{
 			if ((!typeof(TFrom).IsEnum && !typeof(TFrom).IsPrimitive) || (!typeof(TTo).IsEnum && !typeof(TTo).IsPrimitive))
-				throw new InvalidMapping(string.Format("You can use CastMapping only on primitive or enum types, not {0} and {1}", typeof(TFrom).Name, typeof(TTo).Name));
+				throw new InvalidMappingException(string.Format("You can use CastMapping only on primitive or enum types, not {0} and {1}", typeof(TFrom).Name, typeof(TTo).Name));
 		}
 
 		public override void Accept(IMappingVisitor visitor)

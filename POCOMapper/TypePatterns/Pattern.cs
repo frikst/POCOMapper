@@ -70,7 +70,7 @@ namespace KST.POCOMapper.TypePatterns
 			int index = 0;
 			this.aPattern = this.Parse(pattern, ref index);
 			if (index != pattern.Length)
-				throw new InvalidPattern(pattern, index);
+				throw new InvalidPatternException(pattern, index);
 		}
 
 		private IPattern Parse(string pattern, ref int indexFrom)
@@ -133,22 +133,22 @@ namespace KST.POCOMapper.TypePatterns
 						if (c == TOKEN_GENERIC_END[0])
 							break;
 						else if (c != TOKEN_GENERIC_SEPARATOR[0])
-							throw new InvalidPattern(pattern, pattern.Length);
+							throw new InvalidPatternException(pattern, pattern.Length);
 					}
 
 					Type generic = this.aAssembly.GetType(token + "`" + parameters.Count);
 
 					if (generic == null)
-						throw new InvalidPattern(pattern, indexFrom, "Unknown type");
+						throw new InvalidPatternException(pattern, indexFrom, "Unknown type");
 
 					if (!generic.IsGenericType)
-						throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
+						throw new InvalidPatternException(pattern, indexFrom, "The given type is not generic type");
 
 					if (state == State.Extends && !generic.IsClass)
-						throw new InvalidPattern(pattern, indexFrom, "The given type is not class type");
+						throw new InvalidPatternException(pattern, indexFrom, "The given type is not class type");
 
 					if (state == State.Implements && !generic.IsInterface)
-						throw new InvalidPattern(pattern, indexFrom, "The given type is not interface");
+						throw new InvalidPatternException(pattern, indexFrom, "The given type is not interface");
 
 
 					indexFrom = i;
@@ -163,22 +163,22 @@ namespace KST.POCOMapper.TypePatterns
 					Type @class = this.aAssembly.GetType(token);
 
 					if (@class == null)
-						throw new InvalidPattern(pattern, indexFrom, "Unknown type");
+						throw new InvalidPatternException(pattern, indexFrom, "Unknown type");
 
 					if (@class.IsGenericType)
-						throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
+						throw new InvalidPatternException(pattern, indexFrom, "The given type is not generic type");
 
 					if (state == State.Extends && !@class.IsClass)
-						throw new InvalidPattern(pattern, indexFrom, "The given type is not class type");
+						throw new InvalidPatternException(pattern, indexFrom, "The given type is not class type");
 
 					if (state == State.Implements && !@class.IsInterface)
-						throw new InvalidPattern(pattern, indexFrom, "The given type is not interface");
+						throw new InvalidPatternException(pattern, indexFrom, "The given type is not interface");
 
 					indexFrom = i;
 					return new ClassPattern(@class, state == State.Implements || state == State.Extends);
 				}
 				else
-					throw new InvalidPattern(pattern, pattern.Length);
+					throw new InvalidPatternException(pattern, pattern.Length);
 			}
 
 			if (token == TOKEN_ANY)
@@ -192,22 +192,22 @@ namespace KST.POCOMapper.TypePatterns
 				Type @class = this.aAssembly.GetType(token);
 
 				if (@class == null)
-					throw new InvalidPattern(pattern, indexFrom, "Unknown type");
+					throw new InvalidPatternException(pattern, indexFrom, "Unknown type");
 
 				if (@class.IsGenericType)
-					throw new InvalidPattern(pattern, indexFrom, "The given type is not generic type");
+					throw new InvalidPatternException(pattern, indexFrom, "The given type is not generic type");
 
 				if (state == State.Extends && !@class.IsClass)
-					throw new InvalidPattern(pattern, indexFrom, "The given type is not class type");
+					throw new InvalidPatternException(pattern, indexFrom, "The given type is not class type");
 
 				if (state == State.Implements && !@class.IsInterface)
-					throw new InvalidPattern(pattern, indexFrom, "The given type is not interface");
+					throw new InvalidPatternException(pattern, indexFrom, "The given type is not interface");
 
 				indexFrom = pattern.Length;
 				return new ClassPattern(@class, state == State.Implements || state == State.Extends);
 			}
 
-			throw new InvalidPattern(pattern, pattern.Length, "Unexpected end of pattern");
+			throw new InvalidPatternException(pattern, pattern.Length, "Unexpected end of pattern");
 		}
 
 		private bool IsClassNameChar(char current)

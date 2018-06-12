@@ -13,7 +13,7 @@ namespace KST.POCOMapper.Mapping.Standard
 		public Parse(MappingImplementation mapping) : base(mapping)
 		{
 			if (!typeof(TTo).IsEnum && !typeof(TTo).IsPrimitive)
-				throw new InvalidMapping(string.Format("You can use Parse only on primitive or enum types, not {0}", typeof(TTo).Name));
+				throw new InvalidMappingException(string.Format("You can use Parse only on primitive or enum types, not {0}", typeof(TTo).Name));
 		}
 
 		#region Overrides of CompiledMapping<string,TTo>

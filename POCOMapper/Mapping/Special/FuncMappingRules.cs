@@ -35,7 +35,7 @@ namespace KST.POCOMapper.Mapping.Special
 			else if (this.aMappingAction != null)
 				return new FuncMapping<TFrom, TTo>(this.aMappingAction);
 			else
-				throw new InvalidMapping("Function mapping without the mapping function defined");
+				throw new InvalidMappingException("Function mapping without the mapping function defined");
 		}
 
 		#endregion

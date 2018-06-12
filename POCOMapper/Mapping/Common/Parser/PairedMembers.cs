@@ -74,11 +74,11 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 
 				if (this.aTo.Getter == null)
 					// TODO: ???
-					throw new InvalidMapping(string.Format("Cannot synchronize object with setter method mapping destination without any getter method defined for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
+					throw new InvalidMappingException(string.Format("Cannot synchronize object with setter method mapping destination without any getter method defined for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
 
 				if (this.aMapping == null)
 					// TODO: ???
-					throw new InvalidMapping(string.Format("Cannot synchronize two reference objects with the same type for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
+					throw new InvalidMappingException(string.Format("Cannot synchronize two reference objects with the same type for {0} member of {1} type", this.aTo, this.aTo.DeclaringType));
 
 				Expression synchronize = Expression.Call(
 					Expression.Constant(this.aMapping),
