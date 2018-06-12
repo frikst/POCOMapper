@@ -15,13 +15,12 @@ namespace KST.POCOMapper.Definition
 	public class MappingImplementation
 	{
 		private readonly List<IMappingDefinition> aMappingDefinitions;
-		private readonly Dictionary<Tuple<Type, Type>, IMappingDefinition> aContainerMappingDefinitions;
-		private readonly Dictionary<Tuple<Type, Type>, IMapping> aMappings;
+		private readonly Dictionary<(Type From, Type To), IMapping> aMappings;
 		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 
 		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, NamingConventions fromConventions, NamingConventions toConventions)
 		{
-			this.aMappings = new Dictionary<Tuple<Type, Type>, IMapping>();
+			this.aMappings = new Dictionary<(Type, Type), IMapping>();
 
 			this.aMappingDefinitions = mappingDefinitions.OrderBy(x => x.Priority).ToList();
 
@@ -43,17 +42,15 @@ namespace KST.POCOMapper.Definition
 		/// <returns>The mapping specified by the parameters.</returns>
 		public IMapping GetMapping(Type from, Type to)
 		{
-			Tuple<Type, Type> key = new Tuple<Type, Type>(from, to);
-
-			if (this.aMappings.ContainsKey(key))
-				return this.aMappings[key];
+			if (this.aMappings.ContainsKey((from, to)))
+				return this.aMappings[(from, to)];
 
 			foreach (IMappingDefinition mappingDefinition in this.aMappingDefinitions)
 			{
 				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
 				{
 					IMapping mapping = mappingDefinition.CreateMapping(this, from, to);
-					this.aMappings[key] = mapping;
+					this.aMappings[(from, to)] = mapping;
 					return mapping;
 				}
 			}
@@ -123,20 +120,15 @@ namespace KST.POCOMapper.Definition
 			visitor.Begin();
 
 			bool first = true;
-			foreach (IMappingDefinition mappingDefinition in this.aMappingDefinitions)
+			foreach (var mappingDefinition in this.aMappingDefinitions.OfType<IExactMappingDefinition>())
 			{
-				Tuple<Type, Type> key = mappingDefinition.GetKey();
+				var mapping = this.GetMapping(mappingDefinition.From, mappingDefinition.To);
 
-				if (key != null)
-				{
-					IMapping mapping = this.GetMapping(key.Item1, key.Item2);
+				if (!first)
+					visitor.Next();
+				first = false;
 
-					if (!first)
-						visitor.Next();
-					first = false;
-
-					mapping.Accept(visitor);
-				}
+				mapping.Accept(visitor);
 			}
 
 			visitor.End();

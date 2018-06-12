@@ -69,12 +69,10 @@ namespace KST.POCOMapper.Conventions.Symbols
 		{
 			if (this.aParts.Length < prefix.aParts.Length)
 				return false;
-			foreach (Tuple<string, string> part in Enumerable.Zip(this.aParts, prefix.aParts, (a, b) => new Tuple<string, string>(a, b)))
-			{
-				if (part.Item1 != part.Item2)
-					return false;
-			}
-			return true;
+
+			return this.aParts
+				.Take(prefix.aParts.Length)
+				.SequenceEqual(prefix.aParts);
 		}
 
 		public Symbol GetWithoutPrefix()

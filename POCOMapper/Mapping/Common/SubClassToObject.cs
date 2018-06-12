@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using KST.POCOMapper.Definition;
@@ -31,14 +32,13 @@ namespace KST.POCOMapper.Mapping.Common
 		}
 
 		private readonly IMapping<TFrom, TTo> aDefaultMapping;
-		private readonly IEnumerable<Tuple<Type, Type>> aConversions;
+		private readonly ReadOnlyCollection<(Type From, Type To)> aConversions;
 
-		public SubClassToObject(MappingImplementation mapping, IEnumerable<Tuple<Type, Type>> fromTo, IMapping<TFrom, TTo> defaultMapping) : base(mapping)
+		public SubClassToObject(MappingImplementation mapping, IEnumerable<(Type From, Type To)> fromTo, IMapping<TFrom, TTo> defaultMapping) : base(mapping)
 		{
 			this.aDefaultMapping = defaultMapping;
 
-			List<Tuple<Type, Type>> subclassMappings = new List<Tuple<Type, Type>>(fromTo);
-			this.aConversions = subclassMappings.AsReadOnly();
+			this.aConversions = fromTo.ToList().AsReadOnly();
 		}
 
 		#region Overrides of CompiledMapping<TFrom,TTo>
@@ -125,9 +125,9 @@ namespace KST.POCOMapper.Mapping.Common
 		{
 			get
 			{
-				foreach (Tuple<Type, Type> conversion in this.aConversions)
+				foreach (var conversion in this.aConversions)
 				{
-					IMapping mapping = this.Mapping.GetMapping(conversion.Item1, conversion.Item2);
+					IMapping mapping = this.Mapping.GetMapping(conversion.From, conversion.To);
 
 					if (mapping is ISubClassMapping)
 					{
@@ -135,7 +135,7 @@ namespace KST.POCOMapper.Mapping.Common
 							yield return innerConversion;
 					}
 					else
-						yield return new SubClassConversion(conversion.Item1, conversion.Item2, mapping);
+						yield return new SubClassConversion(conversion.From, conversion.To, mapping);
 				}
 
 				if (!typeof(TTo).IsAbstract)

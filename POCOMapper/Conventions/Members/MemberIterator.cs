@@ -89,38 +89,34 @@ namespace KST.POCOMapper.Conventions.Members
 
 			for (Type current = this.aType; current != null; current = current.BaseType)
 			{
-				Dictionary<Tuple<Symbol, Type>, MethodInfo[]> methodMembers = new Dictionary<Tuple<Symbol, Type>, MethodInfo[]>();
+				var methodMembers = new Dictionary<(Symbol MemberName, Type MemberType), (MethodInfo Getter, MethodInfo Setter)>();
 
 				foreach (MethodInfo method in current.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 				{
 					Symbol symbol = this.aConventions.Methods.Parse(method.Name);
+
 					if (symbol.HasPrefix("get") && method.GetParameters().Length == 0 && method.ReturnType != typeof(void))
 					{
-						Tuple<Symbol, Type> key = new Tuple<Symbol, Type>(symbol.GetWithoutPrefix(), method.ReturnType);
-						MethodInfo[] item;
-						if (methodMembers.TryGetValue(key, out item))
-							item[0] = method;
+						var key = (symbol.GetWithoutPrefix(), method.ReturnType);
+						if (methodMembers.TryGetValue(key, out var item))
+							methodMembers[key] = (method, item.Setter);
 						else
-							methodMembers[key] = new MethodInfo[] { method, null };
+							methodMembers[key] = (method, null);
 					}
 					else if (symbol.HasPrefix("set") && method.GetParameters().Length == 1 && method.ReturnType == typeof(void))
 					{
-						Tuple<Symbol, Type> key = new Tuple<Symbol, Type>(symbol.GetWithoutPrefix(), method.GetParameters()[0].ParameterType);
-						MethodInfo[] item;
-						if (methodMembers.TryGetValue(key, out item))
-							item[1] = method;
+						var key = (symbol.GetWithoutPrefix(), method.GetParameters()[0].ParameterType);
+						if (methodMembers.TryGetValue(key, out var item))
+							methodMembers[key] = (item.Setter, method);
 						else
-							methodMembers[key] = new MethodInfo[] { null, method };
+							methodMembers[key] = (null, method);
 					}
 				}
 
-				foreach (KeyValuePair<Tuple<Symbol, Type>, MethodInfo[]> method in methodMembers)
+				foreach (var methodPair in methodMembers)
 				{
-					if (!used.Contains(method.Key.Item1))
-					{
-						yield return new MethodMember(this.aParent, method.Key.Item1, method.Value[0], method.Value[1], this.aConventions);
-						used.Add(method.Key.Item1);
-					}
+					if (used.Add(methodPair.Key.MemberName))
+						yield return new MethodMember(this.aParent, methodPair.Key.MemberName, methodPair.Value.Getter, methodPair.Value.Setter, this.aConventions);
 				}
 			}
 		}

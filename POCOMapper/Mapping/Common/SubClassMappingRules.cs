@@ -27,7 +27,7 @@ namespace KST.POCOMapper.Mapping.Common
 		public SubClassMappingRules()
 		{
 			this.CfgDefaultRules = new ObjectMappingRules<TFrom, TTo>();
-			this.CfgMappings = new List<Tuple<Type, Type>>();
+			this.CfgMappings = new List<(Type From, Type To)>();
 		}
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace KST.POCOMapper.Mapping.Common
 			where TSubFrom : TFrom
 			where TSubTo : TTo
 		{
-			this.CfgMappings.Add(Tuple.Create(typeof(TSubFrom), typeof(TSubTo)));
+			this.CfgMappings.Add((typeof(TSubFrom), typeof(TSubTo)));
 
 			return this;
 		}
@@ -48,7 +48,7 @@ namespace KST.POCOMapper.Mapping.Common
 		public IRulesDefinition<TFrom, TTo> Default
 			=> new DefaultRules(this);
 
-		protected List<Tuple<Type, Type>> CfgMappings { get; }
+		protected List<(Type From, Type To)> CfgMappings { get; }
 		protected IMappingRules<TFrom, TTo> CfgDefaultRules { get; private set; }
 
 		#region Implementation of IMappingRules

@@ -126,7 +126,7 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 
 			foreach (IMember fromOne in fromAll)
 			{
-				List<Tuple<Found, IMember>> foundMembers = new List<Tuple<Found, IMember>>();
+				var foundMembers = new List<(Found Found, IMember Member)>();
 				bool foundFull = false;
 
 				foreach (IMember toOne in toAll)
@@ -142,11 +142,11 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 					}
 					else if (fromOne.Symbol.HasPrefix(toOne.Symbol))
 					{
-						foundMembers.Add(Tuple.Create(Found.Left, toOne));
+						foundMembers.Add((Found.Left, toOne));
 					}
 					else if (toOne.Symbol.HasPrefix(fromOne.Symbol))
 					{
-						foundMembers.Add(Tuple.Create(Found.Right, toOne));
+						foundMembers.Add((Found.Right, toOne));
 					}
 				}
 
@@ -154,9 +154,9 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 				{
 					foreach (var foundMember in foundMembers)
 					{
-						if (foundMember.Item1 == Found.Left)
+						if (foundMember.Found == Found.Left)
 						{
-							PairedMembers pair = this.DetectPairLeft(fromOne, foundMember.Item2, foundMember.Item2.Symbol);
+							PairedMembers pair = this.DetectPairLeft(fromOne, foundMember.Member, foundMember.Member.Symbol);
 							if (pair != null)
 							{
 								yield return pair;
@@ -165,7 +165,7 @@ namespace KST.POCOMapper.Mapping.Common.Parser
 						}
 						else
 						{
-							PairedMembers pair = this.DetectPairRight(fromOne, foundMember.Item2, fromOne.Symbol);
+							PairedMembers pair = this.DetectPairRight(fromOne, foundMember.Member, fromOne.Symbol);
 							if (pair != null)
 							{
 								yield return pair;

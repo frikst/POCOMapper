@@ -10,8 +10,6 @@ namespace KST.POCOMapper.Definition
 		bool IsFrom(Type from);
 		bool IsTo(Type to);
 
-		Tuple<Type, Type> GetKey();
-
 		int Priority { get; }
 	}
 }

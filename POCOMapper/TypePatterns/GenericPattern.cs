@@ -92,13 +92,9 @@ namespace KST.POCOMapper.TypePatterns
 			if (genericParameters.Length != this.aGenericParameters.Count)
 				return false;
 
-			foreach (Tuple<IPattern, Type> genericParameter in this.aGenericParameters.Zip(genericParameters, (a, b) => new Tuple<IPattern, Type>(a, b)))
-			{
-				if (!genericParameter.Item1.Matches(genericParameter.Item2))
-					return false;
-			}
-
-			return true;
+			return this.aGenericParameters
+				.Zip(genericParameters, (paramPattern, paramType) => paramPattern.Matches(paramType))
+				.All(x => x);
 		}
 	}
 }

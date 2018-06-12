@@ -43,11 +43,6 @@ namespace KST.POCOMapper.Definition
 			return this.aPatternTo.Matches(to);
 		}
 
-		Tuple<Type, Type> IMappingDefinition.GetKey()
-		{
-			return null;
-		}
-
 		int IMappingDefinition.Priority
 			=> this.aPriority;
 

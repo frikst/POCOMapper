@@ -9,7 +9,7 @@ namespace KST.POCOMapper.Definition
 	/// </summary>
 	/// <typeparam name="TFrom">Source class.</typeparam>
 	/// <typeparam name="TTo">Destination class.</typeparam>
-	public class ExactMappingDefinition<TFrom, TTo> : IMappingDefinition, IRulesDefinition<TFrom, TTo>
+	public class ExactMappingDefinition<TFrom, TTo> : IExactMappingDefinition, IRulesDefinition<TFrom, TTo>
 	{
 		private int aPriority;
 		private IMappingRules<TFrom, TTo> aRules;
@@ -37,11 +37,6 @@ namespace KST.POCOMapper.Definition
 			return to == typeof(TTo);
 		}
 
-		Tuple<Type, Type> IMappingDefinition.GetKey()
-		{
-			return new Tuple<Type, Type>(typeof(TFrom), typeof(TTo));
-		}
-
 		int IMappingDefinition.Priority
 			=> this.aPriority;
 
@@ -63,6 +58,16 @@ namespace KST.POCOMapper.Definition
 			this.aRules = ret;
 			return ret;
 		}
+
+		#endregion
+
+		#region Implementation of IExactMappingDefinition
+
+		public Type From
+			=> typeof(TFrom);
+
+		public Type To
+			=> typeof(TTo);
 
 		#endregion
 	}

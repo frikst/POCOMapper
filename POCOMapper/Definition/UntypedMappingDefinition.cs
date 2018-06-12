@@ -8,7 +8,7 @@ namespace KST.POCOMapper.Definition
 	/// <summary>
 	/// Untyped mapping specification definition class.
 	/// </summary>
-	public class UntypedMappingDefinition : IMappingDefinition, IRulesDefinition
+	public class UntypedMappingDefinition : IExactMappingDefinition, IRulesDefinition
 	{
 		private readonly Type aFrom;
 		private readonly Type aTo;
@@ -41,11 +41,6 @@ namespace KST.POCOMapper.Definition
 			return this.aTo == to;
 		}
 
-		Tuple<Type, Type> IMappingDefinition.GetKey()
-		{
-			return new Tuple<Type, Type>(this.aFrom, this.aTo);
-		}
-
 		int IMappingDefinition.Priority
 			=> this.aPriority;
 
@@ -67,6 +62,16 @@ namespace KST.POCOMapper.Definition
 			this.aRules = ret;
 			return ret;
 		}
+
+		#endregion
+
+		#region Implementation of IExactMappingDefinition
+
+		Type IExactMappingDefinition.From
+			=> this.aFrom;
+
+		Type IExactMappingDefinition.To
+			=> this.aTo;
 
 		#endregion
 	}
