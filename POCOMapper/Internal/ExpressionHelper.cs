@@ -17,15 +17,15 @@ namespace KST.POCOMapper.Internal
 
 				Expression.Assign(
 					enumerator,
-					Expression.Call(source, typeof(IEnumerable).GetMethod("GetEnumerator"))
+					Expression.Call(source, typeof(IEnumerable).GetMethod(nameof(IEnumerable.GetEnumerator)))
 				),
 
 				Expression.Loop(
 					Expression.IfThenElse(
-						Expression.Call(enumerator, typeof(IEnumerator).GetMethod("MoveNext")),
+						Expression.Call(enumerator, typeof(IEnumerator).GetMethod(nameof(IEnumerator.MoveNext))),
 
 						Expression.Block(
-							Expression.Assign(item, Expression.Convert(Expression.Property(enumerator, "Current"), item.Type)),
+							Expression.Assign(item, Expression.Convert(Expression.Property(enumerator, nameof(IEnumerator.Current)), item.Type)),
 							body
 						),
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.TypePatterns;
 
@@ -29,7 +30,7 @@ namespace KST.POCOMapper.Definition
 
 		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
-			MethodInfo mappingCreateMethod = typeof(IMappingRules).GetMethod("Create").MakeGenericMethod(from, to);
+			MethodInfo mappingCreateMethod = MappingRulesMethods.GetCreate(from, to);
 			return (IMapping) mappingCreateMethod.Invoke(this.aRules, new object[] { allMappings });
 		}
 

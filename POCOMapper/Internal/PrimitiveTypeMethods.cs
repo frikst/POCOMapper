@@ -7,7 +7,7 @@ namespace KST.POCOMapper.Internal
 	{
 		public static MethodInfo Parse(Type primitiveType)
 		{
-			return primitiveType.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
+			return primitiveType.GetMethod(nameof(int.Parse), BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
 		}
 	}
 }

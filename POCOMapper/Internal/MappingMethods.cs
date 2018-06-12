@@ -8,12 +8,12 @@ namespace KST.POCOMapper.Internal
 	{
 		public static MethodInfo Map(Type from, Type to)
 		{
-			return typeof(IMapping<,>).MakeGenericType(from, to).GetMethod("Map");
+			return typeof(IMapping<,>).MakeGenericType(from, to).GetMethod(nameof(IMapping<object, object>.Map));
 		}
 
 		public static MethodInfo Synchronize(Type from, Type to)
 		{
-			return typeof(IMapping<,>).MakeGenericType(from, to).GetMethod("Synchronize");
+			return typeof(IMapping<,>).MakeGenericType(from, to).GetMethod(nameof(IMapping<object, object>.Synchronize));
 		}
 	}
 }
