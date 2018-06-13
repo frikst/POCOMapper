@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using KST.POCOMapper.Conventions.Members;
 using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Mapping.Common
 {

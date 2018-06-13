@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using KST.POCOMapper.Conventions;
+using KST.POCOMapper.Definition.ChildProcessingDefinition;
+using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Standard;
 using KST.POCOMapper.TypePatterns;
@@ -17,13 +19,13 @@ namespace KST.POCOMapper.Definition
 	{
 		private static MappingImplementation aMapping;
 
-		private readonly List<IMappingDefinition> aMappingDefinitions;
+		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
 		private bool aFinished;
 		private List<IChildAssociationPostprocessing> aChildPostprocessings;
 
 		protected MappingDefinition()
 		{
-			this.aMappingDefinitions = new List<IMappingDefinition>();
+			this.aMappingDefinitions = new List<ITypeMappingDefinition>();
 			this.aChildPostprocessings = new List<IChildAssociationPostprocessing>();
 			this.aFinished = false;
 
@@ -82,12 +84,12 @@ namespace KST.POCOMapper.Definition
 		/// <typeparam name="TFrom">Class from the source model.</typeparam>
 		/// <typeparam name="TTo">Class from the destination model.</typeparam>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected ExactMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
+		protected ExactTypeMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
 		{
 			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			ExactMappingDefinition<TFrom, TTo> mappingDefinitionDef = new ExactMappingDefinition<TFrom, TTo>();
+			ExactTypeMappingDefinition<TFrom, TTo> mappingDefinitionDef = new ExactTypeMappingDefinition<TFrom, TTo>();
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}
@@ -98,12 +100,12 @@ namespace KST.POCOMapper.Definition
 		/// <param name="from">Class from the source model.</param>
 		/// <param name="to">Class from the destination model.</param>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected UntypedMappingDefinition Map(Type from, Type to)
+		protected UntypedTypeMappingDefinition Map(Type from, Type to)
 		{
 			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			UntypedMappingDefinition mappingDefinitionDef = new UntypedMappingDefinition(from, to);
+			UntypedTypeMappingDefinition mappingDefinitionDef = new UntypedTypeMappingDefinition(from, to);
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}
@@ -115,12 +117,12 @@ namespace KST.POCOMapper.Definition
 		/// <param name="patternFrom">Pattern for class from the source model.</param>
 		/// <param name="patternTo">Pattern for class from the destination model.</param>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected PatternMappingDefinition Map(IPattern patternFrom, IPattern patternTo)
+		protected PatternTypeMappingDefinition Map(IPattern patternFrom, IPattern patternTo)
 		{
 			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			PatternMappingDefinition mappingDefinitionDef = new PatternMappingDefinition(patternFrom, patternTo);
+			PatternTypeMappingDefinition mappingDefinitionDef = new PatternTypeMappingDefinition(patternFrom, patternTo);
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}

@@ -1,11 +1,13 @@
-﻿namespace KST.POCOMapper.Conventions.Symbols
+﻿using KST.POCOMapper.Members;
+
+namespace KST.POCOMapper.Conventions.SymbolConventions
 {
-	public class Suffix : ISymbolParser
+	public class Suffix : ISymbolConvention
 	{
 		private readonly string aSuffix;
-		private readonly ISymbolParser aParser;
+		private readonly ISymbolConvention aParser;
 
-		public Suffix(ISymbolParser parser, string suffix)
+		public Suffix(ISymbolConvention parser, string suffix)
 		{
 			this.aParser = parser;
 			this.aSuffix = suffix;

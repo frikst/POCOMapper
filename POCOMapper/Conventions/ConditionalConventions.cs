@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.Conventions.Members;
+using KST.POCOMapper.Members;
 using KST.POCOMapper.TypePatterns;
 
 namespace KST.POCOMapper.Conventions

@@ -2,7 +2,7 @@
 using System.Reflection;
 using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.Internal
+namespace KST.POCOMapper.Internal.ReflectionMembers
 {
     internal static class MappingRulesMethods
     {

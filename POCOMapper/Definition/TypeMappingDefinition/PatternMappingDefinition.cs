@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Internal;
+using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.TypePatterns;
 
@@ -9,7 +11,7 @@ namespace KST.POCOMapper.Definition
 	/// <summary>
 	/// Pattern mapping specification definition class.
 	/// </summary>
-	public class PatternMappingDefinition : IMappingDefinition, IRulesDefinition
+	public class PatternTypeMappingDefinition : ITypeMappingDefinition, IRulesDefinition
 	{
 		private readonly IPattern aPatternFrom;
 		private readonly IPattern aPatternTo;
@@ -17,8 +19,7 @@ namespace KST.POCOMapper.Definition
 		private int aPriority;
 		private IMappingRules aRules;
 
-
-		internal PatternMappingDefinition(IPattern patternFrom, IPattern patternTo)
+		internal PatternTypeMappingDefinition(IPattern patternFrom, IPattern patternTo)
 		{
 			this.aPatternFrom = patternFrom;
 			this.aPatternTo = patternTo;
@@ -26,30 +27,28 @@ namespace KST.POCOMapper.Definition
 			this.aRules = null;
 		}
 
-		#region Implementation of IMappingDefinition
+		#region Implementation of ITypeMappingDefinition
 
-		IMapping IMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
+		IMapping ITypeMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
 		{
 			MethodInfo mappingCreateMethod = MappingRulesMethods.GetCreate(from, to);
 			return (IMapping) mappingCreateMethod.Invoke(this.aRules, new object[] { allMappings });
 		}
-
-		bool IMappingDefinition.IsFrom(Type from)
+		bool ITypeMappingDefinition.IsFrom(Type from)
 		{
 			return this.aPatternFrom.Matches(from);
 		}
 
-		bool IMappingDefinition.IsTo(Type to)
+		bool ITypeMappingDefinition.IsTo(Type to)
 		{
 			return this.aPatternTo.Matches(to);
 		}
-
-		int IMappingDefinition.Priority
+		
+		int ITypeMappingDefinition.Priority
 			=> this.aPriority;
 
-		#endregion
-
-		public PatternMappingDefinition SetPriority(int priority)
+		#endregion
+		public PatternTypeMappingDefinition SetPriority(int priority)
 		{
 			this.aPriority = priority;
 

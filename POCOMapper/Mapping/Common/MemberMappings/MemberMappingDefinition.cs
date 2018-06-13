@@ -1,8 +1,9 @@
 ﻿using System;
-using KST.POCOMapper.Conventions.Members;
+using KST.POCOMapper.Conventions.MemberParsers;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Common.Parser;
+using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Mapping.Common.MemberMappings
 {

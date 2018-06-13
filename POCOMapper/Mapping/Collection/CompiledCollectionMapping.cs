@@ -7,6 +7,7 @@ using System.Reflection;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Internal;
+using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 

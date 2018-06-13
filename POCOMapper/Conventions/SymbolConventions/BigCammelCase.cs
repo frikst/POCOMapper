@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
+using KST.POCOMapper.Members;
 
-namespace KST.POCOMapper.Conventions.Symbols
+namespace KST.POCOMapper.Conventions.SymbolConventions
 {
-	public class BigCammelCase : ISymbolParser
+	public class BigCammelCase : ISymbolConvention
 	{
 		#region Implementation of ISymbolParser
 

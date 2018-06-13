@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Conventions;
+using KST.POCOMapper.Definition.ChildProcessingDefinition;
+using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Standard;
@@ -14,11 +16,11 @@ namespace KST.POCOMapper.Definition
 	/// </summary>
 	public class MappingImplementation
 	{
-		private readonly List<IMappingDefinition> aMappingDefinitions;
+		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
 		private readonly Dictionary<(Type From, Type To), IMapping> aMappings;
 		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 
-		internal MappingImplementation(IEnumerable<IMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, NamingConventions fromConventions, NamingConventions toConventions)
+		internal MappingImplementation(IEnumerable<ITypeMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, NamingConventions fromConventions, NamingConventions toConventions)
 		{
 			this.aMappings = new Dictionary<(Type, Type), IMapping>();
 
@@ -45,7 +47,7 @@ namespace KST.POCOMapper.Definition
 			if (this.aMappings.ContainsKey((from, to)))
 				return this.aMappings[(from, to)];
 
-			foreach (IMappingDefinition mappingDefinition in this.aMappingDefinitions)
+			foreach (ITypeMappingDefinition mappingDefinition in this.aMappingDefinitions)
 			{
 				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
 				{
@@ -120,7 +122,7 @@ namespace KST.POCOMapper.Definition
 			visitor.Begin();
 
 			bool first = true;
-			foreach (var mappingDefinition in this.aMappingDefinitions.OfType<IExactMappingDefinition>())
+			foreach (var mappingDefinition in this.aMappingDefinitions.OfType<IExactTypeMappingDefinition>())
 			{
 				var mapping = this.GetMapping(mappingDefinition.From, mappingDefinition.To);
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using KST.POCOMapper.Conventions.Symbols;
+using KST.POCOMapper.Conventions.SymbolConventions;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Special;
 using NUnit.Framework;

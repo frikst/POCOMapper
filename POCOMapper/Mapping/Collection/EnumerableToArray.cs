@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Internal;
+using KST.POCOMapper.Internal.ReflectionMembers;
 
 namespace KST.POCOMapper.Mapping.Collection
 {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using KST.POCOMapper.Conventions.Members;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Common.Parser;
+using KST.POCOMapper.Members;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Common

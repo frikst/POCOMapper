@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.Conventions.Members;
-using KST.POCOMapper.Conventions.Symbols;
+using KST.POCOMapper.Conventions.MemberParsers;
+using KST.POCOMapper.Conventions.SymbolConventions;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Conventions
 {
@@ -30,26 +31,26 @@ namespace KST.POCOMapper.Conventions
 			this.aMemberScanningPrecedence = new MemberType[] { MemberType.Property, MemberType.Method, MemberType.Field };
 		}
 
-		public ISymbolParser Fields { get; private set; }
-		public ISymbolParser Methods { get; private set; }
-		public ISymbolParser Properties { get; private set; }
+		public ISymbolConvention Fields { get; private set; }
+		public ISymbolConvention Methods { get; private set; }
+		public ISymbolConvention Properties { get; private set; }
 
 		public IEnumerable<IMember> GetAllMembers(Type type, IMember parent = null)
 			=> this.aMemberIterator(type, this, parent);
 
-		public NamingConventions SetFieldConvention(ISymbolParser parser)
+		public NamingConventions SetFieldConvention(ISymbolConvention parser)
 		{
 			this.Fields = parser;
 			return this;
 		}
 
-		public NamingConventions SetMethodConvention(ISymbolParser parser)
+		public NamingConventions SetMethodConvention(ISymbolConvention parser)
 		{
 			this.Methods = parser;
 			return this;
 		}
 
-		public NamingConventions SetPropertyConvention(ISymbolParser parser)
+		public NamingConventions SetPropertyConvention(ISymbolConvention parser)
 		{
 			this.Properties = parser;
 			return this;

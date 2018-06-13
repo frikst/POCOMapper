@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.Conventions.Members;
-using KST.POCOMapper.Conventions.Symbols;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Mapping.Common.Parser
 {
