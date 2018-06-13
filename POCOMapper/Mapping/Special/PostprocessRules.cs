@@ -61,7 +61,7 @@ namespace KST.POCOMapper.Mapping.Special
 
 	public class PostprocessRules : IMappingRules, IRulesDefinition
 	{
-		private Delegate aPostprocessDelegate;
+		private Action<dynamic, dynamic> aPostprocessDelegate;
 		private IMappingRules aRules;
 
 		public PostprocessRules()
@@ -107,7 +107,7 @@ namespace KST.POCOMapper.Mapping.Special
 
 		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingImplementation mapping)
 		{
-			return new Postprocess<TFrom, TTo>(this.aRules.Create<TFrom, TTo>(mapping), this.aPostprocessDelegate);
+			return new Postprocess<TFrom, TTo>(this.aRules.Create<TFrom, TTo>(mapping), (a, b) => this.aPostprocessDelegate(a, b));
 		}
 
 		#endregion

@@ -7,9 +7,9 @@ namespace KST.POCOMapper.Mapping.Special
 	public class Postprocess<TFrom, TTo> : IMapping<TFrom, TTo>
 	{
 		private readonly IMapping<TFrom, TTo> aInnerMapping;
-		private readonly Delegate aPostprocessDelegate;
+		private readonly Action<TFrom, TTo> aPostprocessDelegate;
 
-		public Postprocess(IMapping<TFrom, TTo> innerMapping, Delegate postprocessDelegate)
+		public Postprocess(IMapping<TFrom, TTo> innerMapping, Action<TFrom, TTo> postprocessDelegate)
 		{
 			this.aInnerMapping = innerMapping;
 			this.aPostprocessDelegate = postprocessDelegate;
