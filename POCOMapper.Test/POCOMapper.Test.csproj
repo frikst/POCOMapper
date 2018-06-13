@@ -19,6 +19,10 @@
 		<RootNamespace>KST.POCOMapper.Test</RootNamespace>
 	</PropertyGroup>
 
+	<PropertyGroup>
+	  <NoWarn>1701;1702;649</NoWarn>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="NUnit" Version="3.10.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
