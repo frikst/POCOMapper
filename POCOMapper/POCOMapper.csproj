@@ -15,8 +15,8 @@
 		<PackageProjectUrl>https://github.com/frikst/POCOMapper</PackageProjectUrl>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-		<DocumentationFile>bin\Debug\netstandard2.0\POCOMapper.xml</DocumentationFile>
+	<PropertyGroup>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\POCOMapper.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='net40'">
