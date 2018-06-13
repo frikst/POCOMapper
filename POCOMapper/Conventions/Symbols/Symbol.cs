@@ -17,20 +17,12 @@ namespace KST.POCOMapper.Conventions.Symbols
 
 		#region Equality members
 
-		public bool Equals(Symbol other)
-		{
-			return this.aHashCode == other.aHashCode && other.aParts.SequenceEqual(this.aParts);
-		}
-
 		public override bool Equals(object other)
 		{
-			if (object.ReferenceEquals(null, other))
-				return false;
+			if (other is Symbol otherSymbol)
+				return this.aHashCode == otherSymbol.aHashCode && otherSymbol.aParts.SequenceEqual(this.aParts);
 
-			if (!(other is Symbol))
-				return false;
-
-			return this.Equals((Symbol) other);
+			return false;
 		}
 
 		public override int GetHashCode()

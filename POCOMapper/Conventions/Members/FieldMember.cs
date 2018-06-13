@@ -82,19 +82,12 @@ namespace KST.POCOMapper.Conventions.Members
 			return $"[F]{this.Symbol}";
 		}
 
-		public bool Equals(FieldMember other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return Equals(other.aField, this.aField) && Equals(other.Parent, this.Parent);
-		}
-
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof (FieldMember)) return false;
-			return this.Equals((FieldMember) obj);
+			if (obj is FieldMember fieldObj)
+				return fieldObj.aField == this.aField && Equals(fieldObj.Parent, this.Parent);
+
+			return false;
 		}
 
 		public override int GetHashCode()

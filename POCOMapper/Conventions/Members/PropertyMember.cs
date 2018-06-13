@@ -106,19 +106,12 @@ namespace KST.POCOMapper.Conventions.Members
 			return $"[P]{this.Symbol}";
 		}
 
-		public bool Equals(PropertyMember other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return Equals(other.aProperty, this.aProperty) && Equals(other.Parent, this.Parent);
-		}
-
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof (PropertyMember)) return false;
-			return this.Equals((PropertyMember) obj);
+			if (obj is PropertyMember propertyObj)
+				return propertyObj.aProperty == this.aProperty && Equals(propertyObj.Parent, this.Parent);
+
+			return false;
 		}
 
 		public override int GetHashCode()

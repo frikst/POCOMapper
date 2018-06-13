@@ -54,17 +54,9 @@ namespace KST.POCOMapper.Conventions.Members
 
 		#endregion
 
-		public bool Equals(ThisMember<TClass> other)
-		{
-			return !ReferenceEquals(null, other);
-		}
-
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof (ThisMember<TClass>)) return false;
-			return this.Equals((ThisMember<TClass>) obj);
+			return obj is ThisMember<TClass>;
 		}
 
 		public override int GetHashCode()

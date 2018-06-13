@@ -92,19 +92,12 @@ namespace KST.POCOMapper.Conventions.Members
 			return $"[M]{this.Symbol}";
 		}
 
-		public bool Equals(MethodMember other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return Equals(other.aGetMethod, this.aGetMethod) && Equals(other.aSetMethod, this.aSetMethod) && Equals(other.Parent, this.Parent);
-		}
-
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof (MethodMember)) return false;
-			return this.Equals((MethodMember) obj);
+			if (obj is MethodMember methodObj)
+				return methodObj.aGetMethod == this.aGetMethod && methodObj.aSetMethod == this.aSetMethod && Equals(methodObj.Parent, this.Parent);
+
+			return false;
 		}
 
 		public override int GetHashCode()
