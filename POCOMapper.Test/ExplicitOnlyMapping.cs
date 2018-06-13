@@ -1,5 +1,5 @@
 ﻿using KST.POCOMapper.Definition;
-using KST.POCOMapper.Mapping.Common;
+using KST.POCOMapper.Mapping.Object;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test

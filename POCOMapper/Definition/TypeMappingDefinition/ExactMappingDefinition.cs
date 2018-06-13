@@ -1,7 +1,7 @@
 ﻿using System;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
+using KST.POCOMapper.Mapping.Object;
 using KST.POCOMapper.Mapping.Base;
-using KST.POCOMapper.Mapping.Common;
 
 namespace KST.POCOMapper.Definition
 {

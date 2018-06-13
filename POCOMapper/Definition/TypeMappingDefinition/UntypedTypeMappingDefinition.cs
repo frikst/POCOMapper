@@ -2,7 +2,7 @@
 using System.Reflection;
 using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
-using KST.POCOMapper.Mapping.Common;
+using KST.POCOMapper.Mapping.Object;
 
 namespace KST.POCOMapper.Definition.TypeMappingDefinition
 {

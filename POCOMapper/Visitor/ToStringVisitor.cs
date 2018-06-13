@@ -5,7 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection;
-using KST.POCOMapper.Mapping.Common;
+using KST.POCOMapper.Mapping.Object;
+using KST.POCOMapper.Mapping.SubClass;
 
 namespace KST.POCOMapper.Visitor
 {

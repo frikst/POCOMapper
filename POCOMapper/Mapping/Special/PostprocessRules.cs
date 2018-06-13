@@ -1,7 +1,7 @@
 ﻿using System;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Base;
-using KST.POCOMapper.Mapping.Common;
+using KST.POCOMapper.Mapping.Object;
 
 namespace KST.POCOMapper.Mapping.Special
 {
