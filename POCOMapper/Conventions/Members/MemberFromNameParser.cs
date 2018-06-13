@@ -22,16 +22,19 @@ namespace KST.POCOMapper.Conventions.Members
 			else
 				parent = null;
 
-			if (current is FieldInfo)
-				return new FieldMember(parent, conventions.Fields.Parse(current.Name), (FieldInfo)current, conventions);
-			else if (current is PropertyInfo)
-				return new PropertyMember(parent, conventions.Fields.Parse(current.Name), (PropertyInfo)current, conventions);
-			else
+			switch (current)
 			{
-				if (write)
-					return new MethodMember(parent, conventions.Fields.Parse(current.Name), null, (MethodInfo)current, conventions);
-				else
-					return new MethodMember(parent, conventions.Fields.Parse(current.Name), (MethodInfo)current, null, conventions);
+				case FieldInfo currentField:
+					return new FieldMember(parent, conventions.Fields.Parse(currentField.Name), currentField, conventions);
+				case PropertyInfo currentProperty:
+					return new PropertyMember(parent, conventions.Fields.Parse(currentProperty.Name), currentProperty, conventions);
+				case MethodInfo currentMethod:
+					if (write)
+						return new MethodMember(parent, conventions.Fields.Parse(current.Name), null, currentMethod, conventions);
+					else
+						return new MethodMember(parent, conventions.Fields.Parse(current.Name), currentMethod, null, conventions);
+				default:
+					throw new Exception("Unkown member type");
 			}
 		}
 
@@ -44,14 +47,22 @@ namespace KST.POCOMapper.Conventions.Members
 			{
 				MemberInfo cur = this.GetOneMember(type, name);
 
-				if (cur == null)
-					throw new InvalidMappingException($"{name} member not found in type {type.Name}");
-				else if (cur is PropertyInfo)
-					type = ((PropertyInfo)cur).PropertyType;
-				else if (cur is FieldInfo)
-					type = ((FieldInfo)cur).FieldType;
-				else
-					type = ((MethodInfo)cur).ReturnType;
+				switch (cur)
+				{
+					case PropertyInfo curProperty:
+						type = curProperty.PropertyType;
+						break;
+					case FieldInfo curField:
+						type = curField.FieldType;
+						break;
+					case MethodInfo curMethod:
+						type = curMethod.ReturnType;
+						break;
+					case null:
+						throw new InvalidMappingException($"{name} member not found in type {type.Name}");
+					default:
+						throw new Exception("Unkown member type");
+				}
 
 				ret.Push(cur);
 			}

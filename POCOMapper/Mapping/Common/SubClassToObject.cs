@@ -129,9 +129,9 @@ namespace KST.POCOMapper.Mapping.Common
 				{
 					IMapping mapping = this.Mapping.GetMapping(conversion.From, conversion.To);
 
-					if (mapping is ISubClassMapping)
+					if (mapping is ISubClassMapping subClassMapping)
 					{
-						foreach (var innerConversion in ((ISubClassMapping)mapping).Conversions)
+						foreach (var innerConversion in subClassMapping.Conversions)
 							yield return innerConversion;
 					}
 					else
