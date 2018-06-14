@@ -17,12 +17,12 @@ namespace KST.POCOMapper.Definition
 	public class MappingImplementation
 	{
 		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
-		private readonly Dictionary<(Type From, Type To), IMapping> aMappings;
+		private readonly Dictionary<TypePair, IMapping> aMappings;
 		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 
 		internal MappingImplementation(IEnumerable<ITypeMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, NamingConventions fromConventions, NamingConventions toConventions)
 		{
-			this.aMappings = new Dictionary<(Type, Type), IMapping>();
+			this.aMappings = new Dictionary<TypePair, IMapping>();
 
 			this.aMappingDefinitions = mappingDefinitions.OrderBy(x => x.Priority).ToList();
 
@@ -44,21 +44,27 @@ namespace KST.POCOMapper.Definition
 		/// <returns>The mapping specified by the parameters.</returns>
 		public IMapping GetMapping(Type from, Type to)
 		{
-			if (this.aMappings.ContainsKey((from, to)))
-				return this.aMappings[(from, to)];
+			var typePair = new TypePair(from, to);
+
+			if (this.aMappings.TryGetValue(typePair, out var foundMapping))
+				return foundMapping;
 
 			foreach (ITypeMappingDefinition mappingDefinition in this.aMappingDefinitions)
 			{
 				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
 				{
 					IMapping mapping = mappingDefinition.CreateMapping(this, from, to);
-					this.aMappings[(from, to)] = mapping;
+					this.aMappings[typePair] = mapping;
 					return mapping;
 				}
 			}
 
 			if (from == to)
-				return (IMapping) Activator.CreateInstance(typeof(Copy<>).MakeGenericType(from), this);
+			{
+				IMapping mapping = (IMapping) Activator.CreateInstance(typeof(Copy<>).MakeGenericType(from), this);
+				this.aMappings[typePair] = mapping;
+				return mapping;
+			}
 
 			return null;
 		}
