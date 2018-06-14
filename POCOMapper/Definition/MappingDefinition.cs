@@ -21,7 +21,7 @@ namespace KST.POCOMapper.Definition
 
 		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
 		private bool aFinished;
-		private List<IChildAssociationPostprocessing> aChildPostprocessings;
+		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 
 		protected MappingDefinition()
 		{

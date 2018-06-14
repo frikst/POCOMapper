@@ -4,7 +4,7 @@ namespace KST.POCOMapper.TypePatterns
 {
 	internal class ClassPattern : IPattern
 	{
-		private Type aType;
+		private readonly Type aType;
 		private readonly bool aSubclass;
 
 		public ClassPattern(Type type, bool subclass)

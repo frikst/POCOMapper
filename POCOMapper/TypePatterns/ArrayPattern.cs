@@ -5,8 +5,8 @@ namespace KST.POCOMapper.TypePatterns
 {
 	internal class ArrayPattern : IPattern
 	{
-		private IPattern aItem;
-		private int aDimensionCount;
+		private readonly IPattern aItem;
+		private readonly int aDimensionCount;
 
 		public ArrayPattern(IPattern item, int dimensionCount)
 		{

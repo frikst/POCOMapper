@@ -17,13 +17,13 @@ namespace KST.POCOMapper.Mapping.Collection
 	{
 		private class SynchronizationEnumerable<TId, TItemFrom, TItemTo> : IEnumerable<TItemTo>
 		{
-			private Func<TItemTo, TId> aSelectIdTo;
-			private Func<TItemFrom, TId> aSelectIdFrom;
+			private readonly Func<TItemTo, TId> aSelectIdTo;
+			private readonly Func<TItemFrom, TId> aSelectIdFrom;
 
-			private IEnumerable<TItemFrom> aFrom;
-			private IEnumerable<TItemTo> aTo;
+			private readonly IEnumerable<TItemFrom> aFrom;
+			private readonly IEnumerable<TItemTo> aTo;
 
-			private IMapping<TItemFrom, TItemTo> aMapping;
+			private readonly IMapping<TItemFrom, TItemTo> aMapping;
 
 			public SynchronizationEnumerable(IEnumerable<TItemFrom> from, IEnumerable<TItemTo> to, Func<TItemTo, TId> selectIdTo, Func<TItemFrom, TId> selectIdFrom, IMapping<TItemFrom, TItemTo> mapping)
 			{

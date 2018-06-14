@@ -8,7 +8,7 @@ namespace KST.POCOMapper.TypePatterns
 {
 	public class Pattern<TPattern> : IPattern
 	{
-		private IPattern aPattern;
+		private readonly IPattern aPattern;
 
 		public Pattern()
 		{
@@ -61,8 +61,8 @@ namespace KST.POCOMapper.TypePatterns
 		private static readonly string TOKEN_GENERIC_SEPARATOR = ",";
 		private static readonly string TOKEN_GENERIC_END = ">";
 
-		private IPattern aPattern;
-		private Assembly aAssembly;
+		private readonly IPattern aPattern;
+		private readonly Assembly aAssembly;
 
 		public Pattern(Assembly assembly, string pattern)
 		{
