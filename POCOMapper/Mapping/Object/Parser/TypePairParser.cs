@@ -34,9 +34,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		private PairedMembers CreateMemberPair(IMember from, IMember to)
 		{
-			IMapping mapping = this.aMapping.GetMapping(from.Type, to.Type);
-
-			if (mapping != null)
+			if (this.aMapping.TryGetMapping(from.Type, to.Type, out var mapping))
 				return new PairedMembers(from, to, mapping);
 			else
 				return null;

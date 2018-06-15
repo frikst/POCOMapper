@@ -55,7 +55,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void StructuringToStringTest()
 		{
-			string correct = "ObjectToObject<From, To>\n    InnerData => Inner.Data (null)\n    Data => Data (null)";
+			string correct = "ObjectToObject<From, To>\n    InnerData => Inner.Data Copy<String>\n    Data => Data Copy<String>";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 

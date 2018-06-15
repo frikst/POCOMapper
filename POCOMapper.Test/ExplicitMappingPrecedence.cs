@@ -41,7 +41,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void ToStringTest()
 		{
-			string correct = "ObjectToObject<From, To>\n    attrSrc => attr (null)";
+			string correct = "ObjectToObject<From, To>\n    attrSrc => attr Copy<String>";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 

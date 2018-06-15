@@ -27,10 +27,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 			this.aFrom = from;
 			this.aTo = to;
 
-			if (mapping == null || mapping.IsDirect)
-				this.aMapping = null;
-			else
-				this.aMapping = mapping;
+			this.aMapping = mapping;
 		}
 
 		public IMember From
@@ -44,15 +41,11 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action, Delegate postprocess, ParameterExpression parent)
 		{
-			if (
-				action == Action.Map
-				|| this.aMapping == null
-				|| (this.aMapping != null && !this.aMapping.CanSynchronize)
-			)
+			if (action == Action.Map || this.aMapping.IsDirect || !this.aMapping.CanSynchronize)
 			{
 				Expression ret = this.aFrom.CreateGetterExpression(from);
 
-				if (this.aMapping != null)
+				if (!this.aMapping.IsDirect)
 					ret = Expression.Call(
 						Expression.Constant(this.aMapping),
 						MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
@@ -65,7 +58,6 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				);
 
 				return this.AddPostprocess(ret, to, postprocess, parent);
-
 			}
 			else
 			{
@@ -75,10 +67,6 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				if (this.aTo.Getter == null)
 					// TODO: ???
 					throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.aTo} member of {this.aTo.DeclaringType} type");
-
-				if (this.aMapping == null)
-					// TODO: ???
-					throw new InvalidMappingException($"Cannot synchronize two reference objects with the same type for {this.aTo} member of {this.aTo.DeclaringType} type");
 
 				Expression synchronize = Expression.Call(
 					Expression.Constant(this.aMapping),

@@ -56,8 +56,7 @@ namespace KST.POCOMapper.Visitor
 
 			this.aLevel++;
 			this.aTypeIdentification = "[item]";
-			if (mapping.ItemMapping != null)
-				mapping.ItemMapping.Accept(this);
+			mapping.ItemMapping.Accept(this);
 			this.aLevel--;
 
 			this.aProcessed.Remove(mapping.GetType());

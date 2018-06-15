@@ -35,6 +35,27 @@ namespace KST.POCOMapper.Definition
 		internal NamingConventions FromConventions { get; }
 		internal NamingConventions ToConventions { get; }
 
+		public bool TryGetMapping(Type from, Type to, out IMapping mapping)
+		{
+			var typePair = new TypePair(from, to);
+
+			if (this.aMappings.TryGetValue(typePair, out mapping))
+				return true;
+
+			foreach (ITypeMappingDefinition mappingDefinition in this.aMappingDefinitions)
+			{
+				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
+				{
+					mapping = mappingDefinition.CreateMapping(this, from, to);
+					this.aMappings[typePair] = mapping;
+					return true;
+				}
+			}
+
+			mapping = null;
+			return false;
+		}
+
 		/// <summary>
 		/// Finds the mapping from the type specified by the <paramref name="from"/> parameter to the type specified
 		/// by the <paramref name="to"/> parameter.
@@ -44,22 +65,22 @@ namespace KST.POCOMapper.Definition
 		/// <returns>The mapping specified by the parameters.</returns>
 		public IMapping GetMapping(Type from, Type to)
 		{
-			var typePair = new TypePair(from, to);
+			if (this.TryGetMapping(from, to, out var mapping))
+				return mapping;
 
-			if (this.aMappings.TryGetValue(typePair, out var foundMapping))
-				return foundMapping;
+			throw new UnknownMappingException(from, to);
+		}
 
-			foreach (ITypeMappingDefinition mappingDefinition in this.aMappingDefinitions)
+		public bool TryGetMapping<TFrom, TTo>(out IMapping<TFrom, TTo> mapping)
+		{
+			if (this.TryGetMapping(typeof(TFrom), typeof(TTo), out var untypedMapping))
 			{
-				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
-				{
-					IMapping mapping = mappingDefinition.CreateMapping(this, from, to);
-					this.aMappings[typePair] = mapping;
-					return mapping;
-				}
+				mapping = (IMapping<TFrom, TTo>) untypedMapping;
+				return true;
 			}
 
-			return null;
+			mapping = null;
+			return false;
 		}
 
 		/// <summary>
@@ -83,9 +104,6 @@ namespace KST.POCOMapper.Definition
 		{
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
 
-			if (mapping == null)
-				throw new UnknownMappingException(typeof(TFrom), typeof(TTo));
-
 			if (!mapping.CanMap)
 				throw new CantMapException($"Can't map {typeof(TFrom).Name} to {typeof(TTo).Name}, mapping object does not support simple mapping");
 
@@ -103,9 +121,6 @@ namespace KST.POCOMapper.Definition
 		public void Synchronize<TFrom, TTo>(TFrom from, ref TTo to)
 		{
 			IMapping<TFrom, TTo> mapping = this.GetMapping<TFrom, TTo>();
-
-			if (mapping == null)
-				throw new UnknownMappingException(typeof(TFrom), typeof(TTo));
 
 			if (!mapping.CanSynchronize)
 				throw new CantMapException($"Can't synchronize {typeof(TFrom).Name} to {typeof(TTo).Name}, mapping object does not support synchronization");

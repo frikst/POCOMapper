@@ -64,7 +64,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void ToStringTest()
 		{
-			string correct = "ObjectToObject<SubFrom, SubTo>\n    GetValue2 => Value2 (null)\n    GetValue => Value (null)\n    GetValue3 => value3 (null)";
+			string correct = "ObjectToObject<SubFrom, SubTo>\n    GetValue2 => Value2 Copy<String>\n    GetValue => Value Copy<String>\n    GetValue3 => value3 Copy<String>";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 

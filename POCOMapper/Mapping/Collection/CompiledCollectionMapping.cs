@@ -113,20 +113,12 @@ namespace KST.POCOMapper.Mapping.Collection
 
 		protected IMapping GetMapping()
 		{
-			if (this.ItemFrom != this.ItemTo)
-			{
-				IMapping mapping = this.Mapping.GetMapping(this.ItemFrom, this.ItemTo);
+			IMapping mapping = this.Mapping.GetMapping(this.ItemFrom, this.ItemTo);
 
-				if (mapping == null)
-					throw new UnknownMappingException(this.ItemFrom, this.ItemTo);
+			if (!mapping.CanMap)
+				throw new InvalidMappingException($"Collection items typed as {this.ItemFrom.Name} and {this.ItemTo.Name} cannot be mapped to each other");
 
-				if (!mapping.CanMap)
-					throw new InvalidMappingException($"Collection items typed as {this.ItemFrom.Name} and {this.ItemTo.Name} cannot be mapped to each other");
-
-				return mapping;
-			}
-			else
-				return null;
+			return mapping;
 		}
 
 		protected Expression CreateItemMappingExpression(ParameterExpression from)
@@ -134,25 +126,19 @@ namespace KST.POCOMapper.Mapping.Collection
 			Expression ret = null;
 			IMapping itemMapping = this.GetMapping();
 
-			if (itemMapping != null)
-			{
-				Delegate mapMethod = Delegate.CreateDelegate(
-					typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
-					itemMapping,
-					MappingMethods.Map(this.ItemFrom, this.ItemTo)
-				);
+			if (itemMapping.IsDirect)
+				return from;
 
-				ret = Expression.Call(null, LinqMethods.Select(this.ItemFrom, this.ItemTo),
-					from,
-					Expression.Constant(mapMethod)
-				);
-			}
-			else
-			{
-				ret = from;
-			}
+			Delegate mapMethod = Delegate.CreateDelegate(
+				typeof(Func<,>).MakeGenericType(this.ItemFrom, this.ItemTo),
+				itemMapping,
+				MappingMethods.Map(this.ItemFrom, this.ItemTo)
+			);
 
-			return ret;
+			return Expression.Call(null, LinqMethods.Select(this.ItemFrom, this.ItemTo),
+				from,
+				Expression.Constant(mapMethod)
+			);
 		}
 
 		protected Expression<Func<TFrom, TTo>> CreateMappingEnvelope(ParameterExpression from, Expression body)
@@ -187,42 +173,35 @@ namespace KST.POCOMapper.Mapping.Collection
 
 		protected Expression CreateItemSynchronizationExpression(ParameterExpression from, ParameterExpression to)
 		{
-			Expression ret;
-			IMapping itemMapping = this.GetMapping();
-
 			if (!this.CanSynchronize)
 				throw new InvalidOperationException("Cannot synchronize collections if no ID selectors are defined");
 
-			if (itemMapping != null)
-			{
-				Type idType = this.aSelectIdFrom.Method.ReturnType;
-				Type synEnu = typeof(SynchronizationEnumerable<,,>).MakeGenericType(typeof(TFrom), typeof(TTo), idType, this.ItemFrom, this.ItemTo);
-				ConstructorInfo synEnuConstructor = synEnu.GetConstructor(
-					BindingFlags.Public | BindingFlags.Instance,
-					null,
-					new [] {
-						typeof(IEnumerable<>).MakeGenericType(this.ItemFrom),
-						typeof(IEnumerable<>).MakeGenericType(this.ItemTo),
-						typeof(Func<,>).MakeGenericType(this.ItemTo, idType),
-						typeof(Func<,>).MakeGenericType(this.ItemFrom, idType),
-						typeof(IMapping<,>).MakeGenericType(this.ItemFrom, this.ItemTo)
-					},
-					null
-				);
+			IMapping itemMapping = this.GetMapping();
 
-				ret = Expression.New(
-					synEnuConstructor,
-					Expression.Convert(from, typeof(IEnumerable<>).MakeGenericType(this.ItemFrom)),
-					Expression.Convert(to, typeof(IEnumerable<>).MakeGenericType(this.ItemTo)),
-					Expression.Constant(this.aSelectIdTo), Expression.Constant(this.aSelectIdFrom), Expression.Constant(itemMapping)
-				);
-			}
-			else
-			{
-				ret = from;
-			}
+			if (itemMapping.IsDirect)
+				return from;
 
-			return ret;
+			Type idType = this.aSelectIdFrom.Method.ReturnType;
+			Type synEnu = typeof(SynchronizationEnumerable<,,>).MakeGenericType(typeof(TFrom), typeof(TTo), idType, this.ItemFrom, this.ItemTo);
+			ConstructorInfo synEnuConstructor = synEnu.GetConstructor(
+				BindingFlags.Public | BindingFlags.Instance,
+				null,
+				new [] {
+					typeof(IEnumerable<>).MakeGenericType(this.ItemFrom),
+					typeof(IEnumerable<>).MakeGenericType(this.ItemTo),
+					typeof(Func<,>).MakeGenericType(this.ItemTo, idType),
+					typeof(Func<,>).MakeGenericType(this.ItemFrom, idType),
+					typeof(IMapping<,>).MakeGenericType(this.ItemFrom, this.ItemTo)
+				},
+				null
+			);
+
+			return Expression.New(
+				synEnuConstructor,
+				Expression.Convert(from, typeof(IEnumerable<>).MakeGenericType(this.ItemFrom)),
+				Expression.Convert(to, typeof(IEnumerable<>).MakeGenericType(this.ItemTo)),
+				Expression.Constant(this.aSelectIdTo), Expression.Constant(this.aSelectIdFrom), Expression.Constant(itemMapping)
+			);
 		}
 
 		protected Expression<Func<TFrom, TTo, TTo>> CreateSynchronizationEnvelope(ParameterExpression from, ParameterExpression to, Expression body)
