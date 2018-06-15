@@ -11,74 +11,80 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 	{
 		public IMember Parse(NamingConventions conventions, Type type, string name, bool write)
 		{
-			return this.WrapMember(conventions, this.GetMember(type, name), write);
+			return this.CreateMember(conventions, this.ParseMemberString(type, name), write);
 		}
 
-		private IMember WrapMember(NamingConventions conventions, Stack<MemberInfo> members, bool write)
+		private IMember CreateMember(NamingConventions conventions, IEnumerable<MemberInfo> members, bool write)
 		{
-			MemberInfo current = members.Pop();
-			IMember parent;
-			if (members.Count > 0)
-				parent = this.WrapMember(conventions, members, false);
-			else
-				parent = null;
+			IMember previousMember = null;
 
-			switch (current)
+			foreach (var current in members)
 			{
-				case FieldInfo currentField:
-					return new FieldMember(parent, conventions.Fields.Parse(currentField.Name), currentField, conventions);
-				case PropertyInfo currentProperty:
-					return new PropertyMember(parent, conventions.Fields.Parse(currentProperty.Name), currentProperty, conventions);
-				case MethodInfo currentMethod:
-					if (write)
-						return new MethodMember(parent, conventions.Fields.Parse(current.Name), null, currentMethod, conventions);
-					else
-						return new MethodMember(parent, conventions.Fields.Parse(current.Name), currentMethod, null, conventions);
-				default:
-					throw new Exception("Unkown member type");
-			}
-		}
-
-		private Stack<MemberInfo> GetMember(Type type, string path)
-		{
-			string[] names = path.Split('.');
-			Stack<MemberInfo> ret = new Stack<MemberInfo>();
-
-			foreach (string name in names)
-			{
-				MemberInfo cur = this.GetOneMember(type, name);
-
-				switch (cur)
+				IMember currentMember;
+				switch (current)
 				{
-					case PropertyInfo curProperty:
-						type = curProperty.PropertyType;
+					case FieldInfo currentField:
+						currentMember = new FieldMember(previousMember, conventions.Fields.Parse(currentField.Name), currentField, conventions);
 						break;
-					case FieldInfo curField:
-						type = curField.FieldType;
+					case PropertyInfo currentProperty:
+						currentMember = new PropertyMember(previousMember, conventions.Properties.Parse(currentProperty.Name), currentProperty, conventions);
 						break;
-					case MethodInfo curMethod:
-						type = curMethod.ReturnType;
+					case MethodInfo currentMethod:
+						if (write)
+							currentMember = new MethodMember(previousMember, conventions.Methods.Parse(current.Name), null, currentMethod, conventions);
+						else
+							currentMember = new MethodMember(previousMember, conventions.Methods.Parse(current.Name), currentMethod, null, conventions);
 						break;
-					case null:
-						throw new InvalidMappingException($"{name} member not found in type {type.Name}");
 					default:
 						throw new Exception("Unkown member type");
 				}
 
-				ret.Push(cur);
+				previousMember = currentMember;
 			}
 
-			return ret;
+			return previousMember;
 		}
 
-		private MemberInfo GetOneMember(Type type, string name)
+		private IEnumerable<MemberInfo> ParseMemberString(Type type, string path)
 		{
-			MemberInfo ret = type.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault();
+			var curType = type;
 
-			if (ret == null && type.BaseType != null)
-				return this.GetOneMember(type.BaseType, name);
+			foreach (var name in path.Split('.'))
+			{
+				var cur = this.GetMember(curType, name);
 
-			return ret;
+				switch (cur)
+				{
+					case PropertyInfo curProperty:
+						curType = curProperty.PropertyType;
+						break;
+					case FieldInfo curField:
+						curType = curField.FieldType;
+						break;
+					case MethodInfo curMethod:
+						curType = curMethod.ReturnType;
+						break;
+					case null:
+						throw new InvalidMappingException($"{name} member not found in type {curType.Name}");
+					default:
+						throw new Exception("Unkown member type");
+				}
+
+				yield return cur;
+			}
+		}
+
+		private MemberInfo GetMember(Type type, string name)
+		{
+			for (var curType = type; curType != null; curType = curType.BaseType)
+			{
+				var ret = curType.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault();
+
+				if (ret != null)
+					return ret;
+			}
+
+			return null;
 		}
 	}
 }
