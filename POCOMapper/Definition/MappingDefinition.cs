@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
+using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Standard;
 using KST.POCOMapper.TypePatterns;
@@ -37,28 +39,29 @@ namespace KST.POCOMapper.Definition
 
 		protected virtual void DefaultMappings()
 		{
-			this.Map<int, double>()
-				.NotVisitable
-				.SetPriority(int.MaxValue)
-				.CastRules();
-			this.Map<double, int>()
-				.NotVisitable
-				.SetPriority(int.MaxValue)
-				.CastRules();
+			foreach (var primitiveType in BasicNetTypes.GetPrimitiveTypes().Concat(BasicNetTypes.GetPrimitiveLikeTypes()))
+			{
+				this.Map(primitiveType, primitiveType)
+					.NotVisitable
+					.SetPriority(int.MaxValue)
+					.CopyRules();
 
-			this.Map<int, string>()
-				.NotVisitable
-				.SetPriority(int.MaxValue)
-				.ToStringRules();
-			this.Map<string, int>()
-				.NotVisitable
-				.SetPriority(int.MaxValue)
-				.ParseRules();
+				if (primitiveType != typeof(string))
+				{
+					this.Map(primitiveType, typeof(string))
+						.NotVisitable
+						.SetPriority(int.MaxValue)
+						.ToStringRules();
+				}
 
-			this.Map<string, string>()
-				.NotVisitable
-				.SetPriority(int.MaxValue)
-				.CopyRules();
+				foreach (var convertibleTo in BasicNetTypes.GetImplicitTypeConversions(primitiveType))
+				{
+					this.Map(primitiveType, convertibleTo)
+						.NotVisitable
+						.SetPriority(int.MaxValue)
+						.CastRules();
+				}
+			}
 
 			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<T[]>())
 				.SetPriority(int.MaxValue)
