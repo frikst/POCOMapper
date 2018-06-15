@@ -17,14 +17,21 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void IntToDouble()
 		{
-			double ret = Mapping.Instance.Map<int, double>(1);
-			Assert.AreEqual(1.0, ret);
+			var ret = Mapping.Instance.Map<int, double>(1);
+			Assert.AreEqual(1d, ret);
+		}
+
+		[Test]
+		public void IntToDecimal()
+		{
+			var ret = Mapping.Instance.Map<int, decimal>(1);
+			Assert.AreEqual(1m, ret);
 		}
 
 		[Test]
 		public void IntToString()
 		{
-			string ret = Mapping.Instance.Map<int, string>(158);
+			var ret = Mapping.Instance.Map<int, string>(158);
 			Assert.AreEqual("158", ret);
 		}
 	}

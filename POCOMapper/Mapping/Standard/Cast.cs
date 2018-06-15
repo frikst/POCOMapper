@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
@@ -13,8 +14,8 @@ namespace KST.POCOMapper.Mapping.Standard
 
 		public Cast(MappingImplementation mapping) : base(mapping)
 		{
-			if ((!typeof(TFrom).IsEnum && !typeof(TFrom).IsPrimitive) || (!typeof(TTo).IsEnum && !typeof(TTo).IsPrimitive))
-				throw new InvalidMappingException($"You can use CastMapping only on primitive or enum types, not {typeof(TFrom).Name} and {typeof(TTo).Name}");
+			if (!BasicNetTypes.IsCastable<TFrom, TTo>())
+				throw new InvalidMappingException($"You can use CastMapping only on (implicitly or explicitly) castable types, not {typeof(TFrom).Name} and {typeof(TTo).Name}");
 		}
 
 		public override void Accept(IMappingVisitor visitor)
