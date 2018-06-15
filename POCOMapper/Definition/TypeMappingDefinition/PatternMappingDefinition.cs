@@ -34,7 +34,8 @@ namespace KST.POCOMapper.Definition
 			MethodInfo mappingCreateMethod = MappingRulesMethods.GetCreate(from, to);
 			return (IMapping) mappingCreateMethod.Invoke(this.aRules, new object[] { allMappings });
 		}
-		bool ITypeMappingDefinition.IsFrom(Type from)
+
+		bool ITypeMappingDefinition.IsFrom(Type from)
 		{
 			return this.aPatternFrom.Matches(from);
 		}
@@ -47,7 +48,8 @@ namespace KST.POCOMapper.Definition
 		int ITypeMappingDefinition.Priority
 			=> this.aPriority;
 
-		#endregion
+		#endregion
+
 		public PatternTypeMappingDefinition SetPriority(int priority)
 		{
 			this.aPriority = priority;
