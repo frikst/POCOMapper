@@ -59,13 +59,6 @@ namespace KST.POCOMapper.Definition
 				}
 			}
 
-			if (from == to)
-			{
-				IMapping mapping = (IMapping) Activator.CreateInstance(typeof(Copy<>).MakeGenericType(from), this);
-				this.aMappings[typePair] = mapping;
-				return mapping;
-			}
-
 			return null;
 		}
 
