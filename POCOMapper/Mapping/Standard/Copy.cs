@@ -25,17 +25,7 @@ namespace KST.POCOMapper.Mapping.Standard
 			=> true;
 
 		public bool IsDirect
-		{
-			get
-			{
-				if (typeof(TFromTo) == typeof(string))
-					return true;
-				else if (typeof(TFromTo).IsValueType)
-					return true;
-				else
-					return false;
-			}
-		}
+			=> true;
 
 		public bool SynchronizeCanChangeObject
 			=> false;
