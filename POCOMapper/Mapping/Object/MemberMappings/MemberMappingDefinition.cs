@@ -18,7 +18,7 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 			this.aFromName = fromName;
 			this.aToName = toName;
 
-			this.aRules = new DefaultMappingRules<TFromType, TToType>();
+			this.aRules = null;
 		}
 
 		#region Implementation of IMemberMappingDefinition
@@ -26,8 +26,6 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 		PairedMembers IMemberMappingDefinition.CreateMapping(MappingImplementation allMappings, Type fromClass, Type toClass)
 		{
 			MemberFromNameParser parser = new MemberFromNameParser();
-
-			IMapping<TFromType, TToType> mapping;
 
 			IMember memberFrom;
 			if (this.aFromName == null)
@@ -40,7 +38,11 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 			else
 				memberTo = parser.Parse(allMappings.ToConventions, toClass, this.aToName, true);
 
-			mapping = this.aRules.Create(allMappings);
+			IMapping<TFromType, TToType> mapping;
+			if (this.aRules == null)
+				mapping = allMappings.GetMapping<TFromType, TToType>();
+			else
+				mapping = this.aRules.Create(allMappings);
 
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}
