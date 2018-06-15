@@ -38,20 +38,25 @@ namespace KST.POCOMapper.Definition
 		protected virtual void DefaultMappings()
 		{
 			this.Map<int, double>()
+				.NotVisitable
 				.SetPriority(int.MaxValue)
 				.CastRules();
 			this.Map<double, int>()
+				.NotVisitable
 				.SetPriority(int.MaxValue)
 				.CastRules();
 
 			this.Map<int, string>()
+				.NotVisitable
 				.SetPriority(int.MaxValue)
 				.ToStringRules();
 			this.Map<string, int>()
+				.NotVisitable
 				.SetPriority(int.MaxValue)
 				.ParseRules();
 
 			this.Map<string, string>()
+				.NotVisitable
 				.SetPriority(int.MaxValue)
 				.CopyRules();
 

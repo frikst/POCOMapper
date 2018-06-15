@@ -14,10 +14,12 @@ namespace KST.POCOMapper.Definition
 	{
 		private int aPriority;
 		private IMappingRules<TFrom, TTo> aRules;
+		private bool aVisitable;
 
 		internal ExactTypeMappingDefinition()
 		{
 			this.aPriority = 0;
+			this.aVisitable = true;
 			this.aRules = new ObjectMappingRules<TFrom, TTo>();
 		}
 
@@ -41,6 +43,9 @@ namespace KST.POCOMapper.Definition
 		int ITypeMappingDefinition.Priority
 			=> this.aPriority;
 
+		bool ITypeMappingDefinition.Visitable
+			=> this.aVisitable;
+
 		#endregion
 
 		public ExactTypeMappingDefinition<TFrom, TTo> SetPriority(int priority)
@@ -48,6 +53,16 @@ namespace KST.POCOMapper.Definition
 			this.aPriority = priority;
 
 			return this;
+		}
+
+		public ExactTypeMappingDefinition<TFrom, TTo> NotVisitable
+		{
+			get
+			{
+				this.aVisitable = false;
+
+				return this;
+			}
 		}
 
 		#region Implementation of IRulesDefinition<TFrom,TTo>

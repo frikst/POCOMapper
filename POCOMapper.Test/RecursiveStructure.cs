@@ -64,7 +64,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void MappingToString()
 		{
-			string expected = "ObjectToObject<From, To>\n    Inner => Inner ObjectToObject<From, To>\n        ...\n" + Constants.STANDARD_MAPPINGS;
+			string expected = "ObjectToObject<From, To>\n    Inner => Inner ObjectToObject<From, To>\n        ...";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 

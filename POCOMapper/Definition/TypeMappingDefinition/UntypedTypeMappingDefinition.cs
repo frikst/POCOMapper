@@ -16,11 +16,14 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 
 		private int aPriority;
 		private IMappingRules aRules;
+		private bool aVisitable;
 
 		internal UntypedTypeMappingDefinition(Type from, Type to)
 		{
 			this.aFrom = from;
 			this.aTo = to;
+			this.aVisitable = true;
+			this.aPriority = 0;
 			this.aRules = new ObjectMappingRules();
 		}
 
@@ -45,6 +48,9 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 		int ITypeMappingDefinition.Priority
 			=> this.aPriority;
 
+		bool ITypeMappingDefinition.Visitable
+			=> this.aVisitable;
+
 		#endregion
 
 		public UntypedTypeMappingDefinition SetPriority(int priority)
@@ -52,6 +58,16 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 			this.aPriority = priority;
 
 			return this;
+		}
+
+		public UntypedTypeMappingDefinition NotVisitable
+		{
+			get
+			{
+				this.aVisitable = false;
+
+				return this;
+			}
 		}
 
 		#region Implementation of IRulesDefinition

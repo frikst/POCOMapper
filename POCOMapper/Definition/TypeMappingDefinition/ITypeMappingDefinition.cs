@@ -11,5 +11,7 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 		bool IsTo(Type to);
 
 		int Priority { get; }
+
+		bool Visitable { get; }
 	}
 }

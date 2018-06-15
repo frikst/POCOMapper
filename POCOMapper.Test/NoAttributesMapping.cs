@@ -34,7 +34,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void ToStringTest()
 		{
-			string correct = "ObjectToObject<From, To>\n" + Constants.STANDARD_MAPPINGS;
+			string correct = "ObjectToObject<From, To>";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 

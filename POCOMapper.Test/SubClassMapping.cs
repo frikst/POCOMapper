@@ -85,8 +85,7 @@ namespace KST.POCOMapper.Test
 			string correct = "SubClassToObject<From, To>\n    SubFrom1 => SubTo1 ObjectToObject<SubFrom1, SubTo1>\n    SubFrom2 => SubTo1 ObjectToObject<SubFrom2, SubTo1>\n    SubFrom3 => SubTo2 ObjectToObject<SubFrom3, SubTo2>\n    From => To ObjectToObject<From, To>\n"
 				+ Constants.SEPARATOR + "ObjectToObject<SubFrom1, SubTo1>\n"
 				+ Constants.SEPARATOR + "ObjectToObject<SubFrom2, SubTo1>\n"
-				+ Constants.SEPARATOR + "ObjectToObject<SubFrom3, SubTo2>\n"
-				+ Constants.STANDARD_MAPPINGS;
+				+ Constants.SEPARATOR + "ObjectToObject<SubFrom3, SubTo2>";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 

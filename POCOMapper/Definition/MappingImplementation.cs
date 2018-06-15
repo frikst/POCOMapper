@@ -128,7 +128,7 @@ namespace KST.POCOMapper.Definition
 			visitor.Begin();
 
 			bool first = true;
-			foreach (var mappingDefinition in this.aMappingDefinitions.OfType<IExactTypeMappingDefinition>())
+			foreach (var mappingDefinition in this.aMappingDefinitions.OfType<IExactTypeMappingDefinition>().Where(x => x.Visitable))
 			{
 				var mapping = this.GetMapping(mappingDefinition.From, mappingDefinition.To);
 

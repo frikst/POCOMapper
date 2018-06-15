@@ -48,6 +48,9 @@ namespace KST.POCOMapper.Definition
 		int ITypeMappingDefinition.Priority
 			=> this.aPriority;
 
+		bool ITypeMappingDefinition.Visitable
+			=> false;
+
 		#endregion
 
 		public PatternTypeMappingDefinition SetPriority(int priority)

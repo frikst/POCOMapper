@@ -55,7 +55,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void FlatteringToStringTest()
 		{
-			string correct = "ObjectToObject<From, To>\n    Inner.Data => InnerData (null)\n    Data => Data (null)\n" + Constants.STANDARD_MAPPINGS;
+			string correct = "ObjectToObject<From, To>\n    Inner.Data => InnerData (null)\n    Data => Data (null)";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 
