@@ -92,13 +92,24 @@ namespace KST.POCOMapper.Internal
 
 	    public static bool IsExplicitlyCastable(Type from, Type to)
 	    {
+		    if (from.IsEnum || to.IsEnum)
+			    return BasicNetTypes.IsEnumExplicitlyCastable(from, to);
+
+		    if (BasicNetTypes.aExplicitTypeConversions.TryGetValue(from, out var ret))
+			    return ret.Contains(to);
+
+		    return false;
+	    }
+
+	    private static bool IsEnumExplicitlyCastable(Type from, Type to)
+	    {
 		    var innerFrom = from.IsEnum ? Enum.GetUnderlyingType(from) : from;
 		    var innerTo = to.IsEnum ? Enum.GetUnderlyingType(to) : to;
 
-		    if (BasicNetTypes.aExplicitTypeConversions.TryGetValue(innerFrom, out var ret))
-			    return ret.Contains(innerTo);
+		    if (innerFrom == innerTo)
+			    return true;
 
-		    return false;
+		    return BasicNetTypes.IsCastable(innerFrom, innerTo);
 	    }
     }
 }
