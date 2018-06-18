@@ -1,9 +1,8 @@
 ﻿using System;
-using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Mapping.Object;
 using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.Definition
+namespace KST.POCOMapper.Definition.TypeMappingDefinition
 {
 	/// <summary>
 	/// Class mapping specification definition class.

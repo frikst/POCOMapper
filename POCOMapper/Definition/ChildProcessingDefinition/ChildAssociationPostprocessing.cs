@@ -1,7 +1,6 @@
 ﻿using System;
-using KST.POCOMapper.Definition.ChildProcessingDefinition;
 
-namespace KST.POCOMapper.Definition
+namespace KST.POCOMapper.Definition.ChildProcessingDefinition
 {
 	public class ChildAssociationPostprocessing<TParent, TChild> : IChildAssociationPostprocessing
 	{
