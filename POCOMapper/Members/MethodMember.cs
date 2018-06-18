@@ -46,14 +46,8 @@ namespace KST.POCOMapper.Members
 		public Type DeclaringType
 			=> this.aGetMethod.DeclaringType;
 
-		public MemberInfo Getter
-			=> this.aGetMethod;
-
-		public MemberInfo Setter
-			=> this.aSetMethod;
-
 		public string Name
-			=> this.Getter.Name;
+			=> this.aGetMethod.Name;
 
 		public string FullName
 		{
@@ -66,19 +60,25 @@ namespace KST.POCOMapper.Members
 			}
 		}
 
+		public bool Readable
+			=> this.aGetMethod != null;
+
+		public bool Writable
+			=> this.aSetMethod != null;
+
 		public bool CanPairWith(IMember other)
 			=> this.aConventions.CanPair(this, other);
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 		{
-			if (this.Getter != null)
+			if (this.aGetMethod != null)
 				return Expression.Call(parentVariable, this.aGetMethod);
 			return null;
 		}
 
 		public Expression CreateSetterExpression(ParameterExpression parentVariable, Expression value)
 		{
-			if (this.Setter != null)
+			if (this.aSetMethod != null)
 				return Expression.Call(parentVariable, this.aSetMethod, value);
 			return null;
 		}

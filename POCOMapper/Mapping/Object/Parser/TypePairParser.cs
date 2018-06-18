@@ -97,7 +97,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		private IEnumerable<IMember> GetFromMembers(Type type, IMember parent)
 		{
-			return this.aMapping.FromConventions.GetAllMembers(type, parent).Where(x => x.Getter != null).ToList();
+			return this.aMapping.FromConventions.GetAllMembers(type, parent).Where(x => x.Readable).ToList();
 		}
 
 		private IEnumerable<IMember> GetToMembers(Type type)
@@ -113,7 +113,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		private IEnumerable<IMember> GetToMembers(Type type, IMember parent)
 		{
-			return this.aMapping.ToConventions.GetAllMembers(type, parent).Where(x => x.Setter != null).ToList();
+			return this.aMapping.ToConventions.GetAllMembers(type, parent).Where(x => x.Writable).ToList();
 		}
 
 		private IEnumerable<PairedMembers> FindPairs()

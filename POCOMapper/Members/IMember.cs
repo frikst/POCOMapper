@@ -7,19 +7,18 @@ namespace KST.POCOMapper.Members
 	public interface IMember
 	{
 		IMember Parent { get; }
-
 		int Depth { get; }
-
-		Symbol Symbol { get; }
-		Type Type { get; }
 
 		Type DeclaringType { get; }
 
-		MemberInfo Getter { get; }
-		MemberInfo Setter { get; }
+		Symbol Symbol { get; }
 		string Name { get; }
-
 		string FullName { get; }
+
+		Type Type { get; }
+
+		bool Readable { get; }
+		bool Writable { get; }
 
 		bool CanPairWith(IMember other);
 

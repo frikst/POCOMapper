@@ -28,17 +28,17 @@ namespace KST.POCOMapper.Members
 		public Type DeclaringType
 			=> typeof(TClass);
 
-		public MemberInfo Getter
-			=> throw new NotImplementedException();
-
-		public MemberInfo Setter
-			=> throw new NotImplementedException();
-
 		public string Name
 			=> "this";
 
 		public string FullName
 			=> this.Name;
+
+		public bool Readable
+			=> true;
+
+		public bool Writable
+			=> false;
 
 		public bool CanPairWith(IMember other)
 			=> true;

@@ -44,28 +44,6 @@ namespace KST.POCOMapper.Members
 		public Type DeclaringType
 			=> this.aProperty.DeclaringType;
 
-		public MemberInfo Getter
-		{
-			get
-			{
-				if (this.aProperty.CanRead)
-					return this.aProperty;
-				else
-					return null;
-			}
-		}
-
-		public MemberInfo Setter
-		{
-			get
-			{
-				if (this.aProperty.CanWrite)
-					return this.aProperty;
-				else
-					return null;
-			}
-		}
-
 		public string Name
 			=> this.aProperty.Name;
 
@@ -80,19 +58,25 @@ namespace KST.POCOMapper.Members
 			}
 		}
 
+		public bool Readable
+			=> this.aProperty.CanRead;
+
+		public bool Writable
+			=> this.aProperty.CanWrite;
+
 		public bool CanPairWith(IMember other)
 			=> this.aConventions.CanPair(this, other);
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 		{
-			if (this.Getter != null)
+			if (this.aProperty.CanRead)
 				return Expression.Property(parentVariable, this.aProperty);
 			return null;
 		}
 
 		public Expression CreateSetterExpression(ParameterExpression parentVariable, Expression value)
 		{
-			if (this.Setter != null)
+			if (this.aProperty.CanWrite)
 				return Expression.Assign(Expression.Property(parentVariable, this.aProperty), value);
 			return null;
 		}

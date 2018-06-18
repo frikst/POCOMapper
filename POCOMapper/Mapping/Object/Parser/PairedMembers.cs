@@ -64,7 +64,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				ParameterExpression tempFromValue = Expression.Parameter(this.aFrom.Type, "tempFrom");
 				ParameterExpression tempToValue = Expression.Parameter(this.aTo.Type, "tempTo");
 
-				if (this.aTo.Getter == null)
+				if (!this.aTo.Readable)
 					// TODO: ???
 					throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.aTo} member of {this.aTo.DeclaringType} type");
 
@@ -100,7 +100,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 					);
 				}
 
-				if (this.aTo.Setter != null && !this.aFrom.Type.IsValueType)
+				if (this.aTo.Writable && !this.aFrom.Type.IsValueType)
 					synchronize = Expression.IfThenElse(
 						Expression.Equal(tempFromValue, Expression.Constant(null)),
 						this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),

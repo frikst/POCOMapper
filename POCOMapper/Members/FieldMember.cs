@@ -44,9 +44,6 @@ namespace KST.POCOMapper.Members
 		public Type DeclaringType
 			=> this.aField.DeclaringType;
 
-		public MemberInfo Setter
-			=> this.aField;
-
 		public string Name
 			=> this.aField.Name;
 
@@ -61,11 +58,14 @@ namespace KST.POCOMapper.Members
 			}
 		}
 
-		public MemberInfo Getter
-			=> this.aField;
-
 		public bool CanPairWith(IMember other)
 			=> this.aConventions.CanPair(this, other);
+
+		public bool Readable
+			=> true;
+
+		public bool Writable
+			=> !this.aField.IsInitOnly;
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 			=> Expression.Field(parentVariable, this.aField);
