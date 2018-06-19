@@ -31,9 +31,6 @@ namespace KST.POCOMapper.Members
 		public string Name
 			=> "this";
 
-		public string FullName
-			=> this.Name;
-
 		public bool Readable
 			=> true;
 

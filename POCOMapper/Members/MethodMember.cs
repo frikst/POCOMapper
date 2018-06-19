@@ -27,17 +27,6 @@ namespace KST.POCOMapper.Members
 
 		public IMember Parent { get; }
 
-		public int Depth
-		{
-			get
-			{
-				if (this.Parent == null)
-					return 0;
-				else
-					return this.Parent.Depth + 1;
-			}
-		}
-
 		public Symbol Symbol { get; }
 
 		public Type Type
@@ -48,17 +37,6 @@ namespace KST.POCOMapper.Members
 
 		public string Name
 			=> this.aGetMethod.Name;
-
-		public string FullName
-		{
-			get
-			{
-				if (this.Parent == null)
-					return this.Name;
-				else
-					return this.Parent.Name + "." + this.Name;
-			}
-		}
 
 		public bool Readable
 			=> this.aGetMethod != null;

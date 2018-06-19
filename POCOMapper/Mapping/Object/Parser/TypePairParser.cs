@@ -176,7 +176,30 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		private PairedMembers MemberPairWithMinFromDepth(IEnumerable<PairedMembers> pairs)
 		{
-			return pairs.Aggregate((a, b) => a.From.Depth <= b.From.Depth ? a : b);
+			PairedMembers result = null;
+			int oldDepth = int.MaxValue;
+
+			foreach (var members in pairs)
+			{
+				var newDepth = TypePairParser.GetDepth(members.From);
+				if (newDepth < oldDepth)
+				{
+					oldDepth = newDepth;
+					result = members;
+				}
+			}
+
+			return result;
+		}
+
+		private static int GetDepth(IMember member)
+		{
+			var depth = 0;
+
+			for (var current = member; current.Parent != null; current = current.Parent)
+				depth++;
+
+			return depth;
 		}
 
 		#region Implementation of IEnumerable

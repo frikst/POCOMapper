@@ -7,6 +7,7 @@ using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Object;
 using KST.POCOMapper.Mapping.SubClass;
+using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Visitor
 {
@@ -72,7 +73,7 @@ namespace KST.POCOMapper.Visitor
 			this.aLevel++;
 			foreach (var member in mapping.Members)
 			{
-				this.aTypeIdentification = $"{member.From.FullName} => {member.To.FullName}";
+				this.aTypeIdentification = $"{ToStringVisitor.GetFullName(member.From)} => {ToStringVisitor.GetFullName(member.To)}";
 				if (member.Mapping == null)
 					this.AddNullLine();
 				else
@@ -81,6 +82,20 @@ namespace KST.POCOMapper.Visitor
 			this.aLevel--;
 
 			this.aProcessed.Remove(mapping.GetType());
+		}
+
+		private static string GetFullName(IMember member)
+		{
+			var ret = new StringBuilder();
+
+			for (var current = member; current != null; current = current.Parent)
+			{
+				var item = ret.Length > 0 ? $"{current.Name}." : current.Name;
+
+				ret.Insert(0, item);
+			}
+
+			return ret.ToString();
 		}
 
 		public void Visit(ISubClassMapping mapping)

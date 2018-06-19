@@ -101,11 +101,11 @@ namespace KST.POCOMapper.Mapping.Object
 			if (implicitMappings)
 			{
 				List<PairedMembers> explicitPairsList = explicitPairs.ToList();
-				HashSet<string> explicitSymbols = new HashSet<string>(explicitPairsList.Select(x => x.To.FullName));
+				var explicitSymbols = new HashSet<IMember>(explicitPairsList.Select(x => x.To));
 
 				this.aMemberPairs = explicitPairsList.Concat(
 					new TypePairParser(this.Mapping, typeof(TFrom), typeof(TTo))
-						.Where(x => !explicitSymbols.Contains(x.To.FullName))
+						.Where(x => !explicitSymbols.Contains(x.To))
 				);
 			}
 			else
