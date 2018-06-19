@@ -155,10 +155,9 @@ namespace KST.POCOMapper.Mapping.Object
 					),
 					this.MakeBlock(
 						pairedMembers.Select(
-							x => x.CreateAssignmentExpression(
+							x => x.CreateMappingAssignmentExpression(
 								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
 								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
-								PairedMembers.Action.Map,
 								this.Mapping.GetChildPostprocessing(typeof(TTo), x.To.Type),
 								to
 							)
@@ -189,10 +188,9 @@ namespace KST.POCOMapper.Mapping.Object
 					),
 					this.MakeBlock(
 						this.aMemberPairs.Select(
-							x => x.CreateAssignmentExpression(
+							x => x.CreateSynchronizationAssignmentExpression(
 								x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
 								x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
-								PairedMembers.Action.Sync,
 								this.Mapping.GetChildPostprocessing(typeof(TTo), x.To.Type),
 								to
 							)

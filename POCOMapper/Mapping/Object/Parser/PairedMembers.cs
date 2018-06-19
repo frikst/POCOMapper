@@ -9,12 +9,6 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 {
 	public class PairedMembers : IObjectMemberMapping
 	{
-		public enum Action
-		{
-			Sync,
-			Map
-		}
-
 		private readonly IMember aFrom;
 		private readonly IMember aTo;
 		private readonly IMapping aMapping;
@@ -39,81 +33,85 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 		public IMapping Mapping
 			=> this.aMapping;
 
-		public Expression CreateAssignmentExpression(ParameterExpression from, ParameterExpression to, Action action, Delegate postprocess, ParameterExpression parent)
+		public Expression CreateMappingAssignmentExpression(ParameterExpression from, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
 		{
-			if (action == Action.Map || this.aMapping.IsDirect || !this.aMapping.CanSynchronize)
-			{
-				Expression ret = this.aFrom.CreateGetterExpression(from);
+			Expression ret = this.aFrom.CreateGetterExpression(from);
 
-				if (!this.aMapping.IsDirect)
-					ret = Expression.Call(
-						Expression.Constant(this.aMapping),
-						MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
-						ret
-					);
-
-				ret = this.aTo.CreateSetterExpression(
-					to,
+			if (!this.aMapping.IsDirect)
+				ret = Expression.Call(
+					Expression.Constant(this.aMapping),
+					MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
 					ret
 				);
 
-				return this.AddPostprocess(ret, to, postprocess, parent);
-			}
-			else
+			ret = this.aTo.CreateSetterExpression(
+				to,
+				ret
+			);
+
+			return this.AddPostprocess(ret, to, postprocess, parent);
+		}
+
+		public Expression CreateSynchronizationAssignmentExpression(ParameterExpression from, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
+		{
+			if (!this.aMapping.CanSynchronize)
+				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
+
+			if (this.aMapping.IsDirect)
+				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
+
+			ParameterExpression tempFromValue = Expression.Parameter(this.aFrom.Type, "tempFrom");
+			ParameterExpression tempToValue = Expression.Parameter(this.aTo.Type, "tempTo");
+
+			if (!this.aTo.Readable)
+				// TODO: ???
+				throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.aTo} member of {this.aTo.DeclaringType} type");
+
+			Expression synchronize = Expression.Call(
+				Expression.Constant(this.aMapping),
+				MappingMethods.Synchronize(this.aFrom.Type, this.aTo.Type),
+				tempFromValue, this.aTo.CreateGetterExpression(to)
+			);
+
+			if (this.aMapping.SynchronizeCanChangeObject)
 			{
-				ParameterExpression tempFromValue = Expression.Parameter(this.aFrom.Type, "tempFrom");
-				ParameterExpression tempToValue = Expression.Parameter(this.aTo.Type, "tempTo");
-
-				if (!this.aTo.Readable)
-					// TODO: ???
-					throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.aTo} member of {this.aTo.DeclaringType} type");
-
-				Expression synchronize = Expression.Call(
-					Expression.Constant(this.aMapping),
-					MappingMethods.Synchronize(this.aFrom.Type, this.aTo.Type),
-					tempFromValue, this.aTo.CreateGetterExpression(to)
-				);
-
-				if (this.aMapping.SynchronizeCanChangeObject)
-				{
-					synchronize = this.aTo.CreateSetterExpression(
-						to,
-						synchronize
-					);
-				}
-
-				if (this.aMapping.CanMap && !this.aTo.Type.IsValueType)
-				{
-					Expression map = this.aTo.CreateSetterExpression(
-						to,
-						Expression.Call(
-							Expression.Constant(this.aMapping),
-							MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
-							tempFromValue
-						)
-					);
-					map = this.AddPostprocess(map, to, postprocess, parent);
-					synchronize = Expression.IfThenElse(
-						Expression.Equal(tempToValue, Expression.Constant(null)),
-						map,
-						synchronize
-					);
-				}
-
-				if (this.aTo.Writable && !this.aFrom.Type.IsValueType)
-					synchronize = Expression.IfThenElse(
-						Expression.Equal(tempFromValue, Expression.Constant(null)),
-						this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),
-						synchronize
-					);
-
-				return Expression.Block(
-					new ParameterExpression[] { tempFromValue, tempToValue },
-					Expression.Assign(tempFromValue, this.aFrom.CreateGetterExpression(from)),
-					Expression.Assign(tempToValue, this.aTo.CreateGetterExpression(to)),
+				synchronize = this.aTo.CreateSetterExpression(
+					to,
 					synchronize
 				);
 			}
+
+			if (this.aMapping.CanMap && !this.aTo.Type.IsValueType)
+			{
+				Expression map = this.aTo.CreateSetterExpression(
+					to,
+					Expression.Call(
+						Expression.Constant(this.aMapping),
+						MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
+						tempFromValue
+					)
+				);
+				map = this.AddPostprocess(map, to, postprocess, parent);
+				synchronize = Expression.IfThenElse(
+					Expression.Equal(tempToValue, Expression.Constant(null)),
+					map,
+					synchronize
+				);
+			}
+
+			if (this.aTo.Writable && !this.aFrom.Type.IsValueType)
+				synchronize = Expression.IfThenElse(
+					Expression.Equal(tempFromValue, Expression.Constant(null)),
+					this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),
+					synchronize
+				);
+
+			return Expression.Block(
+				new ParameterExpression[] { tempFromValue, tempToValue },
+				Expression.Assign(tempFromValue, this.aFrom.CreateGetterExpression(from)),
+				Expression.Assign(tempToValue, this.aTo.CreateGetterExpression(to)),
+				synchronize
+			);
 		}
 
 		private Expression AddPostprocess(Expression assignment, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
