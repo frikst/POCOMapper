@@ -9,42 +9,38 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 {
 	public class PairedMembers : IObjectMemberMapping
 	{
-		private readonly IMember aFrom;
-		private readonly IMember aTo;
-		private readonly IMapping aMapping;
-
-		public PairedMembers(IMember from, IMember to, IMapping mapping)
+		public PairedMembers(IMember from, IMember to, IUnresolvedMapping mapping)
 		{
 			if (!from.CanPairWith(to))
 				throw new Exception($"Cannot map {from} and {to} together");
 
-			this.aFrom = from;
-			this.aTo = to;
+			this.From = from;
+			this.To = to;
 
-			this.aMapping = mapping;
+			this.Mapping = mapping;
 		}
 
-		public IMember From
-			=> this.aFrom;
+		public IMember From { get; }
 
-		public IMember To
-			=> this.aTo;
+		public IMember To { get; }
 
-		public IMapping Mapping
-			=> this.aMapping;
+		public IUnresolvedMapping Mapping { get; }
+
+		IMapping IObjectMemberMapping.Mapping
+			=> this.Mapping.ResolvedMapping;
 
 		public Expression CreateMappingAssignmentExpression(ParameterExpression from, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
 		{
-			Expression ret = this.aFrom.CreateGetterExpression(from);
+			Expression ret = this.From.CreateGetterExpression(from);
 
-			if (!this.aMapping.IsDirect)
+			if (!this.Mapping.ResolvedMapping.IsDirect)
 				ret = Expression.Call(
-					Expression.Constant(this.aMapping),
-					MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
+					Expression.Constant(this.Mapping.ResolvedMapping),
+					MappingMethods.Map(this.From.Type, this.To.Type),
 					ret
 				);
 
-			ret = this.aTo.CreateSetterExpression(
+			ret = this.To.CreateSetterExpression(
 				to,
 				ret
 			);
@@ -54,40 +50,40 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		public Expression CreateSynchronizationAssignmentExpression(ParameterExpression from, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
 		{
-			if (!this.aMapping.CanSynchronize)
+			if (!this.Mapping.ResolvedMapping.CanSynchronize)
 				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
 
-			if (this.aMapping.IsDirect)
+			if (this.Mapping.ResolvedMapping.IsDirect)
 				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
 
-			ParameterExpression tempFromValue = Expression.Parameter(this.aFrom.Type, "tempFrom");
-			ParameterExpression tempToValue = Expression.Parameter(this.aTo.Type, "tempTo");
+			ParameterExpression tempFromValue = Expression.Parameter(this.From.Type, "tempFrom");
+			ParameterExpression tempToValue = Expression.Parameter(this.To.Type, "tempTo");
 
-			if (!this.aTo.Readable)
+			if (!this.To.Readable)
 				// TODO: ???
-				throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.aTo} member of {this.aTo.DeclaringType} type");
+				throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.To} member of {this.To.DeclaringType} type");
 
 			Expression synchronize = Expression.Call(
-				Expression.Constant(this.aMapping),
-				MappingMethods.Synchronize(this.aFrom.Type, this.aTo.Type),
-				tempFromValue, this.aTo.CreateGetterExpression(to)
+				Expression.Constant(this.Mapping.ResolvedMapping),
+				MappingMethods.Synchronize(this.From.Type, this.To.Type),
+				tempFromValue, this.To.CreateGetterExpression(to)
 			);
 
-			if (this.aMapping.SynchronizeCanChangeObject)
+			if (this.Mapping.ResolvedMapping.SynchronizeCanChangeObject)
 			{
-				synchronize = this.aTo.CreateSetterExpression(
+				synchronize = this.To.CreateSetterExpression(
 					to,
 					synchronize
 				);
 			}
 
-			if (this.aMapping.CanMap && !this.aTo.Type.IsValueType)
+			if (this.Mapping.ResolvedMapping.CanMap && !this.To.Type.IsValueType)
 			{
-				Expression map = this.aTo.CreateSetterExpression(
+				Expression map = this.To.CreateSetterExpression(
 					to,
 					Expression.Call(
-						Expression.Constant(this.aMapping),
-						MappingMethods.Map(this.aFrom.Type, this.aTo.Type),
+						Expression.Constant(this.Mapping.ResolvedMapping),
+						MappingMethods.Map(this.From.Type, this.To.Type),
 						tempFromValue
 					)
 				);
@@ -99,17 +95,17 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				);
 			}
 
-			if (this.aTo.Writable && !this.aFrom.Type.IsValueType)
+			if (this.To.Writable && !this.From.Type.IsValueType)
 				synchronize = Expression.IfThenElse(
 					Expression.Equal(tempFromValue, Expression.Constant(null)),
-					this.aTo.CreateSetterExpression(to, Expression.Constant(null, this.aTo.Type)),
+					this.To.CreateSetterExpression(to, Expression.Constant(null, this.To.Type)),
 					synchronize
 				);
 
 			return Expression.Block(
 				new ParameterExpression[] { tempFromValue, tempToValue },
-				Expression.Assign(tempFromValue, this.aFrom.CreateGetterExpression(from)),
-				Expression.Assign(tempToValue, this.aTo.CreateGetterExpression(to)),
+				Expression.Assign(tempFromValue, this.From.CreateGetterExpression(from)),
+				Expression.Assign(tempToValue, this.To.CreateGetterExpression(to)),
 				synchronize
 			);
 		}
@@ -123,7 +119,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 					new Expression[]
 						{
 							assignment,
-							Expression.Call(postprocessTarget, postprocess.Method, parent, this.aTo.CreateGetterExpression(to))
+							Expression.Call(postprocessTarget, postprocess.Method, parent, this.To.CreateGetterExpression(to))
 						}
 				);
 			}
@@ -135,7 +131,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		public override string ToString()
 		{
-			return $"{this.aFrom} => {this.aTo}";
+			return $"{this.From} => {this.To}";
 		}
 	}
 }

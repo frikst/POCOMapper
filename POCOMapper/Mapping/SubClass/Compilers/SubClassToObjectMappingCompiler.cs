@@ -31,7 +31,7 @@ namespace KST.POCOMapper.Mapping.SubClass.Compilers
 			    Expression.Block(
 				    new ParameterExpression[] { to },
 				    Expression.Block(
-					    allConversions.Select(x => this.MakeIfConvertMapStatement(x.From, x.To, x.Mapping, from, to, mappingEnd))
+					    allConversions.Select(x => this.MakeIfConvertMapStatement(x.From, x.To, x.Mapping.ResolvedMapping, from, to, mappingEnd))
 				    ),
 				    Expression.Throw(
 					    Expression.New(

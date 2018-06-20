@@ -14,15 +14,17 @@ namespace KST.POCOMapper.Mapping.Collection
 		private readonly ArrayMappingCompiler<TFrom, TTo> aMappingExpression;
 		private readonly ArraySynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 
+		private readonly IUnresolvedMapping aItemMapping;
+
 		public EnumerableToArray(MappingImplementation mapping, Delegate selectIdFrom, Delegate selectIdTo)
 		{
-			this.ItemMapping = mapping.GetMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
+			this.aItemMapping = mapping.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
 			Delegate childPostprocessing = mapping.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
-			this.aMappingExpression = new ArrayMappingCompiler<TFrom, TTo>(this.ItemMapping, childPostprocessing);
+			this.aMappingExpression = new ArrayMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
 			if (selectIdFrom != null && selectIdTo != null)
-				this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(this.ItemMapping, selectIdFrom, selectIdTo, childPostprocessing);
+				this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(this.aItemMapping, selectIdFrom, selectIdTo, childPostprocessing);
 			else
 				this.aSynchronizationExpression = null;
 		}
@@ -75,6 +77,7 @@ namespace KST.POCOMapper.Mapping.Collection
 		public Type ItemTo
 			=> EnumerableReflection<TTo>.ItemType;
 
-		public IMapping ItemMapping { get; }
+		public IMapping ItemMapping
+			=> this.aItemMapping.ResolvedMapping;
 	}
 }

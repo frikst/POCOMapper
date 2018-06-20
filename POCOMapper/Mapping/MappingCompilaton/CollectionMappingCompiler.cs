@@ -8,10 +8,10 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 {
 	public abstract class CollectionMappingCompiler<TFrom, TTo> : MappingCompiler<TFrom, TTo>
 	{
-		private readonly IMapping aItemMapping;
+		private readonly IUnresolvedMapping aItemMapping;
 		private readonly Delegate aChildPostprocessing;
 
-		protected CollectionMappingCompiler(IMapping itemMapping, Delegate childPostprocessing)
+		protected CollectionMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing)
 		{
 			this.aItemMapping = itemMapping;
 			this.aChildPostprocessing = childPostprocessing;
@@ -19,12 +19,12 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 
 		protected Expression CreateItemMappingExpression(ParameterExpression from)
 		{
-			if (this.aItemMapping.IsDirect)
+			if (this.aItemMapping.ResolvedMapping.IsDirect)
 				return from;
 
 			var mapMethod = Delegate.CreateDelegate(
 				typeof(Func<,>).MakeGenericType(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType),
-				this.aItemMapping,
+				this.aItemMapping.ResolvedMapping,
 				MappingMethods.Map(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType)
 			);
 

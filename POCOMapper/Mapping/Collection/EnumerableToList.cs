@@ -12,14 +12,15 @@ namespace KST.POCOMapper.Mapping.Collection
 	public class EnumerableToList<TFrom, TTo> : IMapping<TFrom, TTo>, ICollectionMapping
 	{
 		private readonly ListMappingCompiler<TFrom, TTo> aMappingExpression;
+		private readonly IUnresolvedMapping aItemMapping;
 
 		public EnumerableToList(MappingImplementation mapping)
 		{
-			this.ItemMapping = mapping.GetMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
+			this.aItemMapping = mapping.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
 			Delegate childPostprocessing = mapping.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
-			this.aMappingExpression = new ListMappingCompiler<TFrom, TTo>(this.ItemMapping, childPostprocessing);
+			this.aMappingExpression = new ListMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
 		}
 
 		public void Accept(IMappingVisitor visitor)
@@ -67,6 +68,7 @@ namespace KST.POCOMapper.Mapping.Collection
 		public Type ItemTo
 			=> EnumerableReflection<TTo>.ItemType;
 
-		public IMapping ItemMapping { get; }
+		public IMapping ItemMapping
+			=> this.aItemMapping.ResolvedMapping;
 	}
 }

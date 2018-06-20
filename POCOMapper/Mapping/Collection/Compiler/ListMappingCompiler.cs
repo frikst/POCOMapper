@@ -9,7 +9,7 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 {
     public class ListMappingCompiler<TFrom, TTo> : CollectionMappingCompiler<TFrom, TTo>
     {
-	    public ListMappingCompiler(IMapping itemMapping, Delegate childPostprocessing)
+	    public ListMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing)
 		    : base(itemMapping, childPostprocessing)
 	    {
 	    }

@@ -27,19 +27,13 @@ namespace KST.POCOMapper.Mapping.SubClass
 			var conversions = new List<SubClassConversion>();
 			foreach (var conversion in fromTo)
 			{
-				var fromToMapping = mapping.GetMapping(conversion.From, conversion.To);
+				var fromToMapping = mapping.GetUnresolvedMapping(conversion.From, conversion.To);
 
-				if (fromToMapping is ISubClassMapping subClassMapping)
-				{
-					foreach (var innerConversion in subClassMapping.Conversions)
-						conversions.Add(new SubClassConversion(innerConversion.From, innerConversion.To, innerConversion.Mapping));
-				}
-				else
-					conversions.Add(new SubClassConversion(conversion.From, conversion.To, fromToMapping));
+				conversions.Add(new SubClassConversion(conversion.From, conversion.To, fromToMapping));
 			}
 
 			if (!typeof(TTo).IsAbstract)
-				conversions.Add(new SubClassConversion(typeof(TFrom), typeof(TTo), this.aDefaultMapping));
+				conversions.Add(new SubClassConversion(typeof(TFrom), typeof(TTo), this.aDefaultMapping.AsUnresolved()));
 
 			this.aConversions = conversions.ToArray();
 

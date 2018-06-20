@@ -4,7 +4,6 @@ using NUnit.Framework;
 namespace KST.POCOMapper.Test
 {
 	[TestFixture]
-	[Ignore("For now")]
 	public class CompositeStructure
 	{
 		private class From

@@ -9,12 +9,12 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 {
 	public abstract class CollectionSynchronizationCompiler<TFrom, TTo> : SynchronizationCompiler<TFrom, TTo>
 	{
-		private readonly IMapping aItemMapping;
+		private readonly IUnresolvedMapping aItemMapping;
 		private readonly Delegate aSelectIdFrom;
 		private readonly Delegate aSelectIdTo;
 		private readonly Delegate aChildPostprocessing;
 
-		protected CollectionSynchronizationCompiler(IMapping itemMapping, Delegate selectIdFrom, Delegate selectIdTo, Delegate childPostprocessing)
+		protected CollectionSynchronizationCompiler(IUnresolvedMapping itemMapping, Delegate selectIdFrom, Delegate selectIdTo, Delegate childPostprocessing)
 		{
 			this.aItemMapping = itemMapping;
 			this.aSelectIdFrom = selectIdFrom;
@@ -24,7 +24,7 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 
 		protected Expression CreateItemSynchronizationExpression(ParameterExpression from, ParameterExpression to)
 		{
-			if (this.aItemMapping.IsDirect)
+			if (this.aItemMapping.ResolvedMapping.IsDirect)
 				return from;
 
 			var idType = this.aSelectIdFrom.Method.ReturnType;
@@ -48,7 +48,7 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 				Expression.Convert(to, typeof(IEnumerable<>).MakeGenericType(EnumerableReflection<TTo>.ItemType)),
 				Expression.Constant(this.aSelectIdTo),
 				Expression.Constant(this.aSelectIdFrom),
-				Expression.Constant(this.aItemMapping)
+				Expression.Constant(this.aItemMapping.ResolvedMapping)
 			);
 		}
 

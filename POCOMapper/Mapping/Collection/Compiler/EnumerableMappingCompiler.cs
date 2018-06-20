@@ -13,7 +13,7 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 {
     internal class EnumerableMappingCompiler<TFrom, TTo> : CollectionMappingCompiler<TFrom, TTo>
     {
-	    public EnumerableMappingCompiler(IMapping itemMapping, Delegate childPostprocessing)
+	    public EnumerableMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing)
 		    : base(itemMapping, childPostprocessing)
 	    {
 	    }

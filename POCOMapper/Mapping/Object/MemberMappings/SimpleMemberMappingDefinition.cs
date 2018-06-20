@@ -22,12 +22,12 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 
 		PairedMembers IMemberMappingDefinition.CreateMapping(MappingImplementation allMappings, Type fromClass, Type toClass)
 		{
-			MemberFromNameParser parser = new MemberFromNameParser();
+			var parser = new MemberFromNameParser();
 
-			IMember memberFrom = parser.Parse(allMappings.FromConventions, fromClass, this.aFromName, false);
-			IMember memberTo = parser.Parse(allMappings.ToConventions, toClass, this.aToName, true);
+			var memberFrom = parser.Parse(allMappings.FromConventions, fromClass, this.aFromName, false);
+			var memberTo = parser.Parse(allMappings.ToConventions, toClass, this.aToName, true);
 
-			IMapping mapping = allMappings.GetMapping(memberFrom.Type, memberTo.Type);
+			var mapping = allMappings.GetUnresolvedMapping(memberFrom.Type, memberTo.Type);
 
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}

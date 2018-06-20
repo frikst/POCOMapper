@@ -35,6 +35,21 @@ namespace KST.POCOMapper.Definition
 		internal NamingConventions FromConventions { get; }
 		internal NamingConventions ToConventions { get; }
 
+		public bool TryGetUnresolvedMapping(Type from, Type to, out IUnresolvedMapping mapping)
+		{
+			foreach (ITypeMappingDefinition mappingDefinition in this.aMappingDefinitions)
+			{
+				if (mappingDefinition.IsFrom(from) && mappingDefinition.IsTo(to))
+				{
+					mapping = new UnresolvedMapping(this, from, to);
+					return true;
+				}
+			}
+
+			mapping = null;
+			return false;
+		}
+
 		public bool TryGetMapping(Type from, Type to, out IMapping mapping)
 		{
 			var typePair = new TypePair(from, to);
@@ -71,12 +86,30 @@ namespace KST.POCOMapper.Definition
 			throw new UnknownMappingException(from, to);
 		}
 
+		public IUnresolvedMapping GetUnresolvedMapping(Type from, Type to)
+			=> new UnresolvedMapping(this, from, to);
+
 		public bool TryGetMapping<TFrom, TTo>(out IMapping<TFrom, TTo> mapping)
 		{
 			if (this.TryGetMapping(typeof(TFrom), typeof(TTo), out var untypedMapping))
 			{
 				mapping = (IMapping<TFrom, TTo>) untypedMapping;
 				return true;
+			}
+
+			mapping = null;
+			return false;
+		}
+
+		public bool TryGetUnresolvedMapping<TFrom, TTo>(out IUnresolvedMapping<TFrom, TTo> mapping)
+		{
+			foreach (ITypeMappingDefinition mappingDefinition in this.aMappingDefinitions)
+			{
+				if (mappingDefinition.IsFrom(typeof(TFrom)) && mappingDefinition.IsTo(typeof(TTo)))
+				{
+					mapping = new UnresolvedMapping<TFrom, TTo>(this);
+					return true;
+				}
 			}
 
 			mapping = null;
@@ -92,6 +125,9 @@ namespace KST.POCOMapper.Definition
 		/// <returns>The mapping specified by the type parameters.</returns>
 		public IMapping<TFrom, TTo> GetMapping<TFrom, TTo>()
 			=> (IMapping<TFrom, TTo>)this.GetMapping(typeof(TFrom), typeof(TTo));
+
+		public IUnresolvedMapping<TFrom, TTo> GetUnresolvedMapping<TFrom, TTo>()
+			=> new UnresolvedMapping<TFrom, TTo>(this);
 
 		/// <summary>
 		/// Map the instance of the class from the source model onto the new instance of the class from the destination model.

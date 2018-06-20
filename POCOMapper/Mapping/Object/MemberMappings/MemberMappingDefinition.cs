@@ -38,11 +38,11 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 			else
 				memberTo = parser.Parse(allMappings.ToConventions, toClass, this.aToName, true);
 
-			IMapping<TFromType, TToType> mapping;
+			IUnresolvedMapping<TFromType, TToType> mapping;
 			if (this.aRules == null)
-				mapping = allMappings.GetMapping<TFromType, TToType>();
+				mapping = allMappings.GetUnresolvedMapping<TFromType, TToType>();
 			else
-				mapping = this.aRules.Create(allMappings);
+				mapping = this.aRules.Create(allMappings).AsUnresolved();
 
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}

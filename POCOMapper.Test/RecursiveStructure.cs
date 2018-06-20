@@ -5,7 +5,6 @@ using NUnit.Framework;
 namespace KST.POCOMapper.Test
 {
 	[TestFixture]
-	[Ignore("For now")]
 	public class RecursiveStructure
 	{
 		private class From
