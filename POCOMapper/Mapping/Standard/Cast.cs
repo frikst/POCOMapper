@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Internal;
@@ -8,48 +7,55 @@ using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Standard
 {
-	public class Cast<TFrom, TTo> : CompiledMapping<TFrom, TTo>
+	public class Cast<TFrom, TTo> : IMapping<TFrom, TTo>
 	{
-		#region Overrides of CompiledMapping<TFrom,TTo>
+		private readonly CastMappingCompiler<TFrom, TTo> aMappingExpression;
 
-		public Cast(MappingImplementation mapping) : base(mapping)
+		public Cast(MappingImplementation mapping)
 		{
 			if (!BasicNetTypes.IsCastable<TFrom, TTo>())
 				throw new InvalidMappingException($"You can use CastMapping only on (implicitly or explicitly) castable types, not {typeof(TFrom).Name} and {typeof(TTo).Name}");
+
+			this.aMappingExpression = new CastMappingCompiler<TFrom, TTo>();
 		}
 
-		public override void Accept(IMappingVisitor visitor)
+		public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
 
-		public override bool CanSynchronize
+		public bool CanSynchronize
 			=> false;
 
-		public override bool CanMap
+		public bool CanMap
 			=> true;
 
-		public override bool IsDirect
+		public bool IsDirect
 			=> false;
 
-		public override bool SynchronizeCanChangeObject
+		public bool SynchronizeCanChangeObject
 			=> false;
 
-		protected override Expression<Func<TFrom, TTo>> CompileMapping()
+		public string MappingSource
+			=> this.aMappingExpression.Source;
+
+		public string SynchronizationSource
+			=> null;
+
+		public Type From
+			=> typeof(TFrom);
+
+		public Type To
+			=> typeof(TTo);
+
+		public TTo Map(TFrom from)
 		{
-			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
-
-			return Expression.Lambda<Func<TFrom, TTo>>(
-				Expression.Convert(from, typeof(TTo)),
-				from
-			);
+			return this.aMappingExpression.Map(from);
 		}
 
-		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
+		public TTo Synchronize(TFrom from, TTo to)
 		{
 			throw new NotImplementedException();
 		}
-
-		#endregion
 	}
 }

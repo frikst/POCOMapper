@@ -2,77 +2,61 @@
 using System.Linq.Expressions;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
-using KST.POCOMapper.Internal;
 using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Standard
 {
-	public class Parse<TTo> : CompiledMapping<string, TTo>
+	public class Parse<TTo> : IMapping<string, TTo>
 	{
-		public Parse(MappingImplementation mapping) : base(mapping)
+		private readonly ParseMappingCompiler<TTo> aMappingExpression;
+
+		public Parse(MappingImplementation mapping)
 		{
 			if (!typeof(TTo).IsEnum && !typeof(TTo).IsPrimitive)
 				throw new InvalidMappingException($"You can use Parse only on primitive or enum types, not {typeof(TTo).Name}");
+
+			this.aMappingExpression = new ParseMappingCompiler<TTo>();
 		}
 
-		#region Overrides of CompiledMapping<string,TTo>
-
-		public override void Accept(IMappingVisitor visitor)
+		public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
 
-		public override bool CanSynchronize
+		public bool CanSynchronize
 			=> false;
 
-		public override bool CanMap
+		public bool CanMap
 			=> true;
 
-		public override bool IsDirect
+		public bool IsDirect
 			=> false;
 
-		public override bool SynchronizeCanChangeObject
+		public bool SynchronizeCanChangeObject
 			=> false;
 
-		protected override Expression<Func<string, TTo>> CompileMapping()
+		public string MappingSource
+			=> this.aMappingExpression.Source;
+
+		public string SynchronizationSource
+			=> null;
+
+		public Type From
+			=> typeof(string);
+
+		public Type To
+			=> typeof(TTo);
+
+		public TTo Map(string from)
 		{
-			ParameterExpression from = Expression.Parameter(typeof(string), "from");
-
-			if (typeof(TTo).IsEnum)
-			{
-				return Expression.Lambda<Func<string, TTo>>(
-					Expression.Convert(
-						Expression.Call(
-							null,
-							EnumMethods.Parse(typeof(TTo)),
-							Expression.Constant(typeof(TTo)),
-							from
-						),
-						typeof(TTo)
-					),
-					from
-				);
-			}
-			else
-			{
-				return Expression.Lambda<Func<string, TTo>>(
-					Expression.Call(
-						null,
-						PrimitiveTypeMethods.Parse(typeof(TTo)),
-						from
-					),
-					from
-				);
-			}
+			return this.aMappingExpression.Map(from);
 		}
 
-		protected override Expression<Func<string, TTo, TTo>> CompileSynchronization()
+		public TTo Synchronize(string from, TTo to)
 		{
 			throw new NotImplementedException();
 		}
-
-		#endregion
 	}
 }

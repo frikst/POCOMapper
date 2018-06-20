@@ -4,55 +4,71 @@ using System.Linq.Expressions;
 using System.Reflection;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Internal;
+using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.Collection.Compiler;
+using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Collection
 {
-	public class EnumerableToEnumerable<TFrom, TTo> : CompiledCollectionMapping<TFrom, TTo>
+	public class EnumerableToEnumerable<TFrom, TTo> : IMapping<TFrom, TTo>, ICollectionMapping
 	{
-		private readonly bool aToIEnumerable;
+		private readonly EnumerableMappingCompiler<TFrom, TTo> aMappingExpression;
 
-		public EnumerableToEnumerable(MappingImplementation mapping, Delegate selectIdFrom, Delegate selectIdTo)
-			: base(mapping, selectIdFrom, selectIdTo)
+		public EnumerableToEnumerable(MappingImplementation mapping)
 		{
-			if (typeof(TTo).IsGenericType && typeof(TTo).GetGenericTypeDefinition() == typeof(IEnumerable<>))
-				this.aToIEnumerable = true;
-			else
-				this.aToIEnumerable = false;
+			this.ItemMapping = mapping.GetMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
+
+			Delegate childPostprocessing = mapping.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
+
+			this.aMappingExpression = new EnumerableMappingCompiler<TFrom, TTo>(this.ItemMapping, childPostprocessing);
 		}
 
-		public override bool IsDirect
+		public void Accept(IMappingVisitor visitor)
+		{
+			visitor.Visit(this);
+		}
+
+		public bool CanSynchronize
 			=> false;
 
-		protected override Expression<Func<TFrom, TTo>> CompileMapping()
+		public bool CanMap
+			=> true;
+
+		public bool IsDirect
+			=> false;
+
+		public bool SynchronizeCanChangeObject
+			=> true;
+
+		public string MappingSource
+			=> this.aMappingExpression.Source;
+
+		public string SynchronizationSource
+			=> null;
+
+		public Type From
+			=> typeof(TFrom);
+
+		public Type To
+			=> typeof(TTo);
+
+		public TTo Map(TFrom from)
 		{
-			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
-
-			if (this.aToIEnumerable)
-			{
-				return this.CreateMappingEnvelope(
-					from,
-					this.CreateItemMappingExpression(from)
-				);
-			}
-			else
-			{
-				ConstructorInfo constructTo = typeof(TTo).GetConstructor(
-					BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, 
-					null,
-					new Type[] { typeof(IEnumerable<>).MakeGenericType(this.ItemTo) },
-					null
-				);
-
-				if (constructTo == null)
-					throw new InvalidMappingException($"Cannot find constructor for type {typeof(TTo).FullName}");
-
-				return this.CreateMappingEnvelope(
-					from,
-					Expression.New(constructTo,
-						this.CreateItemMappingExpression(from)
-					)
-				);
-			}
+			return this.aMappingExpression.Map(from);
 		}
+
+		public TTo Synchronize(TFrom from, TTo to)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Type ItemFrom
+			=> EnumerableReflection<TFrom>.ItemType;
+
+		public Type ItemTo
+			=> EnumerableReflection<TTo>.ItemType;
+
+		public IMapping ItemMapping { get; }
 	}
 }

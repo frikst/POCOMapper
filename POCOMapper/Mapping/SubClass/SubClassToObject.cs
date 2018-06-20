@@ -7,182 +7,90 @@ using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Mapping.SubClass.Compilers;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.SubClass
 {
-	public class SubClassToObject<TFrom, TTo> : CompiledMapping<TFrom, TTo>, ISubClassMapping
+	public class SubClassToObject<TFrom, TTo> : IMapping<TFrom, TTo>, ISubClassMapping
 	{
-		private class SubClassConversion : ISubClassConversionMapping
-		{
-			public SubClassConversion(Type from, Type to, IMapping mapping)
-			{
-				this.From = from;
-				this.To = to;
-				this.Mapping = mapping;
-			}
-
-			#region Implementation of ISubClassConversionMapping
-
-			public Type From { get; }
-			public Type To { get; }
-			public IMapping Mapping { get; }
-
-			#endregion
-		}
 
 		private readonly IMapping<TFrom, TTo> aDefaultMapping;
-		private readonly ReadOnlyCollection<(Type From, Type To)> aConversions;
+		private readonly SubClassConversion[] aConversions;
+		private SubClassToObjectMappingCompiler<TFrom, TTo> aMappingExpression;
+		private SubClassToObjectSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 
-		public SubClassToObject(MappingImplementation mapping, IEnumerable<(Type From, Type To)> fromTo, IMapping<TFrom, TTo> defaultMapping) : base(mapping)
+		public SubClassToObject(MappingImplementation mapping, IEnumerable<(Type From, Type To)> fromTo, IMapping<TFrom, TTo> defaultMapping)
 		{
 			this.aDefaultMapping = defaultMapping;
 
-			this.aConversions = fromTo.ToList().AsReadOnly();
+			var conversions = new List<SubClassConversion>();
+			foreach (var conversion in fromTo)
+			{
+				var fromToMapping = mapping.GetMapping(conversion.From, conversion.To);
+
+				if (fromToMapping is ISubClassMapping subClassMapping)
+				{
+					foreach (var innerConversion in subClassMapping.Conversions)
+						conversions.Add(new SubClassConversion(innerConversion.From, innerConversion.To, innerConversion.Mapping));
+				}
+				else
+					conversions.Add(new SubClassConversion(conversion.From, conversion.To, fromToMapping));
+			}
+
+			if (!typeof(TTo).IsAbstract)
+				conversions.Add(new SubClassConversion(typeof(TFrom), typeof(TTo), this.aDefaultMapping));
+
+			this.aConversions = conversions.ToArray();
+
+			this.aMappingExpression = new SubClassToObjectMappingCompiler<TFrom, TTo>(conversions);
+			this.aSynchronizationExpression = new SubClassToObjectSynchronizationCompiler<TFrom, TTo>(conversions);
 		}
 
-		#region Overrides of CompiledMapping<TFrom,TTo>
-
-		public override void Accept(IMappingVisitor visitor)
+		public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
 
-		public override bool CanSynchronize
+		public bool CanSynchronize
 			=> true;
 
-		public override bool CanMap
+		public bool CanMap
 			=> true;
 
-		public override bool IsDirect
+		public bool IsDirect
 			=> false;
 
-		public override bool SynchronizeCanChangeObject
+		public bool SynchronizeCanChangeObject
 			=> false;
 
-		protected override Expression<Func<TFrom, TTo>> CompileMapping()
-		{
-			List<ISubClassConversionMapping> allConversions = this.Conversions.ToList();
+		public string MappingSource
+			=> this.aMappingExpression.Source;
 
-			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
-			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
+		public string SynchronizationSource
+			=> this.aSynchronizationExpression.Source;
 
-			LabelTarget mappingEnd = Expression.Label();
+		public Type From
+			=> typeof(TFrom);
 
-			return Expression.Lambda<Func<TFrom, TTo>>(
-				Expression.Block(
-					new ParameterExpression[] { to },
-					Expression.Block(
-						allConversions.Select(x => this.MakeIfConvertMapStatement(x.From, x.To, x.Mapping, from, to, mappingEnd))
-					),
-					Expression.Throw(
-						Expression.New(
-							typeof(UnknownMappingException).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
-							Expression.Call(from, ObjectMethods.GetType()),
-							Expression.Constant(typeof(TTo))
-						)
-					),
-					Expression.Label(mappingEnd),
-					to
-				),
-				from
-			);
-		}
-
-		protected override Expression<Func<TFrom, TTo, TTo>> CompileSynchronization()
-		{
-			List<ISubClassConversionMapping> allConversions = this.Conversions.ToList();
-
-			ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
-			ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
-
-			LabelTarget mappingEnd = Expression.Label();
-
-			return Expression.Lambda<Func<TFrom, TTo, TTo>>(
-				Expression.Block(
-					Expression.Block(
-						allConversions.Select(x => this.MakeIfConvertSynchronizeStatement(x.From, x.To, x.Mapping, from, to, mappingEnd))
-					),
-					Expression.Throw(
-						Expression.New(
-							typeof(UnknownMappingException).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
-							Expression.Call(from, ObjectMethods.GetType()),
-							Expression.Constant(typeof(TTo))
-						)
-					),
-					Expression.Label(mappingEnd),
-					to
-				),
-				from, to
-			);
-		}
-
-		#endregion
-
-		#region Implementation of ISubClassMapping
+		public Type To
+			=> typeof(TTo);
 
 		public IEnumerable<ISubClassConversionMapping> Conversions
+			=> this.aConversions;
+
+		#region Implementation of IMapping<TFrom,TTo>
+
+		public TTo Map(TFrom from)
 		{
-			get
-			{
-				foreach (var conversion in this.aConversions)
-				{
-					IMapping mapping = this.Mapping.GetMapping(conversion.From, conversion.To);
+			return this.aMappingExpression.Map(from);
+		}
 
-					if (mapping is ISubClassMapping subClassMapping)
-					{
-						foreach (var innerConversion in subClassMapping.Conversions)
-							yield return innerConversion;
-					}
-					else
-						yield return new SubClassConversion(conversion.From, conversion.To, mapping);
-				}
-
-				if (!typeof(TTo).IsAbstract)
-					yield return new SubClassConversion(typeof(TFrom), typeof(TTo), this.aDefaultMapping);
-			}
+		public TTo Synchronize(TFrom from, TTo to)
+		{
+			return this.aSynchronizationExpression.Synchronize(from, to);
 		}
 
 		#endregion
-
-		private Expression MakeIfConvertMapStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to, LabelTarget mappingEnd)
-		{
-			return Expression.IfThen(
-				Expression.Equal(
-					Expression.Call(from, ObjectMethods.GetType()),
-					Expression.Constant(fromType)
-				),
-				Expression.Block(
-					Expression.Assign(
-						to,
-						Expression.Call(
-							Expression.Constant(mapping),
-							MappingMethods.Map(fromType, toType),
-							Expression.Convert(from, fromType)
-						)
-					),
-					Expression.Goto(mappingEnd)
-				)
-			);
-		}
-
-		private Expression MakeIfConvertSynchronizeStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to, LabelTarget mappingEnd)
-		{
-			return Expression.IfThen(
-				Expression.Equal(
-					Expression.Call(from, ObjectMethods.GetType()),
-					Expression.Constant(fromType)
-				),
-				Expression.Block(
-					Expression.Call(
-						Expression.Constant(mapping),
-						MappingMethods.Synchronize(fromType, toType),
-						Expression.Convert(from, fromType),
-						Expression.Convert(to, toType)
-					),
-					Expression.Goto(mappingEnd)
-				)
-			);
-		}
 	}
 }
