@@ -33,32 +33,43 @@ namespace KST.POCOMapper.Mapping.Object.Compilers
 
 		    var temporaryVariables = new TemporaryVariables(pairedMembers, from, to);
 
-		    return Expression.Lambda<Func<TFrom, TTo>>(
-			    Expression.Block(
-				    new ParameterExpression[] { to }.Concat(temporaryVariables.Variables),
+		    Expression body = Expression.Block(
+			    new ParameterExpression[] { to }.Concat(temporaryVariables.Variables),
 
-				    Expression.Assign(
-					    to,
-					    this.NewExpression(from, typeof(TTo))
-				    ),
-				    this.MakeBlock(
-					    temporaryVariables.InitialAssignments
-				    ),
-				    this.MakeBlock(
-					    pairedMembers.Select(
-						    x => x.CreateMappingAssignmentExpression(
-							    x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
-							    x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
-							    this.aMapping.GetChildPostprocessing(typeof(TTo), x.To.Type),
-							    to
-						    )
-					    )
-				    ),
-				    this.MakeBlock(
-					    temporaryVariables.FinalAssignments
-				    ),
-				    to
+			    Expression.Assign(
+				    to,
+				    this.NewExpression(from, typeof(TTo))
 			    ),
+			    this.MakeBlock(
+				    temporaryVariables.InitialAssignments
+			    ),
+			    this.MakeBlock(
+				    pairedMembers.Select(
+					    x => x.CreateMappingAssignmentExpression(
+						    x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
+						    x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
+						    this.aMapping.GetChildPostprocessing(typeof(TTo), x.To.Type),
+						    to
+					    )
+				    )
+			    ),
+			    this.MakeBlock(
+				    temporaryVariables.FinalAssignments
+			    ),
+			    to
+		    );
+
+		    if (!typeof(TFrom).IsValueType)
+		    {
+			    body = Expression.Condition(
+				    Expression.ReferenceEqual(from, Expression.Constant(null)),
+				    Expression.Constant(default(TTo), typeof(TTo)),
+				    body
+			    );
+		    }
+
+		    return Expression.Lambda<Func<TFrom, TTo>>(
+			    body,
 			    from
 		    );
 	    }
