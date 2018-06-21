@@ -1,6 +1,6 @@
 ﻿using System;
-using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
@@ -11,7 +11,7 @@ namespace KST.POCOMapper.Mapping.Standard
 	{
 		private readonly CastMappingCompiler<TFrom, TTo> aMappingExpression;
 
-		public Cast(MappingImplementation mapping)
+		public Cast()
 		{
 			if (!BasicNetTypes.IsCastable<TFrom, TTo>())
 				throw new InvalidMappingException($"You can use CastMapping only on (implicitly or explicitly) castable types, not {typeof(TFrom).Name} and {typeof(TTo).Name}");

@@ -1,4 +1,4 @@
-﻿using KST.POCOMapper.Definition;
+﻿using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 
 namespace KST.POCOMapper.Mapping.Standard
@@ -9,9 +9,9 @@ namespace KST.POCOMapper.Mapping.Standard
 	{
 		#region Implementation of IMappingRules
 
-		public IMapping<TFrom, TTo> Create(MappingImplementation mapping)
+		public IMapping<TFrom, TTo> Create(MappingDefinitionInformation mappingDefinition)
 		{
-			return new Cast<TFrom, TTo>(mapping);
+			return new Cast<TFrom, TTo>();
 		}
 
 		#endregion
@@ -21,9 +21,9 @@ namespace KST.POCOMapper.Mapping.Standard
 	{
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			return new Cast<TFrom, TTo>(mapping);
+			return new Cast<TFrom, TTo>();
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿using System;
-using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 
 namespace KST.POCOMapper.Mapping.Special
@@ -28,7 +28,7 @@ namespace KST.POCOMapper.Mapping.Special
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
 			if (this.aMappingFunc != null)
 				return new FuncMapping<TFrom, TTo>(this.aMappingFunc);

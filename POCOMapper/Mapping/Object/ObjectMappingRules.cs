@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.Definition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Object.MemberMappings;
 using KST.POCOMapper.Mapping.Object.Parser;
@@ -50,10 +50,10 @@ namespace KST.POCOMapper.Mapping.Object
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			IEnumerable<PairedMembers> members = this.CfgExplicitMappings.Select(x => x.CreateMapping(mapping, typeof(TFrom), typeof(TTo)));
-			return new ObjectToObject<TFrom, TTo>(null, mapping, members, this.CfgUseImplicitMappings);
+			IEnumerable<PairedMembers> members = this.CfgExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
+			return new ObjectToObject<TFrom, TTo>(null, mappingDefinition, members, this.CfgUseImplicitMappings);
 		}
 
 		#endregion
@@ -128,10 +128,10 @@ namespace KST.POCOMapper.Mapping.Object
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			IEnumerable<PairedMembers> members = this.ExplicitMappings.Select(x => x.CreateMapping(mapping, typeof(TFrom), typeof(TTo)));
-			return new ObjectToObject<TFrom, TTo>(this.FactoryFunction, mapping, members, this.UseImplicitMappings);
+			IEnumerable<PairedMembers> members = this.ExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
+			return new ObjectToObject<TFrom, TTo>(this.FactoryFunction, mappingDefinition, members, this.UseImplicitMappings);
 		}
 
 		#endregion

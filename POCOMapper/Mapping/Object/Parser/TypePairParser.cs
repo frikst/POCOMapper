@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.Definition;
-using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Mapping.Object.Parser
@@ -16,15 +15,15 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 			Right
 		}
 
-		private readonly MappingImplementation aMapping;
+		private readonly MappingDefinitionInformation aMappingDefinition;
 		private readonly Type aFrom;
 		private readonly Type aTo;
 		private readonly Dictionary<Type, List<IMember>> aFromMembers;
 		private readonly Dictionary<Type, List<IMember>> aToMembers;
 
-		public TypePairParser(MappingImplementation mapping, Type from, Type to)
+		public TypePairParser(MappingDefinitionInformation mappingDefinition, Type from, Type to)
 		{
-			this.aMapping = mapping;
+			this.aMappingDefinition = mappingDefinition;
 			this.aFrom = from;
 			this.aTo = to;
 
@@ -34,7 +33,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		private PairedMembers CreateMemberPair(IMember from, IMember to)
 		{
-			if (this.aMapping.TryGetUnresolvedMapping(from.Type, to.Type, out var mapping))
+			if (this.aMappingDefinition.UnresolvedMappings.TryGetUnresolvedMapping(from.Type, to.Type, out var mapping))
 				return new PairedMembers(from, to, mapping);
 			else
 				return null;
@@ -97,7 +96,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		private IEnumerable<IMember> GetFromMembers(Type type, IMember parent)
 		{
-			return this.aMapping.FromConventions.GetAllMembers(type, parent).Where(x => x.Readable).ToList();
+			return this.aMappingDefinition.FromConventions.GetAllMembers(type, parent).Where(x => x.Readable).ToList();
 		}
 
 		private IEnumerable<IMember> GetToMembers(Type type)
@@ -113,7 +112,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		private IEnumerable<IMember> GetToMembers(Type type, IMember parent)
 		{
-			return this.aMapping.ToConventions.GetAllMembers(type, parent).Where(x => x.Writable).ToList();
+			return this.aMappingDefinition.ToConventions.GetAllMembers(type, parent).Where(x => x.Writable).ToList();
 		}
 
 		private IEnumerable<PairedMembers> FindPairs()

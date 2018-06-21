@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace KST.POCOMapper.Definition
+namespace KST.POCOMapper.Executor
 {
 	internal class TypePair
 	{
@@ -17,6 +15,12 @@ namespace KST.POCOMapper.Definition
 
 			this.aHash = (from.GetHashCode() * 397) ^ to.GetHashCode();
 		}
+
+		public Type From
+			=> (Type) this.aFrom;
+
+		public Type To
+			=> (Type) this.aTo;
 
 		#region Equality members
 

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.MappingCompilaton;
 using KST.POCOMapper.Mapping.Object.Parser;
 
@@ -15,12 +14,12 @@ namespace KST.POCOMapper.Mapping.Object.Compilers
     {
 	    private readonly Func<TFrom, TTo> aFactoryFunction;
 	    private readonly IEnumerable<PairedMembers> aMemberPairs;
-	    private readonly MappingImplementation aMapping;
+	    private readonly MappingDefinitionInformation aMappingDefinition;
 
-	    public ObjectToObjectMappingCompiler(MappingImplementation mapping, Func<TFrom, TTo> factoryFunction, IEnumerable<PairedMembers> memberPairs)
+	    public ObjectToObjectMappingCompiler(MappingDefinitionInformation mappingDefinition, Func<TFrom, TTo> factoryFunction, IEnumerable<PairedMembers> memberPairs)
 	    {
 		    this.aMemberPairs = memberPairs;
-		    this.aMapping = mapping;
+		    this.aMappingDefinition = mappingDefinition;
 		    this.aFactoryFunction = factoryFunction;
 	    }
 
@@ -48,7 +47,7 @@ namespace KST.POCOMapper.Mapping.Object.Compilers
 					    x => x.CreateMappingAssignmentExpression(
 						    x.From.Parent == null ? from : temporaryVariables[x.From.Parent],
 						    x.To.Parent == null ? to : temporaryVariables[x.To.Parent],
-						    this.aMapping.GetChildPostprocessing(typeof(TTo), x.To.Type),
+						    this.aMappingDefinition.GetChildPostprocessing(typeof(TTo), x.To.Type),
 						    to
 					    )
 				    )

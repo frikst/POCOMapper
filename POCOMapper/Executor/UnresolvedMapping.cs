@@ -1,16 +1,16 @@
 ﻿using System;
 using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.Definition
+namespace KST.POCOMapper.Executor
 {
 	internal class UnresolvedMapping<TFrom, TTo> : IUnresolvedMapping<TFrom, TTo>
 	{
 		private IMapping<TFrom, TTo> aResolvedMapping;
-		private readonly MappingImplementation aMappingImplementation;
+		private readonly MappingContainer aMappingContainer;
 
-		public UnresolvedMapping(MappingImplementation mappingImplementation)
+		public UnresolvedMapping(MappingContainer mappingContainer)
 		{
-			this.aMappingImplementation = mappingImplementation;
+			this.aMappingContainer = mappingContainer;
 			this.aResolvedMapping = null;
 		}
 
@@ -22,7 +22,7 @@ namespace KST.POCOMapper.Definition
 			get
 			{
 				if (this.aResolvedMapping == null)
-					this.aResolvedMapping = this.aMappingImplementation.GetMapping<TFrom, TTo>();
+					this.aResolvedMapping = this.aMappingContainer.GetMapping<TFrom, TTo>();
 
 				return this.aResolvedMapping;
 			}
@@ -32,13 +32,13 @@ namespace KST.POCOMapper.Definition
 	internal class UnresolvedMapping : IUnresolvedMapping
 	{
 		private IMapping aResolvedMapping;
-		private readonly MappingImplementation aMappingImplementation;
+		private readonly MappingContainer aMappingContainer;
 		private readonly Type aFrom;
 		private readonly Type aTo;
 
-		public UnresolvedMapping(MappingImplementation mappingImplementation, Type from, Type to)
+		public UnresolvedMapping(MappingContainer mappingContainer, Type from, Type to)
 		{
-			this.aMappingImplementation = mappingImplementation;
+			this.aMappingContainer = mappingContainer;
 			this.aFrom = from;
 			this.aTo = to;
 			this.aResolvedMapping = null;
@@ -49,7 +49,7 @@ namespace KST.POCOMapper.Definition
 			get
 			{
 				if (this.aResolvedMapping == null)
-					this.aResolvedMapping = this.aMappingImplementation.GetMapping(this.aFrom, this.aTo);
+					this.aResolvedMapping = this.aMappingContainer.GetMapping(this.aFrom, this.aTo);
 
 				return this.aResolvedMapping;
 			}

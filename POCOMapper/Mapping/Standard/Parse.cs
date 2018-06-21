@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq.Expressions;
-using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
-using KST.POCOMapper.Internal.ReflectionMembers;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
@@ -12,7 +10,7 @@ namespace KST.POCOMapper.Mapping.Standard
 	{
 		private readonly ParseMappingCompiler<TTo> aMappingExpression;
 
-		public Parse(MappingImplementation mapping)
+		public Parse()
 		{
 			if (!typeof(TTo).IsEnum && !typeof(TTo).IsPrimitive)
 				throw new InvalidMappingException($"You can use Parse only on primitive or enum types, not {typeof(TTo).Name}");

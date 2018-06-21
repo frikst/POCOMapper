@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq.Expressions;
-using KST.POCOMapper.Definition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
-using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection.Compiler;
 using KST.POCOMapper.Visitor;
@@ -14,11 +12,11 @@ namespace KST.POCOMapper.Mapping.Collection
 		private readonly ListMappingCompiler<TFrom, TTo> aMappingExpression;
 		private readonly IUnresolvedMapping aItemMapping;
 
-		public EnumerableToList(MappingImplementation mapping)
+		public EnumerableToList(MappingDefinitionInformation mappingDefinition)
 		{
-			this.aItemMapping = mapping.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
+			this.aItemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
-			Delegate childPostprocessing = mapping.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
+			Delegate childPostprocessing = mappingDefinition.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
 			this.aMappingExpression = new ListMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
 		}

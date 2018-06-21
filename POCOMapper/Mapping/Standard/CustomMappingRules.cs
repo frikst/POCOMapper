@@ -1,28 +1,28 @@
 ﻿using System;
-using KST.POCOMapper.Definition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 
 namespace KST.POCOMapper.Mapping.Standard
 {
 	public class CustomMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 	{
-		private Func<MappingImplementation, IMapping<TFrom, TTo>> aFactory;
+		private Func<MappingDefinitionInformation, IMapping<TFrom, TTo>> aFactory;
 
 		public CustomMappingRules()
 		{
 			this.aFactory = null;
 		}
 
-		public void MappingFactory(Func<MappingImplementation, IMapping<TFrom, TTo>> factory)
+		public void MappingFactory(Func<MappingDefinitionInformation, IMapping<TFrom, TTo>> factory)
 		{
 			this.aFactory = factory;
 		}
 
 		#region Implementation of IMappingRules<TFrom,TTo>
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			return this.aFactory(mapping);
+			return this.aFactory(mappingDefinition);
 		}
 
 		#endregion
@@ -30,23 +30,23 @@ namespace KST.POCOMapper.Mapping.Standard
 
 	public class CustomMappingRules : IMappingRules
 	{
-		private Func<MappingImplementation, Type, Type, IMapping> aFactory;
+		private Func<MappingDefinitionInformation, Type, Type, IMapping> aFactory;
 
 		public CustomMappingRules()
 		{
 			this.aFactory = null;
 		}
 
-		public void MappingFactory(Func<MappingImplementation, Type, Type, IMapping> factory)
+		public void MappingFactory(Func<MappingDefinitionInformation, Type, Type, IMapping> factory)
 		{
 			this.aFactory = factory;
 		}
 
 		#region Implementation of IMappingRules
 
-		public IMapping<TFrom, TTo> Create<TFrom, TTo>(MappingImplementation mapping)
+		public IMapping<TFrom, TTo> Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			return (IMapping<TFrom, TTo>) this.aFactory(mapping, typeof(TFrom), typeof(TTo));
+			return (IMapping<TFrom, TTo>) this.aFactory(mappingDefinition, typeof(TFrom), typeof(TTo));
 		}
 
 		#endregion

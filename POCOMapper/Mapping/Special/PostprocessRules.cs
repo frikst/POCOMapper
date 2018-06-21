@@ -1,5 +1,6 @@
 ﻿using System;
 using KST.POCOMapper.Definition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Object;
 
@@ -51,9 +52,9 @@ namespace KST.POCOMapper.Mapping.Special
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			return new Postprocess<TFrom, TTo>(this.aRules.Create(mapping), this.aPostprocessDelegate);
+			return new Postprocess<TFrom, TTo>(this.aRules.Create(mappingDefinition), this.aPostprocessDelegate);
 		}
 
 		#endregion
@@ -105,9 +106,9 @@ namespace KST.POCOMapper.Mapping.Special
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			return new Postprocess<TFrom, TTo>(this.aRules.Create<TFrom, TTo>(mapping), (a, b) => this.aPostprocessDelegate(a, b));
+			return new Postprocess<TFrom, TTo>(this.aRules.Create<TFrom, TTo>(mappingDefinition), (a, b) => this.aPostprocessDelegate(a, b));
 		}
 
 		#endregion

@@ -89,7 +89,7 @@ namespace KST.POCOMapper.Test
 
 			ToStringVisitor visitor = new ToStringVisitor();
 
-			Mapping.Instance.AcceptForAll(visitor);
+			Mapping.Instance.Mappings.AcceptForAll(visitor);
 
 			string mappingToString = visitor.GetResult();
 

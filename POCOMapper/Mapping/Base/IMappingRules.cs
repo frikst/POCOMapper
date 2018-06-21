@@ -1,14 +1,14 @@
-﻿using KST.POCOMapper.Definition;
+﻿using KST.POCOMapper.Executor;
 
 namespace KST.POCOMapper.Mapping.Base
 {
 	public interface IMappingRules
 	{
-		IMapping<TFrom, TTo> Create<TFrom, TTo>(MappingImplementation mapping);
+		IMapping<TFrom, TTo> Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition);
 	}
 
 	public interface IMappingRules<TFrom, TTo>
 	{
-		IMapping<TFrom, TTo> Create(MappingImplementation mapping);
+		IMapping<TFrom, TTo> Create(MappingDefinitionInformation mappingDefinition);
 	}
 }

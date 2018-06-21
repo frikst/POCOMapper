@@ -1,6 +1,4 @@
-﻿using KST.POCOMapper.Definition;
-
-namespace KST.POCOMapper.Mapping.Base
+﻿namespace KST.POCOMapper.Mapping.Base
 {
 	public static class MappingExtension
 	{

@@ -1,6 +1,7 @@
 ﻿using System;
 using KST.POCOMapper.Conventions.MemberParsers;
 using KST.POCOMapper.Definition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Object.Parser;
 using KST.POCOMapper.Members;
@@ -23,7 +24,7 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 
 		#region Implementation of IMemberMappingDefinition
 
-		PairedMembers IMemberMappingDefinition.CreateMapping(MappingImplementation allMappings, Type fromClass, Type toClass)
+		PairedMembers IMemberMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type fromClass, Type toClass)
 		{
 			MemberFromNameParser parser = new MemberFromNameParser();
 
@@ -31,18 +32,18 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 			if (this.aFromName == null)
 				memberFrom = new ThisMember<TFromType>();
 			else
-				memberFrom = parser.Parse(allMappings.FromConventions, fromClass, this.aFromName, false);
+				memberFrom = parser.Parse(mappingDefinition.FromConventions, fromClass, this.aFromName, false);
 			IMember memberTo;
 			if (this.aToName == null)
 				memberTo = new ThisMember<TToType>();
 			else
-				memberTo = parser.Parse(allMappings.ToConventions, toClass, this.aToName, true);
+				memberTo = parser.Parse(mappingDefinition.ToConventions, toClass, this.aToName, true);
 
 			IUnresolvedMapping<TFromType, TToType> mapping;
 			if (this.aRules == null)
-				mapping = allMappings.GetUnresolvedMapping<TFromType, TToType>();
+				mapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping<TFromType, TToType>();
 			else
-				mapping = this.aRules.Create(allMappings).AsUnresolved();
+				mapping = this.aRules.Create(mappingDefinition).AsUnresolved();
 
 			return new PairedMembers(memberFrom, memberTo, mapping);
 		}

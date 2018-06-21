@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 
 namespace KST.POCOMapper.Mapping.Collection
@@ -44,16 +44,16 @@ namespace KST.POCOMapper.Mapping.Collection
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
 			switch (this.CfgType)
 			{
 				case CollectionMappingType.List:
-					return new EnumerableToList<TFrom, TTo>(mapping);
+					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
 				case CollectionMappingType.Array:
-					return new EnumerableToArray<TFrom, TTo>(mapping, this.CfgSelectIdFrom, this.CfgSelectIdTo);
+					return new EnumerableToArray<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
 				default:
-					return new EnumerableToEnumerable<TFrom, TTo>(mapping);
+					return new EnumerableToEnumerable<TFrom, TTo>(mappingDefinition);
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace KST.POCOMapper.Mapping.Collection
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
 			if (this.CfgSelectIdFrom != null && this.CfgSelectIdTo != null)
 			{
@@ -106,11 +106,11 @@ namespace KST.POCOMapper.Mapping.Collection
 			switch (this.CfgType)
 			{
 				case CollectionMappingType.List:
-					return new EnumerableToList<TFrom, TTo>(mapping);
+					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
 				case CollectionMappingType.Array:
-					return new EnumerableToArray<TFrom, TTo>(mapping, this.CfgSelectIdFrom, this.CfgSelectIdTo);
+					return new EnumerableToArray<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
 				default:
-					return new EnumerableToEnumerable<TFrom, TTo>(mapping);
+					return new EnumerableToEnumerable<TFrom, TTo>(mappingDefinition);
 			}
 		}
 

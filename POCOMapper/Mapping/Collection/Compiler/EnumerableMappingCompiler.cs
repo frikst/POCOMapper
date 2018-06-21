@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Internal;
-using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.MappingCompilaton;
 

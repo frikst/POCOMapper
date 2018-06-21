@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using KST.POCOMapper.Definition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Object;
 
@@ -54,9 +55,9 @@ namespace KST.POCOMapper.Mapping.SubClass
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingImplementation mapping)
+		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			return new SubClassToObject<TFrom, TTo>(mapping, this.CfgMappings, this.CfgDefaultRules.Create(mapping));
+			return new SubClassToObject<TFrom, TTo>(mappingDefinition, this.CfgMappings, this.CfgDefaultRules.Create(mappingDefinition));
 		}
 
 		#endregion

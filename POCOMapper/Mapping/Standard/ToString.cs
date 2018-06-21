@@ -1,5 +1,5 @@
 ﻿using System;
-using KST.POCOMapper.Definition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
@@ -7,10 +7,6 @@ namespace KST.POCOMapper.Mapping.Standard
 {
 	public class ToString<TFrom> : IMapping<TFrom, string>
 	{
-		public ToString(MappingImplementation mappings)
-		{
-		}
-
 		#region Implementation of IMapping
 
 		public void Accept(IMappingVisitor visitor)

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Linq.Expressions;
-using KST.POCOMapper.Definition;
-using KST.POCOMapper.Exceptions;
-using KST.POCOMapper.Internal.ReflectionMembers;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.SubClass.Compilers;
 using KST.POCOMapper.Visitor;
@@ -17,17 +12,17 @@ namespace KST.POCOMapper.Mapping.SubClass
 
 		private readonly IMapping<TFrom, TTo> aDefaultMapping;
 		private readonly SubClassConversion[] aConversions;
-		private SubClassToObjectMappingCompiler<TFrom, TTo> aMappingExpression;
-		private SubClassToObjectSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
+		private readonly SubClassToObjectMappingCompiler<TFrom, TTo> aMappingExpression;
+		private readonly SubClassToObjectSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 
-		public SubClassToObject(MappingImplementation mapping, IEnumerable<(Type From, Type To)> fromTo, IMapping<TFrom, TTo> defaultMapping)
+		public SubClassToObject(MappingDefinitionInformation mappingDefinition, IEnumerable<(Type From, Type To)> fromTo, IMapping<TFrom, TTo> defaultMapping)
 		{
 			this.aDefaultMapping = defaultMapping;
 
 			var conversions = new List<SubClassConversion>();
 			foreach (var conversion in fromTo)
 			{
-				var fromToMapping = mapping.GetUnresolvedMapping(conversion.From, conversion.To);
+				var fromToMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(conversion.From, conversion.To);
 
 				conversions.Add(new SubClassConversion(conversion.From, conversion.To, fromToMapping));
 			}

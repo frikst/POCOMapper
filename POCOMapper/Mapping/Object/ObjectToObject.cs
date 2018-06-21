@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using KST.POCOMapper.Definition;
-using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Object.Compilers;
 using KST.POCOMapper.Mapping.Object.Parser;
@@ -19,7 +16,7 @@ namespace KST.POCOMapper.Mapping.Object
 		private readonly ObjectToObjectSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 		private readonly IEnumerable<PairedMembers> aMemberPairs;
 
-		public ObjectToObject(Func<TFrom, TTo> factoryFunction, MappingImplementation mapping, IEnumerable<PairedMembers> explicitPairs, bool implicitMappings)
+		public ObjectToObject(Func<TFrom, TTo> factoryFunction, MappingDefinitionInformation mappingDefinition, IEnumerable<PairedMembers> explicitPairs, bool implicitMappings)
 		{
 			PairedMembers[] memberPairs;
 
@@ -30,7 +27,7 @@ namespace KST.POCOMapper.Mapping.Object
 
 				memberPairs = explicitPairArray
 					.Concat(
-						new TypePairParser(mapping, typeof(TFrom), typeof(TTo))
+						new TypePairParser(mappingDefinition, typeof(TFrom), typeof(TTo))
 							.Where(x => !explicitSymbols.Contains(x.To))
 					)
 					.ToArray();
@@ -42,8 +39,8 @@ namespace KST.POCOMapper.Mapping.Object
 
 			this.aMemberPairs = memberPairs;
 
-			this.aMappingExpression = new ObjectToObjectMappingCompiler<TFrom, TTo>(mapping, factoryFunction, memberPairs);
-			this.aSynchronizationExpression = new ObjectToObjectSynchronizationCompiler<TFrom, TTo>(mapping, memberPairs);
+			this.aMappingExpression = new ObjectToObjectMappingCompiler<TFrom, TTo>(mappingDefinition, factoryFunction, memberPairs);
+			this.aSynchronizationExpression = new ObjectToObjectSynchronizationCompiler<TFrom, TTo>(mappingDefinition, memberPairs);
 		}
 
 		public void Accept(IMappingVisitor visitor)

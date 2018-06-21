@@ -5,6 +5,7 @@ using System.Reflection;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Standard;
@@ -19,7 +20,7 @@ namespace KST.POCOMapper.Definition
 	public abstract class MappingDefinition<TMapping>
 		where TMapping : MappingDefinition<TMapping>
 	{
-		private static MappingImplementation aMapping;
+		private static MappingExecutor aMapping;
 
 		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
 		private bool aFinished;
@@ -148,7 +149,7 @@ namespace KST.POCOMapper.Definition
 		/// <summary>
 		/// Instance of the singleton. Should be used only on the <see cref="MappingDefinition{TMapping}"/> descendant.
 		/// </summary>
-		public static MappingImplementation Instance
+		public static MappingExecutor Instance
 		{
 			get
 			{
@@ -160,7 +161,7 @@ namespace KST.POCOMapper.Definition
 					MappingDefinition<TMapping> definition = (MappingDefinition<TMapping>)ci.Invoke(null);
 					definition.aFinished = true;
 
-					aMapping = new MappingImplementation(
+					aMapping = new MappingExecutor(
 						definition.aMappingDefinitions,
 						definition.aChildPostprocessings,
 						definition.FromConventions,

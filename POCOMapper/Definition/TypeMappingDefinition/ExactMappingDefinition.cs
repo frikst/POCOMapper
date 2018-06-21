@@ -1,4 +1,5 @@
 ﻿using System;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Object;
 using KST.POCOMapper.Mapping.Base;
 
@@ -24,9 +25,9 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 
 		#region Implementation of ITypeMappingDefinition
 
-		IMapping ITypeMappingDefinition.CreateMapping(MappingImplementation allMappings, Type from, Type to)
+		IMapping ITypeMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type from, Type to)
 		{
-			return this.aRules.Create(allMappings);
+			return this.aRules.Create(mappingDefinition);
 		}
 
 		bool ITypeMappingDefinition.IsFrom(Type from)
