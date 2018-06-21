@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Executor;
+using KST.POCOMapper.Internal;
 using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Mapping.Object.Parser
@@ -136,11 +137,11 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 						yield return pair;
 						break;
 					}
-					else if (fromOne.Symbol.HasPrefix(toOne.Symbol))
+					else if (fromOne.Symbol.HasPrefix(toOne.Symbol) && !BasicNetTypes.IsPrimitiveOrPrimitiveLikeType(toOne.Type))
 					{
 						foundMembers.Add((Found.Left, toOne));
 					}
-					else if (toOne.Symbol.HasPrefix(fromOne.Symbol))
+					else if (toOne.Symbol.HasPrefix(fromOne.Symbol) && !BasicNetTypes.IsPrimitiveOrPrimitiveLikeType(fromOne.Type))
 					{
 						foundMembers.Add((Found.Right, toOne));
 					}

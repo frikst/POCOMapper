@@ -36,7 +36,8 @@ namespace KST.POCOMapper.Internal
 		    {typeof(decimal), new HashSet<Type> {typeof(sbyte), typeof(byte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(char), typeof(float), typeof(double)}},
 	    };
 
-	    private static readonly Type[] aPrimitiveTypes = {
+	    private static readonly HashSet<Type> aPrimitiveTypes = new HashSet<Type>
+	    {
 		    typeof(sbyte),
 		    typeof(byte),
 		    typeof(short),
@@ -51,13 +52,14 @@ namespace KST.POCOMapper.Internal
 		    typeof(bool),
 	    };
 
-	    private static readonly Type[] aPrimitiveLikeTypes = {
+	    private static readonly HashSet<Type> aPrimitiveLikeTypes = new HashSet<Type>
+	    {
 		    typeof(decimal),
 		    typeof(string),
 		    typeof(DateTime),
 		    typeof(DateTimeOffset),
 		    typeof(Guid),
-			typeof(TimeSpan),
+		    typeof(TimeSpan),
 	    };
 
 	    public static IEnumerable<Type> GetPrimitiveTypes()
@@ -65,6 +67,15 @@ namespace KST.POCOMapper.Internal
 
 	    public static IEnumerable<Type> GetPrimitiveLikeTypes()
 		    => BasicNetTypes.aPrimitiveLikeTypes;
+
+	    public static bool IsPrimitiveType(Type type)
+		    => BasicNetTypes.aPrimitiveTypes.Contains(type);
+
+	    public static bool IsPrimitiveLikeType(Type type)
+		    => BasicNetTypes.aPrimitiveLikeTypes.Contains(type);
+
+	    public static bool IsPrimitiveOrPrimitiveLikeType(Type type)
+		    => BasicNetTypes.IsPrimitiveType(type) || BasicNetTypes.IsPrimitiveLikeType(type);
 
 	    public static IEnumerable<Type> GetImplicitTypeConversions(Type from)
 	    {
