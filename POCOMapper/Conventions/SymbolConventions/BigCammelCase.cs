@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using KST.POCOMapper.Internal;
 using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Conventions.SymbolConventions
@@ -9,7 +10,7 @@ namespace KST.POCOMapper.Conventions.SymbolConventions
 
 		public Symbol Parse(string symbol)
 		{
-			return new Symbol(Regex.Replace(symbol, "([A-Z])", " $1", RegexOptions.Compiled).Trim().Split(' '));
+			return new Symbol(new CammelCaseSplitter(symbol));
 		}
 
 		#endregion
