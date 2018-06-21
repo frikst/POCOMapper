@@ -8,7 +8,7 @@ namespace KST.POCOMapper.Test
 	[TestFixture]
 	public class Collections
 	{
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

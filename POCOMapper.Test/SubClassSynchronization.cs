@@ -18,7 +18,7 @@ namespace KST.POCOMapper.Test
 		private class SubTo1 : To { }
 		private class SubTo2 : To { }
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

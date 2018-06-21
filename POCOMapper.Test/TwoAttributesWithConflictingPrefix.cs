@@ -22,7 +22,7 @@ namespace KST.POCOMapper.Test
 			public int prefixChild;
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

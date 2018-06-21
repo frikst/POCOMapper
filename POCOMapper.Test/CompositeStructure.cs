@@ -16,7 +16,7 @@ namespace KST.POCOMapper.Test
 			public To child;
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

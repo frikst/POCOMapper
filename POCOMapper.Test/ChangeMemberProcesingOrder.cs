@@ -20,7 +20,7 @@ namespace KST.POCOMapper.Test
 			public string Data;
 		}
 
-		private class MappingFields : MappingDefinition<MappingFields>
+		private class MappingFields : MappingSingleton<MappingFields>
 		{
 			private MappingFields()
 			{
@@ -31,7 +31,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		private class MappingProps : MappingDefinition<MappingProps>
+		private class MappingProps : MappingSingleton<MappingProps>
 		{
 			private MappingProps()
 			{
@@ -41,7 +41,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		private class MappingMethods : MappingDefinition<MappingMethods>
+		private class MappingMethods : MappingSingleton<MappingMethods>
 		{
 			private MappingMethods()
 			{

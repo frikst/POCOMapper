@@ -44,7 +44,7 @@ namespace KST.POCOMapper.Test
 			#endregion
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

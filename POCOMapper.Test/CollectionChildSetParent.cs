@@ -18,7 +18,7 @@ namespace KST.POCOMapper.Test
 			public IEnumerable Parent { get; set; }
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

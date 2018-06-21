@@ -19,7 +19,7 @@ namespace KST.POCOMapper.Test
 			public bool i2;
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

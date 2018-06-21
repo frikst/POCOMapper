@@ -21,7 +21,7 @@ namespace KST.POCOMapper.Test
 			public string number;
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

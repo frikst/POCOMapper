@@ -25,7 +25,7 @@ namespace KST.POCOMapper.Test
 			public ToInner Inner = new ToInner();
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{

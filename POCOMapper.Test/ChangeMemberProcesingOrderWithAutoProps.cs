@@ -28,7 +28,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		private class MappingAuto : MappingDefinition<MappingAuto>
+		private class MappingAuto : MappingSingleton<MappingAuto>
 		{
 			private MappingAuto()
 			{
@@ -39,7 +39,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		private class MappingCode : MappingDefinition<MappingCode>
+		private class MappingCode : MappingSingleton<MappingCode>
 		{
 			private MappingCode()
 			{
@@ -50,7 +50,7 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
-		private class MappingProperty : MappingDefinition<MappingProperty>
+		private class MappingProperty : MappingSingleton<MappingProperty>
 		{
 			private MappingProperty()
 			{

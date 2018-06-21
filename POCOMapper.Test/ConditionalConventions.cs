@@ -31,7 +31,7 @@ namespace KST.POCOMapper.Test
 			public Int64 aSecondID;
 		}
 
-		private class Mapping : MappingDefinition<Mapping>
+		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
 			{
