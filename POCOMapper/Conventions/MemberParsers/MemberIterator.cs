@@ -29,7 +29,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 				foreach (IMember member in child.GetAllMembers(this.aType, this.aParent))
 					yield return member;
 
-			foreach (MemberType memberType in this.aConventions.GetMemberScanningPrecedence())
+			foreach (MemberType memberType in this.aConventions.MemberScanningPrecedence)
 			{
 				switch (memberType)
 				{

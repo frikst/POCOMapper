@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
+using KST.POCOMapper.Definition.Conventions;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
@@ -24,8 +25,8 @@ namespace KST.POCOMapper.Definition
 			this.aChildPostprocessings = new List<IChildAssociationPostprocessing>();
 			this.aFinished = false;
 
-			this.FromConventions = new GlobalConventions(NamingConventions.Direction.From);
-			this.ToConventions = new GlobalConventions(NamingConventions.Direction.To);
+			this.FromConventions = new GlobalNamingConventionsBuilder(NamingConventions.Direction.From);
+			this.ToConventions = new GlobalNamingConventionsBuilder(NamingConventions.Direction.To);
 
 			this.DefaultMappings();
 		}
@@ -72,12 +73,12 @@ namespace KST.POCOMapper.Definition
 		/// <summary>
 		/// Conventions for the source model.
 		/// </summary>
-		public GlobalConventions FromConventions { get; }
+		public GlobalNamingConventionsBuilder FromConventions { get; }
 
 		/// <summary>
 		/// Conventions for the destination model.
 		/// </summary>
-		public GlobalConventions ToConventions { get; }
+		public GlobalNamingConventionsBuilder ToConventions { get; }
 
 		/// <summary>
 		/// Defines the mapping of one instance of the class TFrom onto the instance of the class TTo.
@@ -144,8 +145,8 @@ namespace KST.POCOMapper.Definition
 			return new MappingExecutor(
 				this.aMappingDefinitions,
 				this.aChildPostprocessings,
-				this.FromConventions,
-				this.ToConventions
+				this.FromConventions.Finish(),
+				this.ToConventions.Finish()
 			);
 		}
 	}

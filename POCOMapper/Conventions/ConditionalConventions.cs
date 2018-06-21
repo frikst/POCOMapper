@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using KST.POCOMapper.Conventions.SymbolConventions;
 using KST.POCOMapper.Members;
 using KST.POCOMapper.TypePatterns;
 
@@ -10,8 +11,8 @@ namespace KST.POCOMapper.Conventions
 		private readonly IPattern aFrom;
 		private readonly IPattern aTo;
 
-		internal ConditionalConventions(IPattern from, IPattern to, NamingConventions.Direction direction)
-			: base(direction)
+		internal ConditionalConventions(Direction conventionDirection, ISymbolConvention fields, ISymbolConvention methods, ISymbolConvention properties, IEnumerable<MemberType> memberScanningPrecedence, IPattern from, IPattern to)
+			: base(conventionDirection, fields, methods, properties, memberScanningPrecedence)
 		{
 			this.aFrom = from;
 			this.aTo = to;

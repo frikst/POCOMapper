@@ -2,6 +2,7 @@
 using System.Reflection;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
+using KST.POCOMapper.Definition.Conventions;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Executor;
 using KST.POCOMapper.TypePatterns;
@@ -27,13 +28,13 @@ namespace KST.POCOMapper.Definition
 		/// <summary>
 		/// Conventions for the source model.
 		/// </summary>
-		protected GlobalConventions FromConventions
+		protected GlobalNamingConventionsBuilder FromConventions
 			=> this.aBuilder.FromConventions;
 
 		/// <summary>
 		/// Conventions for the destination model.
 		/// </summary>
-		protected GlobalConventions ToConventions
+		protected GlobalNamingConventionsBuilder ToConventions
 			=> this.aBuilder.ToConventions;
 
 		/// <summary>
