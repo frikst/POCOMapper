@@ -68,10 +68,13 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 		{
 			HashSet<Symbol> used = new HashSet<Symbol>();
 
-			for (Type current = this.aType; current != null; current = current.BaseType)
+			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
 				foreach (FieldInfo field in current.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 				{
+					if (field.IsSpecialName || field.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any() || field.Name.Contains('.'))
+						continue;
+
 					Symbol symbol = this.aConventions.Fields.Parse(field.Name);
 
 					if (!used.Contains(symbol))
@@ -87,12 +90,15 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 		{
 			HashSet<Symbol> used = new HashSet<Symbol>();
 
-			for (Type current = this.aType; current != null; current = current.BaseType)
+			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
 				var methodMembers = new Dictionary<(Symbol MemberName, Type MemberType), (MethodInfo Getter, MethodInfo Setter)>();
 
 				foreach (MethodInfo method in current.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 				{
+					if (method.IsSpecialName || method.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any() || method.Name.Contains('.'))
+						continue;
+
 					Symbol symbol = this.aConventions.Methods.Parse(method.Name);
 
 					if (symbol.HasPrefix("get") && method.GetParameters().Length == 0 && method.ReturnType != typeof(void))
@@ -125,10 +131,13 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 		{
 			HashSet<Symbol> used = new HashSet<Symbol>();
 
-			for (Type current = this.aType; current != null; current = current.BaseType)
+			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
 				foreach (PropertyInfo property in current.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
 				{
+					if (property.IsSpecialName || property.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any() || property.Name.Contains('.'))
+						continue;
+
 					Symbol symbol = this.aConventions.Properties.Parse(property.Name);
 
 					if (!used.Contains(symbol))
