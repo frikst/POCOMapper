@@ -26,7 +26,11 @@ namespace KST.POCOMapper.Executor
 			    return true;
 
 		    if (this.aDefinitionContainer.TryCreateMapping(from, to, out mapping))
+		    {
+			    this.aMappings[typePair] = mapping;
+
 			    return true;
+		    }
 
 		    return false;
 	    }
