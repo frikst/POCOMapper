@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Internal;
 using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Members;
@@ -114,13 +115,9 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 		{
 			if (postprocess != null)
 			{
-				Expression postprocessTarget = postprocess.Target == null ? null : Expression.Constant(postprocess.Target);
 				return Expression.Block(
-					new Expression[]
-						{
-							assignment,
-							Expression.Call(postprocessTarget, postprocess.Method, parent, this.To.CreateGetterExpression(to))
-						}
+					assignment,
+					ExpressionHelper.Call(postprocess, parent, this.To.CreateGetterExpression(to))
 				);
 			}
 			else
