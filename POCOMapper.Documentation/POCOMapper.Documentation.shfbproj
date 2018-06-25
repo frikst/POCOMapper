@@ -34,7 +34,8 @@
     <HelpTitle>A Plain Old CLR Object Mapper</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\POCOMapper\POCOMapper.csproj" />
+      <DocumentationSource sourceFile="..\POCOMapper\bin\Debug\netstandard2.0\KST.POCOMapper.dll" />
+      <DocumentationSource sourceFile="..\POCOMapper\bin\Debug\netstandard2.0\POCOMapper.xml" />
     </DocumentationSources>
     <SccProjectName>Svn</SccProjectName>
     <SccProvider>SubversionScc</SccProvider>
