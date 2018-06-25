@@ -53,14 +53,14 @@ namespace KST.POCOMapper.Mapping.Special
 		public TTo Map(TFrom from)
 		{
 			TTo ret = this.aInnerMapping.Map(from);
-			this.aPostprocessDelegate.DynamicInvoke(from, ret);
+			this.aPostprocessDelegate(from, ret);
 			return ret;
 		}
 
 		public TTo Synchronize(TFrom from, TTo to)
 		{
 			to = this.aInnerMapping.Synchronize(from, to);
-			this.aPostprocessDelegate.DynamicInvoke(from, to);
+			this.aPostprocessDelegate(from, to);
 			return to;
 		}
 
