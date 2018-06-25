@@ -18,15 +18,58 @@ namespace KST.POCOMapper.TypePatterns
 		private IPattern Parse(Type type, bool subclass)
 		{
 			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(SubClass<>))
-				return this.Parse(type.GetGenericArguments()[0], true);
+				return this.ParseSubClass(type);
+			else if (type.IsGenericType && type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(Generic<>.IWith)))
+				return this.ParseGeneric(type, subclass);
 			else if (type.IsGenericType && !type.IsGenericTypeDefinition)
-				return new GenericPattern(this.Parse(type.GetGenericTypeDefinition(), false), type.GetGenericArguments().Select(x => this.Parse(x, false)), subclass);
+				return this.ParseExactGeneric(type, subclass);
 			else if (type.IsArray)
-				return new ArrayPattern(this.Parse(type.GetElementType(), subclass), type.GetArrayRank());
+				return this.ParseArray(type, subclass);
 			else if (type == typeof(T))
-				return new AnyPattern();
+				return ParseAny();
 			else
-				return new ClassPattern(type, subclass);
+				return ParseClass(type, subclass);
+		}
+
+		private IPattern ParseSubClass(Type type)
+		{
+			var inner = type.GetGenericArguments()[0];
+
+			return this.Parse(inner, true);
+		}
+
+		private IPattern ParseGeneric(Type type, bool subclass)
+		{
+			var inner = new ClassPattern(type.GetGenericArguments().First().GetGenericTypeDefinition(), false);
+			var genericParameters = type.GetGenericArguments().Skip(1).Select(x => this.Parse(x, false));
+
+			return new GenericPattern(inner, genericParameters, subclass);
+		}
+
+		private IPattern ParseExactGeneric(Type type, bool subclass)
+		{
+			var inner = this.Parse(type.GetGenericTypeDefinition(), false);
+			var genericParameters = type.GetGenericArguments().Select(x => this.Parse(x, false));
+
+			return new GenericPattern(inner, genericParameters, subclass);
+		}
+
+		private IPattern ParseArray(Type type, bool subclass)
+		{
+			var inner = this.Parse(type.GetElementType(), subclass);
+			var dimensionCount = type.GetArrayRank();
+
+			return new ArrayPattern(inner, dimensionCount);
+		}
+
+		private static IPattern ParseAny()
+		{
+			return new AnyPattern();
+		}
+
+		private static IPattern ParseClass(Type type, bool subclass)
+		{
+			return new ClassPattern(type, subclass);
 		}
 
 		#region Implementation of IPattern
