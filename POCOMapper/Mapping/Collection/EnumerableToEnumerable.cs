@@ -26,17 +26,11 @@ namespace KST.POCOMapper.Mapping.Collection
 			visitor.Visit(this);
 		}
 
-		public bool CanSynchronize
-			=> false;
-
 		public bool CanMap
 			=> true;
 
 		public bool IsDirect
 			=> false;
-
-		public bool SynchronizeCanChangeObject
-			=> true;
 
 		public string MappingSource
 			=> this.aMappingExpression.Source;
@@ -53,11 +47,6 @@ namespace KST.POCOMapper.Mapping.Collection
 		public TTo Map(TFrom from)
 		{
 			return this.aMappingExpression.Map(from);
-		}
-
-		public TTo Synchronize(TFrom from, TTo to)
-		{
-			throw new NotImplementedException();
 		}
 
 		public Type ItemFrom

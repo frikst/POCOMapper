@@ -54,7 +54,11 @@ namespace KST.POCOMapper.Mapping.Special
 
 		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			return new Postprocess<TFrom, TTo>(this.aRules.Create(mappingDefinition), this.aPostprocessDelegate);
+			var mapping = this.aRules.Create(mappingDefinition);
+			if (mapping is IMappingWithSyncSupport<TFrom, TTo> mappingWithSync)
+				return new PostprocessWithSync<TFrom, TTo>(mappingWithSync, this.aPostprocessDelegate);
+			else
+				return new PostprocessWithMap<TFrom, TTo>(mapping, this.aPostprocessDelegate);
 		}
 
 		#endregion
@@ -108,7 +112,11 @@ namespace KST.POCOMapper.Mapping.Special
 
 		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			return new Postprocess<TFrom, TTo>(this.aRules.Create<TFrom, TTo>(mappingDefinition), (a, b) => this.aPostprocessDelegate(a, b));
+			var mapping = this.aRules.Create<TFrom, TTo>(mappingDefinition);
+			if (mapping is IMappingWithSyncSupport<TFrom, TTo> mappingWithSync)
+				return new PostprocessWithSync<TFrom, TTo>(mappingWithSync, (a, b) => this.aPostprocessDelegate(a, b));
+			else
+				return new PostprocessWithMap<TFrom, TTo>(mapping, (a, b) => this.aPostprocessDelegate(a, b));
 		}
 
 		#endregion

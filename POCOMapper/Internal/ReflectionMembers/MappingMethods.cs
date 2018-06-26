@@ -13,7 +13,7 @@ namespace KST.POCOMapper.Internal.ReflectionMembers
 
 		public static MethodInfo Synchronize(Type from, Type to)
 		{
-			return typeof(IMapping<,>).MakeGenericType(from, to).GetMethod(nameof(IMapping<object, object>.Synchronize));
+			return typeof(IMappingWithSyncSupport<,>).MakeGenericType(from, to).GetMethod(nameof(IMappingWithSyncSupport<object, object>.Synchronize));
 		}
 	}
 }

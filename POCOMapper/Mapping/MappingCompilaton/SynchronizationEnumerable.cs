@@ -31,18 +31,31 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 
 		public IEnumerator<TItemTo> GetEnumerator()
 		{
-			Dictionary<TId, TItemTo> index = this.aTo.ToDictionary(this.aSelectIdTo);
+			if (this.aMapping is IMappingWithSyncSupport<TItemFrom, TItemTo> mappingWithSync)
+				return this.EnumerateWithSync(mappingWithSync);
+			else
+				return this.EnumerateWithMap(this.aMapping);
+		}
+
+		private IEnumerator<TItemTo> EnumerateWithSync(IMappingWithSyncSupport<TItemFrom, TItemTo> mappingWithSync)
+		{
+			var index = this.aTo.ToDictionary(this.aSelectIdTo);
 
 			foreach (TItemFrom itemFrom in this.aFrom)
 			{
 				TItemTo itemTo;
 				if (index.TryGetValue(this.aSelectIdFrom(itemFrom), out itemTo))
-					itemTo = this.aMapping.Synchronize(itemFrom, itemTo);
+					itemTo = mappingWithSync.Synchronize(itemFrom, itemTo);
 				else
-					itemTo = this.aMapping.Map(itemFrom);
+					itemTo = mappingWithSync.Map(itemFrom);
 
 				yield return itemTo;
 			}
+		}
+
+		private IEnumerator<TItemTo> EnumerateWithMap(IMapping<TItemFrom, TItemTo> mappingWithMap)
+		{
+			return this.aFrom.Select(mappingWithMap.Map).GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
 using KST.POCOMapper.Definition.Conventions;
 using KST.POCOMapper.Definition.TypeMappingDefinition;

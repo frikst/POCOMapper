@@ -7,7 +7,7 @@ using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.SubClass
 {
-	public class SubClassToObject<TFrom, TTo> : IMapping<TFrom, TTo>, ISubClassMapping
+	public class SubClassToObject<TFrom, TTo> : IMappingWithSyncSupport<TFrom, TTo>, ISubClassMapping
 	{
 
 		private readonly IMapping<TFrom, TTo> aDefaultMapping;

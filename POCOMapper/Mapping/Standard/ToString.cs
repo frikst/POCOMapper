@@ -1,5 +1,4 @@
 ﻿using System;
-using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
@@ -7,15 +6,10 @@ namespace KST.POCOMapper.Mapping.Standard
 {
 	public class ToString<TFrom> : IMapping<TFrom, string>
 	{
-		#region Implementation of IMapping
-
 		public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
-
-		public bool CanSynchronize
-			=> false;
 
 		public bool CanMap
 			=> true;
@@ -23,13 +17,7 @@ namespace KST.POCOMapper.Mapping.Standard
 		public bool IsDirect
 			=> false;
 
-		public bool SynchronizeCanChangeObject
-			=> false;
-
 		public string MappingSource
-			=> null;
-
-		public string SynchronizationSource
 			=> null;
 
 		public Type From
@@ -38,18 +26,9 @@ namespace KST.POCOMapper.Mapping.Standard
 		public Type To
 			=> typeof(string);
 
-		#endregion
-
-		#region Implementation of IMapping<TFrom,string>
-
 		public string Map(TFrom from)
 		{
 			return from.ToString();
 		}
-
-		public string Synchronize(TFrom from, string to)
-			=> throw new NotImplementedException();
-
-		#endregion
 	}
 }

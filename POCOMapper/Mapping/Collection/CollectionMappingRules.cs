@@ -50,8 +50,10 @@ namespace KST.POCOMapper.Mapping.Collection
 			{
 				case CollectionMappingType.List:
 					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
+				case CollectionMappingType.Array when this.CfgSelectIdFrom != null && this.CfgSelectIdTo != null:
+					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
 				case CollectionMappingType.Array:
-					return new EnumerableToArray<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
+					return new EnumerableToArrayWithMap<TFrom, TTo>(mappingDefinition);
 				default:
 					return new EnumerableToEnumerable<TFrom, TTo>(mappingDefinition);
 			}
@@ -107,8 +109,10 @@ namespace KST.POCOMapper.Mapping.Collection
 			{
 				case CollectionMappingType.List:
 					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
+				case CollectionMappingType.Array when this.CfgSelectIdFrom != null && this.CfgSelectIdTo != null:
+					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
 				case CollectionMappingType.Array:
-					return new EnumerableToArray<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
+					return new EnumerableToArrayWithMap<TFrom, TTo>(mappingDefinition);
 				default:
 					return new EnumerableToEnumerable<TFrom, TTo>(mappingDefinition);
 			}

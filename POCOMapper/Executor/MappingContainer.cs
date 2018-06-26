@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;

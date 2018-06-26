@@ -10,7 +10,7 @@ using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Object
 {
-	public class ObjectToObject<TFrom, TTo> : IMapping<TFrom, TTo>, IObjectMapping
+	public class ObjectToObject<TFrom, TTo> : IMappingWithSyncSupport<TFrom, TTo>, IObjectMapping
 	{
 		private readonly ObjectToObjectMappingCompiler<TFrom, TTo> aMappingExpression;
 		private readonly ObjectToObjectSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;

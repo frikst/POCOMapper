@@ -51,10 +51,12 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 
 		public Expression CreateSynchronizationAssignmentExpression(ParameterExpression from, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
 		{
-			if (!this.Mapping.ResolvedMapping.CanSynchronize)
+			IMappingWithSyncSupport mappingWithSync = this.Mapping.ResolvedMapping as IMappingWithSyncSupport;
+
+			if (mappingWithSync == null)
 				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
 
-			if (this.Mapping.ResolvedMapping.IsDirect)
+			if (mappingWithSync.IsDirect)
 				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
 
 			ParameterExpression tempFromValue = Expression.Parameter(this.From.Type, "tempFrom");
@@ -65,12 +67,12 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				throw new InvalidMappingException($"Cannot synchronize object with setter method mapping destination without any getter method defined for {this.To} member of {this.To.DeclaringType} type");
 
 			Expression synchronize = Expression.Call(
-				Expression.Constant(this.Mapping.ResolvedMapping),
+				Expression.Constant(mappingWithSync),
 				MappingMethods.Synchronize(this.From.Type, this.To.Type),
 				tempFromValue, this.To.CreateGetterExpression(to)
 			);
 
-			if (this.Mapping.ResolvedMapping.SynchronizeCanChangeObject)
+			if (mappingWithSync.SynchronizeCanChangeObject)
 			{
 				synchronize = this.To.CreateSetterExpression(
 					to,
@@ -78,12 +80,12 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				);
 			}
 
-			if (this.Mapping.ResolvedMapping.CanMap && !this.To.Type.IsValueType)
+			if (mappingWithSync.CanMap && !this.To.Type.IsValueType)
 			{
 				Expression map = this.To.CreateSetterExpression(
 					to,
 					Expression.Call(
-						Expression.Constant(this.Mapping.ResolvedMapping),
+						Expression.Constant(mappingWithSync),
 						MappingMethods.Map(this.From.Type, this.To.Type),
 						tempFromValue
 					)

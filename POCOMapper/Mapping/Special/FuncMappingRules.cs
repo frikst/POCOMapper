@@ -21,8 +21,9 @@ namespace KST.POCOMapper.Mapping.Special
 			this.aMappingFunc = mappingFunc;
 		}
 
-		public void Using(Action<TFrom, TTo> mappingAction)
+		public void Using(Func<TFrom, TTo> mappingFunc, Action<TFrom, TTo> mappingAction)
 		{
+			this.aMappingFunc = mappingFunc;
 			this.aMappingAction = mappingAction;
 		}
 
@@ -30,12 +31,14 @@ namespace KST.POCOMapper.Mapping.Special
 
 		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			if (this.aMappingFunc != null)
-				return new FuncMapping<TFrom, TTo>(this.aMappingFunc);
-			else if (this.aMappingAction != null)
-				return new FuncMapping<TFrom, TTo>(this.aMappingAction);
-			else
+			if (this.aMappingFunc == null)
 				throw new InvalidMappingException("Function mapping without the mapping function defined");
+
+			if (this.aMappingAction != null)
+				return new FuncMappingWithSync<TFrom, TTo>(this.aMappingFunc, this.aMappingAction);
+			else 
+				return new FuncMappingWithMap<TFrom, TTo>(this.aMappingFunc);
+				
 		}
 
 		#endregion

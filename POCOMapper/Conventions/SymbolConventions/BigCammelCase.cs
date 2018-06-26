@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using KST.POCOMapper.Internal;
+﻿using KST.POCOMapper.Internal;
 using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Conventions.SymbolConventions

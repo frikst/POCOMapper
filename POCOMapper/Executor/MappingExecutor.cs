@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
@@ -53,9 +52,9 @@ namespace KST.POCOMapper.Executor
 		/// <param name="to">Instance that should have state transfered to.</param>
 		public void Synchronize<TFrom, TTo>(TFrom from, ref TTo to)
 		{
-			IMapping<TFrom, TTo> mapping = this.Mappings.GetMapping<TFrom, TTo>();
+			var mapping = this.Mappings.GetMapping<TFrom, TTo>() as IMappingWithSyncSupport<TFrom, TTo>;
 
-			if (!mapping.CanSynchronize)
+			if (mapping == null)
 				throw new CantMapException($"Can't synchronize {typeof(TFrom).Name} to {typeof(TTo).Name}, mapping object does not support synchronization");
 
 			if (mapping.SynchronizeCanChangeObject)
