@@ -19,6 +19,11 @@ namespace KST.POCOMapper.Definition.ChildProcessingDefinition
 
 		#endregion
 
+		internal ChildAssociationPostprocessing()
+		{
+
+		}
+
 		public ChildAssociationPostprocessing<TParent, TChild> Postprocess(Action<TParent, TChild> postprocessDelegate)
 		{
 			this.aPostprocessDelegate = postprocessDelegate;
