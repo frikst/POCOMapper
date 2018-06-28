@@ -56,8 +56,8 @@ namespace KST.POCOMapper.Definition
 			=> this.aBuilder.Map(from, to);
 
 		/// <summary>
-		/// Defines the mapping of one instance of the container TFrom onto the instance of the container TTo.
-		/// <see cref="T"/> should be used as the collection item type.
+		/// Defines the mapping of one instance of the type defined by pattern patternFrom onto the instance of the type defined
+		/// by pattern patternTo.
 		/// </summary>
 		/// <param name="patternFrom">Pattern for class from the source model.</param>
 		/// <param name="patternTo">Pattern for class from the destination model.</param>
