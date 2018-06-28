@@ -2,9 +2,11 @@
 {
 	public static class MappingExtension
 	{
-		private class ReallyResolvedMapping : IUnresolvedMapping
+		#region Support classes
+
+		private class UnresolvedMapping : IUnresolvedMapping
 		{
-			public ReallyResolvedMapping(IMapping resolvedMapping)
+			public UnresolvedMapping(IMapping resolvedMapping)
 			{
 				this.ResolvedMapping = resolvedMapping;
 			}
@@ -12,9 +14,9 @@
 			public IMapping ResolvedMapping { get; }
 		}
 
-		private class ReallyResolvedMapping<TFrom, TTo> : IUnresolvedMapping<TFrom, TTo>
+		private class UnresolvedMapping<TFrom, TTo> : IUnresolvedMapping<TFrom, TTo>
 		{
-			public ReallyResolvedMapping(IMapping<TFrom, TTo> resolvedMapping)
+			public UnresolvedMapping(IMapping<TFrom, TTo> resolvedMapping)
 			{
 				this.ResolvedMapping = resolvedMapping;
 			}
@@ -25,10 +27,12 @@
 				=> this.ResolvedMapping;
 		}
 
+		#endregion
+
 		public static IUnresolvedMapping AsUnresolved(this IMapping mapping)
-			=> new ReallyResolvedMapping(mapping);
+			=> new UnresolvedMapping(mapping);
 
 		public static IUnresolvedMapping<TFrom, TTo> AsUnresolved<TFrom, TTo>(this IMapping<TFrom, TTo> mapping)
-			=> new ReallyResolvedMapping<TFrom, TTo>(mapping);
+			=> new UnresolvedMapping<TFrom, TTo>(mapping);
 	}
 }
