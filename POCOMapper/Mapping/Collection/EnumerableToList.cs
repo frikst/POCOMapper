@@ -32,9 +32,6 @@ namespace KST.POCOMapper.Mapping.Collection
 		public bool IsDirect
 			=> false;
 
-		public string MappingSource
-			=> this.aMappingExpression.Source;
-
 		public Type From
 			=> typeof(TFrom);
 

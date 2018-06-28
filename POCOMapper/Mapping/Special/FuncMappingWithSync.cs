@@ -13,14 +13,8 @@ namespace KST.POCOMapper.Mapping.Special
 			this.aMappingAction = mappingAction;
 		}
 
-		public bool CanSynchronize
-			=> true;
-
 		public bool SynchronizeCanChangeObject
 			=> false;
-
-		public string SynchronizationSource
-			=> null;
 
 		public TTo Synchronize(TFrom from, TTo to)
 		{

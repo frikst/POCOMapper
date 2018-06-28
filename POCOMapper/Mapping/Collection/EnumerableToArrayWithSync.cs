@@ -3,7 +3,6 @@ using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection.Compiler;
-using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Collection
 {
@@ -23,9 +22,6 @@ namespace KST.POCOMapper.Mapping.Collection
 
 		public bool SynchronizeCanChangeObject
 			=> true;
-
-		public string SynchronizationSource
-			=> this.aSynchronizationExpression?.Source;
 
 		public TTo Synchronize(TFrom from, TTo to)
 		{

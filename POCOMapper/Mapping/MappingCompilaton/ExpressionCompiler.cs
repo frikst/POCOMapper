@@ -13,8 +13,9 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 		    this.aFnc = null;
 	    }
 
+#if DEBUG
 	    public string Source { get; private set; }
-
+#endif
 
 	    protected TDelegate EnsureCompiled()
 	    {
@@ -22,7 +23,9 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 			    return this.aFnc;
 
 		    var expression = this.CompileToExpression();
+#if DEBUG
 		    this.Source = ExpressionHelper.GetDebugView(expression);
+#endif
 		    this.aFnc = expression.Compile();
 		    return this.aFnc;
 	    }

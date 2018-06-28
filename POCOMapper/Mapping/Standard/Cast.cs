@@ -29,9 +29,6 @@ namespace KST.POCOMapper.Mapping.Standard
 		public bool IsDirect
 			=> false;
 
-		public string MappingSource
-			=> this.aMappingExpression.Source;
-
 		public Type From
 			=> typeof(TFrom);
 

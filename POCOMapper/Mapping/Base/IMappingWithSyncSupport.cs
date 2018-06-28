@@ -3,8 +3,6 @@
 	public interface IMappingWithSyncSupport : IMapping
 	{
 		bool SynchronizeCanChangeObject { get; }
-
-		string SynchronizationSource { get; }
 	}
 
 	public interface IMappingWithSyncSupport<TFrom, TTo> : IMapping<TFrom, TTo>, IMappingWithSyncSupport

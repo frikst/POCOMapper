@@ -10,8 +10,6 @@ namespace KST.POCOMapper.Mapping.Base
 
 		bool IsDirect { get; }
 
-		string MappingSource { get; }
-
 		Type From { get; }
 		Type To { get; }
 	}

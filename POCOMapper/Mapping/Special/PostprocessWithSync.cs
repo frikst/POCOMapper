@@ -31,12 +31,6 @@ namespace KST.POCOMapper.Mapping.Special
 		public bool SynchronizeCanChangeObject
 			=> false;
 
-		public string MappingSource
-			=> null;
-
-		public string SynchronizationSource
-			=> null;
-
 		public Type From
 			=> typeof(TFrom);
 

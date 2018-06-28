@@ -17,10 +17,7 @@ namespace KST.POCOMapper.Executor
 		internal MappingExecutor(IEnumerable<ITypeMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, NamingConventions fromConventions, NamingConventions toConventions)
 		{
 			this.aMappingDefinition = new MappingDefinitionInformation(mappingDefinitions, childPostprocessings, fromConventions, toConventions);
-			this.MappingDebug = new MappingDebugInformation(this.aMappingDefinition.Mappings);
 		}
-
-		public MappingDebugInformation MappingDebug { get; }
 
 		public MappingContainer Mappings
 			=> this.aMappingDefinition.Mappings;

@@ -41,9 +41,6 @@ namespace KST.POCOMapper.Mapping.SubClass
 			visitor.Visit(this);
 		}
 
-		public bool CanSynchronize
-			=> true;
-
 		public bool CanMap
 			=> true;
 
@@ -52,12 +49,6 @@ namespace KST.POCOMapper.Mapping.SubClass
 
 		public bool SynchronizeCanChangeObject
 			=> false;
-
-		public string MappingSource
-			=> this.aMappingExpression.Source;
-
-		public string SynchronizationSource
-			=> this.aSynchronizationExpression.Source;
 
 		public Type From
 			=> typeof(TFrom);
