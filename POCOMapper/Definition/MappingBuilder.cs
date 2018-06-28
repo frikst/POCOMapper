@@ -16,6 +16,8 @@ namespace KST.POCOMapper.Definition
 {
 	public class MappingBuilder
 	{
+		private abstract class T : GenericParameter { }
+
 		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
 		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 		private bool aFinished;

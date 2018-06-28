@@ -7,6 +7,8 @@ namespace KST.POCOMapper.Test
 	[TestFixture]
 	public class StaticTypePatternMatching
 	{
+		private abstract class T : GenericParameter { }
+
 		private interface ITest
 		{
 

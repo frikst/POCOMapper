@@ -26,7 +26,7 @@ namespace KST.POCOMapper.TypePatterns
 				return this.ParseExactGeneric(type, subclass);
 			else if (type.IsArray)
 				return this.ParseArray(type, subclass);
-			else if (type == typeof(T))
+			else if (typeof(GenericParameter).IsAssignableFrom(type))
 				return ParseAny();
 			else
 				return ParseClass(type, subclass);

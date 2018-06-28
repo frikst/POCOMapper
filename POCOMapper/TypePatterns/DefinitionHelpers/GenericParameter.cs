@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Placeholder for the generic type mappings.
 	/// </summary>
-	public sealed class T
+	public abstract class GenericParameter
 	{
 		
 	}
