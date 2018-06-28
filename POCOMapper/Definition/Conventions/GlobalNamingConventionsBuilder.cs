@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.TypePatterns;
+using KST.POCOMapper.TypePatterns.Group;
 
 namespace KST.POCOMapper.Definition.Conventions
 {
@@ -18,7 +19,7 @@ namespace KST.POCOMapper.Definition.Conventions
 
 	    public GlobalNamingConventionsBuilder ConditionalConventions<TMemberFrom, TMemberTo>(Action<NamingConventionsBuilder> conventions)
 	    {
-		    NamingConventionsBuilder conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, new Pattern<TMemberFrom>(), new Pattern<TMemberTo>());
+		    NamingConventionsBuilder conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, new PatternGroup(new Pattern<TMemberFrom>(), new Pattern<TMemberTo>()));
 		    conventions(conv);
 
 		    this.aConditionalConventionList.Add(conv);
@@ -28,7 +29,7 @@ namespace KST.POCOMapper.Definition.Conventions
 
 	    public GlobalNamingConventionsBuilder ConditionalConventions(IPattern from, IPattern to, Action<NamingConventionsBuilder> conventions)
 	    {
-		    NamingConventionsBuilder conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, from, to);
+		    NamingConventionsBuilder conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, new PatternGroup(from, to));
 		    conventions(conv);
 
 		    this.aConditionalConventionList.Add(conv);

@@ -4,6 +4,7 @@ using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.TypePatterns;
+using KST.POCOMapper.TypePatterns.Group;
 
 namespace KST.POCOMapper.Definition.TypeMappingDefinition
 {
@@ -12,36 +13,32 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 	/// </summary>
 	public class PatternTypeMappingDefinition : ITypeMappingDefinition, IRulesDefinition
 	{
-		private readonly IPattern aPatternFrom;
-		private readonly IPattern aPatternTo;
+		private readonly PatternGroup aPatterns;
 
 		private int aPriority;
 		private IMappingRules aRules;
 
 		internal PatternTypeMappingDefinition(IPattern patternFrom, IPattern patternTo)
 		{
-			this.aPatternFrom = patternFrom;
-			this.aPatternTo = patternTo;
+			this.aPatterns = new PatternGroup(patternFrom, patternTo);
 			this.aPriority = 0;
 			this.aRules = null;
 		}
 
 		#region Implementation of ITypeMappingDefinition
 
-		IMapping ITypeMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type @from, Type to)
+		IMapping ITypeMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type from, Type to)
 		{
+			if (!this.aPatterns.Matches(from, to))
+				throw new InvalidOperationException($"{from.Name} and {to.Name} does not match required patterns");
+
 			MethodInfo mappingCreateMethod = MappingRulesMethods.GetCreate(from, to);
 			return (IMapping) mappingCreateMethod.Invoke(this.aRules, new object[] { mappingDefinition });
 		}
 
-		bool ITypeMappingDefinition.IsFrom(Type from)
+		bool ITypeMappingDefinition.IsDefinedFor(Type from, Type to)
 		{
-			return this.aPatternFrom.Matches(from);
-		}
-
-		bool ITypeMappingDefinition.IsTo(Type to)
-		{
-			return this.aPatternTo.Matches(to);
+			return this.aPatterns.Matches(from, to);
 		}
 		
 		int ITypeMappingDefinition.Priority

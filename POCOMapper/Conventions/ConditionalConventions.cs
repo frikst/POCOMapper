@@ -2,20 +2,18 @@
 using System.Linq;
 using KST.POCOMapper.Conventions.SymbolConventions;
 using KST.POCOMapper.Members;
-using KST.POCOMapper.TypePatterns;
+using KST.POCOMapper.TypePatterns.Group;
 
 namespace KST.POCOMapper.Conventions
 {
 	public class ConditionalConventions : NamingConventions
 	{
-		private readonly IPattern aFrom;
-		private readonly IPattern aTo;
+		private readonly PatternGroup aTypePatterns;
 
-		internal ConditionalConventions(Direction conventionDirection, ISymbolConvention fields, ISymbolConvention methods, ISymbolConvention properties, IEnumerable<MemberType> memberScanningPrecedence, IPattern from, IPattern to)
+		internal ConditionalConventions(Direction conventionDirection, ISymbolConvention fields, ISymbolConvention methods, ISymbolConvention properties, IEnumerable<MemberType> memberScanningPrecedence, PatternGroup typePatterns)
 			: base(conventionDirection, fields, methods, properties, memberScanningPrecedence)
 		{
-			this.aFrom = from;
-			this.aTo = to;
+			this.aTypePatterns = typePatterns;
 		}
 
 		#region Overrides of Conventions
@@ -26,9 +24,9 @@ namespace KST.POCOMapper.Conventions
 		public override bool CanPair(IMember first, IMember second)
 		{
 			if (this.ConventionDirection == Direction.From)
-				return this.aFrom.Matches(first.Type) && this.aTo.Matches(second.Type);
+				return this.aTypePatterns.Matches(first.Type, second.Type);
 			else
-				return this.aFrom.Matches(second.Type) && this.aTo.Matches(first.Type);
+				return this.aTypePatterns.Matches(second.Type, first.Type);
 		}
 
 		#endregion

@@ -30,20 +30,18 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 
 		#region Implementation of IMappingDefinition
 
-		IMapping ITypeMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type @from, Type to)
+		IMapping ITypeMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type from, Type to)
 		{
+			if (this.aFrom != from || this.aTo != to)
+				throw new InvalidOperationException($"{from.Name} and {to.Name} does not match required types");
+
 			MethodInfo mappingCreateMethod = MappingRulesMethods.GetCreate(from, to);
 			return (IMapping)mappingCreateMethod.Invoke(this.aRules, new object[] { mappingDefinition });
 		}
 
-		bool ITypeMappingDefinition.IsFrom(Type from)
+		bool ITypeMappingDefinition.IsDefinedFor(Type from, Type to)
 		{
-			return this.aFrom == from;
-		}
-
-		bool ITypeMappingDefinition.IsTo(Type to)
-		{
-			return this.aTo == to;
+			return this.aFrom == from && this.aTo == to;
 		}
 
 		int ITypeMappingDefinition.Priority

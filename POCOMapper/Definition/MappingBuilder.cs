@@ -16,7 +16,8 @@ namespace KST.POCOMapper.Definition
 {
 	public class MappingBuilder
 	{
-		private abstract class T : GenericParameter { }
+		private abstract class GItemFrom : GenericParameter { }
+		private abstract class GItemTo : GenericParameter { }
 
 		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
 		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
@@ -60,15 +61,15 @@ namespace KST.POCOMapper.Definition
 				}
 			}
 
-			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<T[]>())
+			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<GItemTo[]>())
 				.SetPriority(int.MaxValue)
 				.CollectionMappingRules()
 				.MapAs(CollectionMappingType.Array);
-			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<List<T>>())
+			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<List<GItemTo>>())
 				.SetPriority(int.MaxValue)
 				.CollectionMappingRules()
 				.MapAs(CollectionMappingType.List);
-			this.Map(new Pattern<SubClass<IEnumerable<T>>>(), new Pattern<SubClass<IEnumerable<T>>>())
+			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<SubClass<IEnumerable<GItemTo>>>())
 				.SetPriority(int.MaxValue)
 				.CollectionMappingRules();
 		}

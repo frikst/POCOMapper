@@ -27,17 +27,15 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 
 		IMapping ITypeMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type from, Type to)
 		{
+			if (typeof(TFrom) != from || typeof(TTo) != to)
+				throw new InvalidOperationException($"{from.Name} and {to.Name} does not match required types");
+
 			return this.aRules.Create(mappingDefinition);
 		}
 
-		bool ITypeMappingDefinition.IsFrom(Type from)
+		bool ITypeMappingDefinition.IsDefinedFor(Type from, Type to)
 		{
-			return from == typeof(TFrom);
-		}
-
-		bool ITypeMappingDefinition.IsTo(Type to)
-		{
-			return to == typeof(TTo);
+			return from == typeof(TFrom) && to == typeof(TTo);
 		}
 
 		int ITypeMappingDefinition.Priority

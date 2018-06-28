@@ -8,8 +8,7 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 	{
 		IMapping CreateMapping(MappingDefinitionInformation mappingDefinition, Type from, Type to);
 
-		bool IsFrom(Type from);
-		bool IsTo(Type to);
+		bool IsDefinedFor(Type from, Type to);
 
 		int Priority { get; }
 

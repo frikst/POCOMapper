@@ -1,18 +1,17 @@
 ﻿using KST.POCOMapper.Conventions;
 using KST.POCOMapper.TypePatterns;
+using KST.POCOMapper.TypePatterns.Group;
 
 namespace KST.POCOMapper.Definition.Conventions
 {
     public class ConditionalNamingConventionsBuilder : NamingConventionsBuilder
     {
-	    private readonly IPattern aPatternFrom;
-	    private readonly IPattern aPatternTo;
+	    private readonly PatternGroup aTypePatterns;
 
-	    internal ConditionalNamingConventionsBuilder(NamingConventions.Direction direction, IPattern patternFrom, IPattern patternTo)
+	    internal ConditionalNamingConventionsBuilder(NamingConventions.Direction direction, PatternGroup typePatterns)
 		    : base(direction)
 	    {
-		    this.aPatternFrom = patternFrom;
-		    this.aPatternTo = patternTo;
+		    this.aTypePatterns = typePatterns;
 	    }
 
 	    #region Overrides of NamingConventionsBuilder
@@ -23,7 +22,7 @@ namespace KST.POCOMapper.Definition.Conventions
 				this.ConventionDirection,
 				this.Fields, this.Methods, this.Properties,
 				this.MemberScanningPrecedence,
-				this.aPatternFrom, this.aPatternTo
+				this.aTypePatterns
 			);
 	    }
 

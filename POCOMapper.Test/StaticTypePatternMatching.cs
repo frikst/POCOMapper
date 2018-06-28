@@ -7,7 +7,7 @@ namespace KST.POCOMapper.Test
 	[TestFixture]
 	public class StaticTypePatternMatching
 	{
-		private abstract class T : GenericParameter { }
+		private abstract class GAny : GenericParameter { }
 
 		private interface ITest
 		{
@@ -32,7 +32,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void MatchesToAny()
 		{
-			IPattern pattern = new Pattern<T>();
+			IPattern pattern = new Pattern<GAny>();
 			Assert.IsTrue(pattern.Matches(typeof(Test1)));
 		}
 
@@ -67,7 +67,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void GenericMatchesToItSelf()
 		{
-			IPattern pattern = new Pattern<Generic<GenericTest<Test2>>.With<T>>();
+			IPattern pattern = new Pattern<Generic<GenericTest<Test2>>.With<GAny>>();
 			Assert.IsTrue(pattern.Matches(typeof(GenericTest<Test1>)));
 		}
 
@@ -81,7 +81,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void GenericMatchesToItsBase()
 		{
-			IPattern pattern = new Pattern<SubClass<Generic<GenericTest<Test2>>.With<T>>>();
+			IPattern pattern = new Pattern<SubClass<Generic<GenericTest<Test2>>.With<GAny>>>();
 			Assert.IsTrue(pattern.Matches(typeof(GenericTest<Test1>)));
 		}
 
