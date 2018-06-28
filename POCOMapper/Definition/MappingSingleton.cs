@@ -5,6 +5,7 @@ using KST.POCOMapper.Definition.Conventions;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Executor;
 using KST.POCOMapper.TypePatterns;
+using KST.POCOMapper.TypePatterns.DefinitionHelpers;
 
 namespace KST.POCOMapper.Definition
 {

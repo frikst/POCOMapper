@@ -10,6 +10,7 @@ using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Standard;
 using KST.POCOMapper.TypePatterns;
+using KST.POCOMapper.TypePatterns.DefinitionHelpers;
 
 namespace KST.POCOMapper.Definition
 {

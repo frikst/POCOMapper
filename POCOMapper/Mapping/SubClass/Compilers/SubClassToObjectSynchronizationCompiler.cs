@@ -25,43 +25,37 @@ namespace KST.POCOMapper.Mapping.SubClass.Compilers
 		    var from = Expression.Parameter(typeof(TFrom), "from");
 		    var to = Expression.Parameter(typeof(TTo), "to");
 
-		    var mappingEnd = Expression.Label();
-
 		    return Expression.Lambda<Func<TFrom, TTo, TTo>>(
 			    Expression.Block(
-				    Expression.Block(
-					    allConversions.Select(x => this.MakeIfConvertSynchronizeStatement(x.From, x.To, x.Mapping.ResolvedMapping, from, to, mappingEnd))
+				    Expression.Switch(
+						typeof(void),
+					    Expression.Call(from, ObjectMethods.GetType()),
+						Expression.Throw(
+							Expression.New(
+								typeof(UnknownMappingException).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
+								Expression.Call(from, ObjectMethods.GetType()),
+								Expression.Constant(typeof(TTo))
+							)
+						),
+						null,
+					    allConversions.Select(x => this.MakeIfConvertSynchronizeStatement(x.From, x.To, x.Mapping.ResolvedMapping, from, to))
 				    ),
-				    Expression.Throw(
-					    Expression.New(
-						    typeof(UnknownMappingException).GetConstructor(new Type[] { typeof(Type), typeof(Type) }),
-						    Expression.Call(from, ObjectMethods.GetType()),
-						    Expression.Constant(typeof(TTo))
-					    )
-				    ),
-				    Expression.Label(mappingEnd),
 				    to
 			    ),
 			    from, to
 		    );
 	    }
 
-	    private Expression MakeIfConvertSynchronizeStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to, LabelTarget mappingEnd)
+	    private SwitchCase MakeIfConvertSynchronizeStatement(Type fromType, Type toType, IMapping mapping, ParameterExpression from, ParameterExpression to)
 	    {
-		    return Expression.IfThen(
-			    Expression.Equal(
-				    Expression.Call(from, ObjectMethods.GetType()),
-				    Expression.Constant(fromType)
+		    return Expression.SwitchCase(
+			    Expression.Call(
+				    Expression.Constant(mapping),
+				    MappingMethods.Synchronize(fromType, toType),
+				    Expression.Convert(from, fromType),
+				    Expression.Convert(to, toType)
 			    ),
-			    Expression.Block(
-				    Expression.Call(
-					    Expression.Constant(mapping),
-					    MappingMethods.Synchronize(fromType, toType),
-					    Expression.Convert(from, fromType),
-					    Expression.Convert(to, toType)
-				    ),
-				    Expression.Goto(mappingEnd)
-			    )
+			    Expression.Constant(fromType)
 		    );
 	    }
     }

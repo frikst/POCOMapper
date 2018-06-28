@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.TypePatterns.DefinitionHelpers;
 
 namespace KST.POCOMapper.TypePatterns
 {

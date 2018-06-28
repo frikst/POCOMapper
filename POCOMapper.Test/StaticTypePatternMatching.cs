@@ -1,4 +1,5 @@
 ﻿using KST.POCOMapper.TypePatterns;
+using KST.POCOMapper.TypePatterns.DefinitionHelpers;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test

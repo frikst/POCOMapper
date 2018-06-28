@@ -1,4 +1,4 @@
-﻿namespace KST.POCOMapper.TypePatterns
+﻿namespace KST.POCOMapper.TypePatterns.DefinitionHelpers
 {
     public static class Generic<TGeneric>
     {
