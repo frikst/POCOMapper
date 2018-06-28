@@ -25,9 +25,6 @@ namespace KST.POCOMapper.Mapping.Collection
 
 		public TTo Synchronize(TFrom from, TTo to)
 		{
-			if (this.aSynchronizationExpression == null)
-				throw new NotImplementedException();
-
 			return this.aSynchronizationExpression.Synchronize(from, to);
 		}
 	}
