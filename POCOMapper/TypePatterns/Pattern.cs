@@ -27,7 +27,7 @@ namespace KST.POCOMapper.TypePatterns
 			else if (type.IsArray)
 				return this.ParseArray(type, subclass);
 			else if (typeof(GenericParameter).IsAssignableFrom(type))
-				return ParseAny();
+				return ParseAny(type);
 			else
 				return ParseClass(type, subclass);
 		}
@@ -63,21 +63,21 @@ namespace KST.POCOMapper.TypePatterns
 			return new ArrayPattern(inner, dimensionCount);
 		}
 
-		private static IPattern ParseAny()
+		private IPattern ParseAny(Type type)
 		{
-			return new AnyPattern();
+			return new AnyPattern(type);
 		}
 
-		private static IPattern ParseClass(Type type, bool subclass)
+		private IPattern ParseClass(Type type, bool subclass)
 		{
 			return new ClassPattern(type, subclass);
 		}
 
 		#region Implementation of IPattern
 
-		public bool Matches(Type type)
+		public bool Matches(Type type, TypeChecker typeChecker)
 		{
-			return this.aPattern.Matches(type);
+			return this.aPattern.Matches(type, typeChecker);
 		}
 
 		public override string ToString()
@@ -261,9 +261,9 @@ namespace KST.POCOMapper.TypePatterns
 
 		#region Implementation of IPattern
 
-		public bool Matches(Type type)
+		public bool Matches(Type type, TypeChecker typeChecker)
 		{
-			return this.aPattern.Matches(type);
+			return this.aPattern.Matches(type, typeChecker);
 		}
 
 		public override string ToString()

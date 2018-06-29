@@ -20,7 +20,7 @@ namespace KST.POCOMapper.TypePatterns
 
 		#region Implementation of IPattern
 
-		public bool Matches(Type type)
+		public bool Matches(Type type, TypeChecker typeChecker)
 		{
 			if (this.aSubclass)
 			{
@@ -28,12 +28,12 @@ namespace KST.POCOMapper.TypePatterns
 
 				while (current != null)
 				{
-					if (this.CompareTypeToPattern(current))
+					if (this.CompareTypeToPattern(current, typeChecker))
 						return true;
 
 					foreach (Type @interface in current.GetInterfaces())
 					{
-						if (this.CompareTypeToPattern(@interface))
+						if (this.CompareTypeToPattern(@interface, typeChecker))
 							return true;
 					}
 
@@ -42,7 +42,7 @@ namespace KST.POCOMapper.TypePatterns
 			}
 			else
 			{
-				if (this.CompareTypeToPattern(type))
+				if (this.CompareTypeToPattern(type, typeChecker))
 					return true;
 			}
 
@@ -76,7 +76,7 @@ namespace KST.POCOMapper.TypePatterns
 
 		#endregion
 
-		private bool CompareTypeToPattern(Type type)
+		private bool CompareTypeToPattern(Type type, TypeChecker typeChecker)
 		{
 			if (type.IsArray && type.GetArrayRank() == 1)
 				type = typeof(IEnumerable<>).MakeGenericType(type.GetElementType());
@@ -84,7 +84,7 @@ namespace KST.POCOMapper.TypePatterns
 			if (!type.IsGenericType)
 				return false;
 
-			if (!this.aGenericType.Matches(type.GetGenericTypeDefinition()))
+			if (!this.aGenericType.Matches(type.GetGenericTypeDefinition(), typeChecker))
 				return false;
 
 			Type[] genericParameters = type.GetGenericArguments();
@@ -93,7 +93,7 @@ namespace KST.POCOMapper.TypePatterns
 				return false;
 
 			return this.aGenericParameters
-				.Zip(genericParameters, (paramPattern, paramType) => paramPattern.Matches(paramType))
+				.Zip(genericParameters, (paramPattern, paramType) => paramPattern.Matches(paramType, typeChecker))
 				.All(x => x);
 		}
 	}

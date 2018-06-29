@@ -15,7 +15,7 @@ namespace KST.POCOMapper.TypePatterns
 
 		#region Implementation of IPattern
 
-		public bool Matches(Type type)
+		public bool Matches(Type type, TypeChecker typeChecker)
 		{
 			if (this.aSubclass)
 				return this.IsBase(type, this.aType);

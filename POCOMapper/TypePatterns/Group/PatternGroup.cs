@@ -19,13 +19,14 @@ namespace KST.POCOMapper.TypePatterns.Group
 
 	    public bool Matches(IEnumerable<Type> types)
 	    {
+			TypeChecker typeChecker = new TypeChecker();
 		    var typeArray = types as ICollection<Type> ?? types.ToArray();
 
 			if (typeArray.Count != this.aPatterns.Length)
 				throw new ArgumentException($"Pattern group should be compared to exactly {this.aPatterns.Length} types.");
 
 		    return typeArray
-			    .Zip(this.aPatterns, (type, pattern) => pattern.Matches(type))
+			    .Zip(this.aPatterns, (type, pattern) => pattern.Matches(type, typeChecker))
 			    .All(x => x);
 	    }
 

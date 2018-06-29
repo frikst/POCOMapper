@@ -16,12 +16,12 @@ namespace KST.POCOMapper.TypePatterns
 
 		#region Implementation of IPattern
 
-		public bool Matches(Type type)
+		public bool Matches(Type type, TypeChecker typeChecker)
 		{
 			if (! type.IsArray)
 				return false;
 
-			if (! this.aItem.Matches(type.GetElementType()))
+			if (! this.aItem.Matches(type.GetElementType(), typeChecker))
 				return false;
 
 			if (type.GetArrayRank() != this.aDimensionCount)
