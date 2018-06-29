@@ -23,6 +23,9 @@ namespace KST.POCOMapper.Executor
 
 		    this.FromConventions = fromConventions;
 		    this.ToConventions = toConventions;
+
+			this.FromConventions.SetMappingDefinition(this);
+		    this.ToConventions.SetMappingDefinition(this);
 	    }
 
 	    public MappingContainer Mappings { get; }
