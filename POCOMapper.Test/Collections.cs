@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Definition;
+using KST.POCOMapper.Exceptions;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -54,6 +56,25 @@ namespace KST.POCOMapper.Test
 			Assert.IsTrue(ret.Contains(1));
 			Assert.IsTrue(ret.Contains(2));
 			Assert.IsTrue(ret.Contains(3));
+		}
+
+		[Test]
+		public void ToArrayWithCast()
+		{
+			double[] ret = Mapping.Instance.Map<int[], double[]>(new int[] {1, 2, 3});
+			Assert.AreEqual(ret.Length, 3);
+			Assert.AreEqual(ret[0], 1d);
+			Assert.AreEqual(ret[1], 2d);
+			Assert.AreEqual(ret[2], 3d);
+		}
+
+		[Test]
+		public void ToArrayWithInvalidCast()
+		{
+			Assert.Throws<UnknownMappingException>(delegate
+			{
+				int[] ret = Mapping.Instance.Map<double[], int[]>(new double[] {1, 2, 3});
+			});
 		}
 	}
 }
