@@ -29,16 +29,16 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 
 		IMapping ITypeMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type from, Type to)
 		{
-			if (!this.aPatterns.Matches(from, to))
+			if (!this.aPatterns.Matches(mappingDefinition, from, to))
 				throw new InvalidOperationException($"{from.Name} and {to.Name} does not match required patterns");
 
 			MethodInfo mappingCreateMethod = MappingRulesMethods.GetCreate(from, to);
 			return (IMapping) mappingCreateMethod.Invoke(this.aRules, new object[] { mappingDefinition });
 		}
 
-		bool ITypeMappingDefinition.IsDefinedFor(Type from, Type to)
+		bool ITypeMappingDefinition.IsDefinedFor(MappingDefinitionInformation mappingDefinition, Type from, Type to)
 		{
-			return this.aPatterns.Matches(from, to);
+			return this.aPatterns.Matches(mappingDefinition, from, to);
 		}
 		
 		int ITypeMappingDefinition.Priority
@@ -48,6 +48,13 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 			=> false;
 
 		#endregion
+
+		public PatternTypeMappingDefinition Where(PatternGroupWhereCondition whereCondition)
+		{
+			this.aPatterns.AddWhereCondition(whereCondition);
+
+			return this;
+		}
 
 		public PatternTypeMappingDefinition SetPriority(int priority)
 		{

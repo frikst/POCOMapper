@@ -19,7 +19,7 @@ namespace KST.POCOMapper.Definition.Conventions
 
 	    public GlobalNamingConventionsBuilder ConditionalConventions<TMemberFrom, TMemberTo>(Action<NamingConventionsBuilder> conventions)
 	    {
-		    NamingConventionsBuilder conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, new PatternGroup(new Pattern<TMemberFrom>(), new Pattern<TMemberTo>()));
+		    var conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, new PatternGroup(new Pattern<TMemberFrom>(), new Pattern<TMemberTo>()));
 		    conventions(conv);
 
 		    this.aConditionalConventionList.Add(conv);
@@ -27,9 +27,9 @@ namespace KST.POCOMapper.Definition.Conventions
 		    return this;
 	    }
 
-	    public GlobalNamingConventionsBuilder ConditionalConventions(IPattern from, IPattern to, Action<NamingConventionsBuilder> conventions)
+	    public GlobalNamingConventionsBuilder ConditionalConventions(IPattern from, IPattern to, Action<ConditionalNamingConventionsBuilder> conventions)
 	    {
-		    NamingConventionsBuilder conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, new PatternGroup(from, to));
+		    var conv = new ConditionalNamingConventionsBuilder(this.ConventionDirection, new PatternGroup(from, to));
 		    conventions(conv);
 
 		    this.aConditionalConventionList.Add(conv);

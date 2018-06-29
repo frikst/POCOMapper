@@ -1,38 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KST.POCOMapper.Executor;
 
 namespace KST.POCOMapper.TypePatterns.Group
 {
-    public class PatternGroup
+	public class PatternGroup
     {
 	    private readonly IPattern[] aPatterns;
+	    private readonly List<PatternGroupWhereCondition> aWhereConditions;
 
 	    public PatternGroup(IEnumerable<IPattern> patterns)
 	    {
 		    this.aPatterns = patterns.ToArray();
+			this.aWhereConditions = new List<PatternGroupWhereCondition>();
 	    }
 
 	    public PatternGroup(params IPattern[] patterns)
 			: this(patterns.AsEnumerable())
 	    { }
 
-	    public bool Matches(IEnumerable<Type> types)
+	    public void AddWhereCondition(PatternGroupWhereCondition whereCondition)
 	    {
-			TypeChecker typeChecker = new TypeChecker();
+			this.aWhereConditions.Add(whereCondition);
+	    }
+
+	    public bool Matches(MappingDefinitionInformation mappingDefinitionInformation, IEnumerable<Type> types)
+	    {
+			var typeChecker = new TypeChecker();
 		    var typeArray = types as ICollection<Type> ?? types.ToArray();
 
 			if (typeArray.Count != this.aPatterns.Length)
 				throw new ArgumentException($"Pattern group should be compared to exactly {this.aPatterns.Length} types.");
 
-		    return typeArray
-			    .Zip(this.aPatterns, (type, pattern) => pattern.Matches(type, typeChecker))
-			    .All(x => x);
+		    foreach (var (type, pattern) in typeArray.Zip(this.aPatterns, (type, pattern) => (type, pattern)))
+		    {
+			    if (!pattern.Matches(type, typeChecker))
+				    return false;
+		    }
+
+		    var patternWhereEvaluator = new PatternWhereEvaluator(typeChecker, mappingDefinitionInformation);
+
+		    foreach (var whereCondition in this.aWhereConditions)
+		    {
+			    if (!whereCondition(patternWhereEvaluator))
+				    return false;
+		    }
+
+		    return true;
 	    }
 
+	    public bool Matches(IEnumerable<Type> types)
+		    => this.Matches(null, types);
+
+	    public bool Matches(MappingDefinitionInformation mappingDefinitionInformation, params Type[] types)
+		    => this.Matches(mappingDefinitionInformation, types.AsEnumerable());
+
 	    public bool Matches(params Type[] types)
-	    {
-		    return this.Matches(types.AsEnumerable());
-	    }
+		    => this.Matches(types.AsEnumerable());
     }
 }

@@ -25,7 +25,7 @@ namespace KST.POCOMapper.Executor
 		{
 			foreach (var currentDefinition in this.aTypeMappingDefinitions)
 			{
-				if (currentDefinition.IsDefinedFor(from, to))
+				if (currentDefinition.IsDefinedFor(this.aMappingDefinition, @from, to))
 				{
 					mapping = currentDefinition.CreateMapping(this.aMappingDefinition, from, to);
 					return true;
@@ -38,7 +38,7 @@ namespace KST.POCOMapper.Executor
 
 		public bool ContainsMapping(Type from, Type to)
 		{
-			return this.aTypeMappingDefinitions.Any(x => x.IsDefinedFor(from, to));
+			return this.aTypeMappingDefinitions.Any(x => x.IsDefinedFor(this.aMappingDefinition, from, to));
 		}
 	}
 }

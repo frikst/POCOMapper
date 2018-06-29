@@ -39,7 +39,7 @@ namespace KST.POCOMapper.Definition.TypeMappingDefinition
 			return (IMapping)mappingCreateMethod.Invoke(this.aRules, new object[] { mappingDefinition });
 		}
 
-		bool ITypeMappingDefinition.IsDefinedFor(Type from, Type to)
+		bool ITypeMappingDefinition.IsDefinedFor(MappingDefinitionInformation mappingDefinition, Type @from, Type to)
 		{
 			return this.aFrom == from && this.aTo == to;
 		}

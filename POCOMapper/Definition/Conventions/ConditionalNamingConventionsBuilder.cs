@@ -14,6 +14,13 @@ namespace KST.POCOMapper.Definition.Conventions
 		    this.aTypePatterns = typePatterns;
 	    }
 
+	    public ConditionalNamingConventionsBuilder Where(PatternGroupWhereCondition whereCondition)
+	    {
+			this.aTypePatterns.AddWhereCondition(whereCondition);
+
+		    return this;
+	    }
+
 	    #region Overrides of NamingConventionsBuilder
 
 	    internal override NamingConventions Finish()

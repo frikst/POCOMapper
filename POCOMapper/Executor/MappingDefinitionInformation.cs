@@ -10,13 +10,14 @@ namespace KST.POCOMapper.Executor
     public class MappingDefinitionInformation
     {
 	    private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
+	    private readonly TypeMappingDefinitionContainer aTypeMappingDefinitionContainer;
 
 	    internal MappingDefinitionInformation(IEnumerable<ITypeMappingDefinition> mappingDefinitions, IEnumerable<IChildAssociationPostprocessing> childPostprocessings, NamingConventions fromConventions, NamingConventions toConventions)
 	    {
-		    var mappingDefinitionContainer = new TypeMappingDefinitionContainer(this, mappingDefinitions);
+		    this.aTypeMappingDefinitionContainer = new TypeMappingDefinitionContainer(this, mappingDefinitions);
 
-		    this.Mappings = new MappingContainer(mappingDefinitionContainer);
-		    this.UnresolvedMappings = new UnresolvedMappingContainer(this.Mappings, mappingDefinitionContainer);
+		    this.Mappings = new MappingContainer(this.aTypeMappingDefinitionContainer);
+		    this.UnresolvedMappings = new UnresolvedMappingContainer(this.Mappings, this.aTypeMappingDefinitionContainer);
 
 		    this.aChildPostprocessings = childPostprocessings.ToList();
 
@@ -41,5 +42,11 @@ namespace KST.POCOMapper.Executor
 
 		    return null;
 	    }
+
+	    public bool HasMapping(Type from, Type to)
+		    => this.aTypeMappingDefinitionContainer.ContainsMapping(@from, to);
+
+	    public bool HasMapping<TFrom, TTo>()
+		    => this.HasMapping(typeof(TFrom), typeof(TTo));
     }
 }

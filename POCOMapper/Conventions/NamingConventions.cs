@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using KST.POCOMapper.Conventions.MemberParsers;
 using KST.POCOMapper.Conventions.SymbolConventions;
+using KST.POCOMapper.Executor;
 using KST.POCOMapper.Members;
 
 namespace KST.POCOMapper.Conventions
@@ -24,6 +25,16 @@ namespace KST.POCOMapper.Conventions
 
 			this.MemberScanningPrecedence = memberScanningPrecedence;
 		}
+
+		internal void SetMappingDefinition(MappingDefinitionInformation mappingDefinition)
+		{
+			this.MappingDefinition = mappingDefinition;
+
+			foreach (var namingConventions in this.GetChildConventions())
+				namingConventions.SetMappingDefinition(mappingDefinition);
+		}
+
+		protected MappingDefinitionInformation MappingDefinition { get; private set; }
 
 		public ISymbolConvention Fields { get; }
 		public ISymbolConvention Methods { get; }

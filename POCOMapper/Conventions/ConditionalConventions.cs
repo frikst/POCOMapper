@@ -24,9 +24,9 @@ namespace KST.POCOMapper.Conventions
 		public override bool CanPair(IMember first, IMember second)
 		{
 			if (this.ConventionDirection == Direction.From)
-				return this.aTypePatterns.Matches(first.Type, second.Type);
+				return this.aTypePatterns.Matches(this.MappingDefinition, first.Type, second.Type);
 			else
-				return this.aTypePatterns.Matches(second.Type, first.Type);
+				return this.aTypePatterns.Matches(this.MappingDefinition, second.Type, first.Type);
 		}
 
 		#endregion
