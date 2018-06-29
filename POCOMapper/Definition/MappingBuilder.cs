@@ -37,39 +37,34 @@ namespace KST.POCOMapper.Definition
 
 		private void DefaultMappings()
 		{
-			foreach (var primitiveType in BasicNetTypes.GetPrimitiveTypes().Concat(BasicNetTypes.GetPrimitiveLikeTypes()))
-			{
-				this.Map(primitiveType, primitiveType)
-					.NotVisitable
-					.SetPriority(int.MaxValue)
-					.CopyRules();
+			this.Map(new Pattern<GItemFrom>(), new Pattern<GItemFrom>())
+				.Where(x => x.IsPrimitiveOrPrimitiveLike<GItemFrom>())
+				.SetPriority(int.MaxValue)
+				.CopyRules();
 
-				if (primitiveType != typeof(string))
-				{
-					this.Map(primitiveType, typeof(string))
-						.NotVisitable
-						.SetPriority(int.MaxValue)
-						.ToStringRules();
-				}
+			this.Map(new Pattern<GItemFrom>(), new Pattern<string>())
+				.Where(x => x.Type<GItemFrom>() != typeof(string))
+				.Where(x => x.IsPrimitiveOrPrimitiveLike<GItemFrom>())
+				.SetPriority(int.MaxValue)
+				.ToStringRules();
 
-				foreach (var convertibleTo in BasicNetTypes.GetImplicitTypeConversions(primitiveType))
-				{
-					this.Map(primitiveType, convertibleTo)
-						.NotVisitable
-						.SetPriority(int.MaxValue)
-						.CastRules();
-				}
-			}
+			this.Map(new Pattern<GItemFrom>(), new Pattern<GItemTo>())
+				.Where(x => x.IsImplicitlyCastable<GItemFrom, GItemTo>())
+				.SetPriority(int.MaxValue)
+				.CastRules();
 
 			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<GItemTo[]>())
+				.Where(x => x.Mappable<GItemFrom, GItemTo>())
 				.SetPriority(int.MaxValue)
 				.CollectionMappingRules()
 				.MapAs(CollectionMappingType.Array);
 			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<List<GItemTo>>())
+				.Where(x => x.Mappable<GItemFrom, GItemTo>())
 				.SetPriority(int.MaxValue)
 				.CollectionMappingRules()
 				.MapAs(CollectionMappingType.List);
 			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<SubClass<IEnumerable<GItemTo>>>())
+				.Where(x => x.Mappable<GItemFrom, GItemTo>())
 				.SetPriority(int.MaxValue)
 				.CollectionMappingRules();
 		}
