@@ -22,9 +22,6 @@ namespace KST.POCOMapper.Mapping.Standard
 			visitor.Visit(this);
 		}
 
-		public bool CanMap
-			=> true;
-
 		public bool IsDirect
 			=> false;
 

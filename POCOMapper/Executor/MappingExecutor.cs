@@ -32,10 +32,6 @@ namespace KST.POCOMapper.Executor
 		public TTo Map<TFrom, TTo>(TFrom from)
 		{
 			IMapping<TFrom, TTo> mapping = this.Mappings.GetMapping<TFrom, TTo>();
-
-			if (!mapping.CanMap)
-				throw new CantMapException($"Can't map {typeof(TFrom).Name} to {typeof(TTo).Name}, mapping object does not support simple mapping");
-
 			return mapping.Map(from);
 		}
 

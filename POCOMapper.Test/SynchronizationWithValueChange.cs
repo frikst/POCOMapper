@@ -20,7 +20,7 @@ namespace KST.POCOMapper.Test
 			public int child;
 		}
 
-		private class TestMapping : IMapping<int, int>
+		private class TestMapping : IMappingWithSyncSupport<int, int>
 		{
 			#region Implementation of IMapping
 
@@ -29,12 +29,8 @@ namespace KST.POCOMapper.Test
 				visitor.Visit(this);
 			}
 
-			public bool CanSynchronize { get { return true; } }
-			public bool CanMap { get { return true; } }
 			public bool IsDirect { get { return false; } }
 			public bool SynchronizeCanChangeObject { get { return true; } }
-			public string MappingSource { get { return null; } }
-			public string SynchronizationSource { get { return null; } }
 			public Type From { get { return typeof(int); } }
 			public Type To { get { return typeof(int); } }
 

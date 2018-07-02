@@ -80,7 +80,7 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				);
 			}
 
-			if (mappingWithSync.CanMap && !this.To.Type.IsValueType)
+			if (!this.To.Type.IsValueType)
 			{
 				Expression map = this.To.CreateSetterExpression(
 					to,

@@ -6,7 +6,6 @@ namespace KST.POCOMapper.Mapping.Base
 	public interface IMapping
 	{
 		void Accept(IMappingVisitor visitor);
-		bool CanMap { get; }
 
 		bool IsDirect { get; }
 

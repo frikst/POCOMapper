@@ -20,9 +20,6 @@ namespace KST.POCOMapper.Mapping.Special
 			this.aInnerMapping.Accept(visitor);
 		}
 
-		public bool CanMap
-			=> this.aInnerMapping.CanMap;
-
 		public bool IsDirect
 			=> false;
 
