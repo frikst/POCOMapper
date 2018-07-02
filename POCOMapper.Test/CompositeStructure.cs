@@ -1,4 +1,5 @@
 ﻿using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Special;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -20,7 +21,8 @@ namespace KST.POCOMapper.Test
 		{
 			private Mapping()
 			{
-				Map<From, To>();
+				Map<From, To>()
+					.NullableRules();
 			}
 		}
 

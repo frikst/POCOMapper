@@ -49,5 +49,27 @@ namespace KST.POCOMapper.Internal
 			PropertyInfo DebugViewProperty = typeof(Expression).GetProperty("DebugView", BindingFlags.NonPublic | BindingFlags.Instance);
 			return (string) DebugViewProperty.GetValue(expression, null);
 		}
+
+		public static Expression Same(Expression left, Expression right)
+		{
+			if (left.Type != right.Type)
+				throw new ArgumentException("left and right expressions should have the same types");
+
+			if (left.Type.IsValueType)
+				return Expression.Equal(left, right);
+			else
+				return Expression.ReferenceEqual(left, right);
+		}
+
+		public static Expression NotSame(Expression left, Expression right)
+		{
+			if (left.Type != right.Type)
+				throw new ArgumentException("left and right expressions should have the same types");
+
+			if (left.Type.IsValueType)
+				return Expression.NotEqual(left, right);
+			else
+				return Expression.ReferenceNotEqual(left, right);
+		}
 	}
 }

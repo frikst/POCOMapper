@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Object;
+using KST.POCOMapper.Mapping.Special;
 using KST.POCOMapper.Mapping.SubClass;
 using KST.POCOMapper.Members;
 
@@ -114,6 +115,18 @@ namespace KST.POCOMapper.Visitor
 			this.aLevel--;
 
 			this.aProcessed.Remove(mapping.GetType());
+		}
+
+		public void Visit(IDecoratorMapping mapping)
+		{
+			this.AddTypeLine(mapping);
+
+			if (this.CheckRecursivelyProcessed(mapping))
+				return;
+
+			this.aLevel++;
+			mapping.DecoratedMapping.Accept(this);
+			this.aLevel--;
 		}
 
 		public void Visit(IMapping mapping)

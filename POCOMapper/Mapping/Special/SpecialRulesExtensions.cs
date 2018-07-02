@@ -18,5 +18,17 @@ namespace KST.POCOMapper.Mapping.Special
 		{
 			return definition.Rules<PostprocessRules>();
 		}
+
+		public static NullableRules<TFrom, TTo> NullableRules<TFrom, TTo>(this IRulesDefinition<TFrom, TTo> definition)
+			where TFrom : class
+			where TTo : class
+		{
+			return definition.Rules<NullableRules<TFrom, TTo>>();
+		}
+
+		public static NullableRules NullableRules(this IRulesDefinition definition)
+		{
+			return definition.Rules<NullableRules>();
+		}
 	}
 }

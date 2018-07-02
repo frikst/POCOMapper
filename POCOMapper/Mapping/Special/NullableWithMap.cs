@@ -4,15 +4,15 @@ using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Special
 {
-	public class PostprocessWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IDecoratorMapping
+	public class NullableWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IDecoratorMapping
+		where TFrom : class
+		where TTo : class
 	{
 		private readonly IMapping<TFrom, TTo> aInnerMapping;
-		private readonly Action<TFrom, TTo> aPostprocessDelegate;
 
-		public PostprocessWithMap(IMapping<TFrom, TTo> innerMapping, Action<TFrom, TTo> postprocessDelegate)
+		public NullableWithMap(IMapping<TFrom, TTo> innerMapping)
 		{
 			this.aInnerMapping = innerMapping;
-			this.aPostprocessDelegate = postprocessDelegate;
 		}
 
 		public void Accept(IMappingVisitor visitor)
@@ -31,16 +31,13 @@ namespace KST.POCOMapper.Mapping.Special
 
 		public TTo Map(TFrom from)
 		{
-			TTo ret = this.aInnerMapping.Map(from);
-			this.aPostprocessDelegate(from, ret);
-			return ret;
-		}
+			if (from == null)
+				return null;
 
-		#region Implementation of IDecoratorMapping
+			return this.aInnerMapping.Map(from);
+		}
 
 		public IMapping DecoratedMapping
 			=> this.aInnerMapping;
-
-		#endregion
 	}
 }

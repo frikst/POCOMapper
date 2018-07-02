@@ -58,15 +58,6 @@ namespace KST.POCOMapper.Mapping.Object.Compilers
 			    to
 		    );
 
-		    if (!typeof(TFrom).IsValueType)
-		    {
-			    body = Expression.Condition(
-				    Expression.ReferenceEqual(from, Expression.Constant(null)),
-				    Expression.Constant(default(TTo), typeof(TTo)),
-				    body
-			    );
-		    }
-
 		    return Expression.Lambda<Func<TFrom, TTo>>(
 			    body,
 			    from

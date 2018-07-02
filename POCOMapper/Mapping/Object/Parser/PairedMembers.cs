@@ -69,41 +69,41 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 			Expression synchronize = Expression.Call(
 				Expression.Constant(mappingWithSync),
 				MappingMethods.Synchronize(this.From.Type, this.To.Type),
-				tempFromValue, this.To.CreateGetterExpression(to)
+				tempFromValue, tempToValue
 			);
 
 			if (mappingWithSync.SynchronizeCanChangeObject)
 			{
-				synchronize = this.To.CreateSetterExpression(
-					to,
-					synchronize
-				);
-			}
+				if (!this.To.Writable)
+					throw new InvalidMappingException($"Cannot synchronize non writtable member {this.To} using mapping {mappingWithSync.GetType().Name}");
 
-			if (!this.To.Type.IsValueType)
-			{
-				Expression map = this.To.CreateSetterExpression(
-					to,
-					Expression.Call(
-						Expression.Constant(mappingWithSync),
-						MappingMethods.Map(this.From.Type, this.To.Type),
-						tempFromValue
-					)
-				);
-				map = this.AddPostprocess(map, to, postprocess, parent);
-				synchronize = Expression.IfThenElse(
-					Expression.Equal(tempToValue, Expression.Constant(null)),
-					map,
-					synchronize
-				);
-			}
+				if (postprocess != null)
+				{
+					var origToValue = Expression.Parameter(this.To.Type, "origTo");
+					var newToValue = Expression.Parameter(this.To.Type, "newTo");
 
-			if (this.To.Writable && !this.From.Type.IsValueType)
-				synchronize = Expression.IfThenElse(
-					Expression.Equal(tempFromValue, Expression.Constant(null)),
-					this.To.CreateSetterExpression(to, Expression.Constant(null, this.To.Type)),
-					synchronize
-				);
+					synchronize = Expression.Block(
+						new[] {origToValue, newToValue},
+						Expression.Assign(origToValue, tempToValue),
+						Expression.Assign(newToValue, synchronize),
+						Expression.IfThen(
+							ExpressionHelper.NotSame(origToValue, newToValue),
+							ExpressionHelper.Call(postprocess, parent, newToValue)
+						),
+						this.To.CreateSetterExpression(
+							to,
+							newToValue
+						)
+					);
+				}
+				else
+				{
+					synchronize = this.To.CreateSetterExpression(
+						to,
+						synchronize
+					);
+				}
+			}
 
 			return Expression.Block(
 				new ParameterExpression[] { tempFromValue, tempToValue },

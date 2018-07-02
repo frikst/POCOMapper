@@ -1,4 +1,5 @@
 ﻿using KST.POCOMapper.Definition;
+using KST.POCOMapper.Mapping.Special;
 using KST.POCOMapper.Visitor;
 using NUnit.Framework;
 
@@ -21,7 +22,8 @@ namespace KST.POCOMapper.Test
 		{
 			private Mapping()
 			{
-				Map<From, To>();
+				Map<From, To>()
+					.NullableRules();
 			}
 		}
 
@@ -64,7 +66,7 @@ namespace KST.POCOMapper.Test
 		[Test]
 		public void MappingToString()
 		{
-			string expected = "ObjectToObject<From, To>\n    Inner => Inner ObjectToObject<From, To>\n        ...";
+			string expected = "NullableWithSync<From, To>\n    ObjectToObject<From, To>\n        Inner => Inner NullableWithSync<From, To>\n            ...";
 
 			ToStringVisitor visitor = new ToStringVisitor();
 

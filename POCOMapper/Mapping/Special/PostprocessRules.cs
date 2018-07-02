@@ -32,14 +32,6 @@ namespace KST.POCOMapper.Mapping.Special
 
 		#region Implementation of IRulesDefinition<TFrom,TTo>
 
-		public void Rules<TRules>(Action<TRules> rules)
-			where TRules : class, IMappingRules<TFrom, TTo>, new()
-		{
-			TRules ret = new TRules();
-			rules(ret);
-			this.aRules = ret;
-		}
-
 		public TRules Rules<TRules>()
 			where TRules : class, IMappingRules<TFrom, TTo>, new()
 		{
@@ -89,14 +81,6 @@ namespace KST.POCOMapper.Mapping.Special
 		}
 
 		#region Implementation of IRulesDefinition<TFrom,TTo>
-
-		public void Rules<TRules>(Action<TRules> rules)
-			where TRules : class, IMappingRules, new()
-		{
-			TRules ret = new TRules();
-			rules(ret);
-			this.aRules = ret;
-		}
 
 		public TRules Rules<TRules>()
 			where TRules : class, IMappingRules, new()
