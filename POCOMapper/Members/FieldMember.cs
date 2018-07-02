@@ -21,6 +21,17 @@ namespace KST.POCOMapper.Members
 			this.aConventions = conventions;
 		}
 
+		public FieldMember(IMember parent, FieldInfo field)
+		{
+			this.Parent = parent;
+
+			this.Symbol = Symbol.Undefined;
+
+			this.aField = field;
+
+			this.aConventions = null;
+		}
+
 		#region Implementation of IMember
 
 		public IMember Parent { get; }
@@ -37,7 +48,7 @@ namespace KST.POCOMapper.Members
 			=> this.aField.Name;
 
 		public bool CanPairWith(IMember other)
-			=> this.aConventions.CanPair(this, other);
+			=> this.aConventions?.CanPair(this, other) ?? true;
 
 		public bool Readable
 			=> true;
@@ -56,8 +67,8 @@ namespace KST.POCOMapper.Members
 		public override string ToString()
 		{
 			if (this.Parent != null)
-				return $"{this.Parent}.[F]{this.Symbol}";
-			return $"[F]{this.Symbol}";
+				return $"{this.Parent}.[F]{this.Name}";
+			return $"[F]{this.Name}";
 		}
 
 		public override bool Equals(object obj)

@@ -5,6 +5,8 @@ namespace KST.POCOMapper.Members
 {
 	public struct Symbol
 	{
+		public static readonly Symbol Undefined = new Symbol("UNDEFINED", 0);
+
 		private readonly string[] aParts;
 		private readonly int aHashCode;
 
@@ -12,6 +14,12 @@ namespace KST.POCOMapper.Members
 		{
 			this.aParts = parts.Select(x => x.ToLower()).ToArray();
 			this.aHashCode = (int)this.aParts.Sum(x => (long)x.GetHashCode());
+		}
+
+		private Symbol(string name, int hashCode)
+		{
+			this.aParts = new[] {name};
+			this.aHashCode = hashCode;
 		}
 
 		#region Equality members

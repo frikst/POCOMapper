@@ -20,10 +20,8 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 
 		PairedMembers IMemberMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type fromClass, Type toClass)
 		{
-			var parser = new MemberFromNameParser();
-
-			var memberFrom = parser.Parse(mappingDefinition.FromConventions, fromClass, this.aFromName, false);
-			var memberTo = parser.Parse(mappingDefinition.ToConventions, toClass, this.aToName, true);
+			var memberFrom = new MemberFromNameParser(fromClass).ParseRead(this.aFromName);
+			var memberTo = new MemberFromNameParser(toClass).ParseWrite(this.aToName);
 
 			var mapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(memberFrom.Type, memberTo.Type);
 

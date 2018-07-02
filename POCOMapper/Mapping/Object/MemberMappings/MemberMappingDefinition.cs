@@ -26,18 +26,16 @@ namespace KST.POCOMapper.Mapping.Object.MemberMappings
 
 		PairedMembers IMemberMappingDefinition.CreateMapping(MappingDefinitionInformation mappingDefinition, Type fromClass, Type toClass)
 		{
-			MemberFromNameParser parser = new MemberFromNameParser();
-
 			IMember memberFrom;
 			if (this.aFromName == null)
 				memberFrom = new ThisMember<TFromType>();
 			else
-				memberFrom = parser.Parse(mappingDefinition.FromConventions, fromClass, this.aFromName, false);
+				memberFrom = new MemberFromNameParser(fromClass).ParseRead(this.aFromName);
 			IMember memberTo;
 			if (this.aToName == null)
 				memberTo = new ThisMember<TToType>();
 			else
-				memberTo = parser.Parse(mappingDefinition.ToConventions, toClass, this.aToName, true);
+				memberTo = new MemberFromNameParser(toClass).ParseWrite(this.aToName);
 
 			IUnresolvedMapping<TFromType, TToType> mapping;
 			if (this.aRules == null)

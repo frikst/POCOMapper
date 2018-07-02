@@ -49,6 +49,11 @@ namespace KST.POCOMapper.Members
 
 		#endregion
 
+		public override string ToString()
+		{
+			return "this";
+		}
+
 		public override bool Equals(object obj)
 		{
 			return obj is ThisMember<TClass>;

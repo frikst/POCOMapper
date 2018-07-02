@@ -21,6 +21,17 @@ namespace KST.POCOMapper.Members
 			this.aConventions = conventions;
 		}
 
+		public PropertyMember(IMember parent, PropertyInfo property)
+		{
+			this.Parent = parent;
+
+			this.Symbol = Symbol.Undefined;
+
+			this.aProperty = property;
+
+			this.aConventions = null;
+		}
+
 		#region Implementation of IMember
 
 		public IMember Parent { get; }
@@ -43,7 +54,7 @@ namespace KST.POCOMapper.Members
 			=> this.aProperty.CanWrite;
 
 		public bool CanPairWith(IMember other)
-			=> this.aConventions.CanPair(this, other);
+			=> this.aConventions?.CanPair(this, other) ?? true;
 
 		public Expression CreateGetterExpression(ParameterExpression parentVariable)
 		{
@@ -64,8 +75,8 @@ namespace KST.POCOMapper.Members
 		public override string ToString()
 		{
 			if (this.Parent != null)
-				return $"{this.Parent}.[P]{this.Symbol}";
-			return $"[P]{this.Symbol}";
+				return $"{this.Parent}.[P]{this.Name}";
+			return $"[P]{this.Name}";
 		}
 
 		public override bool Equals(object obj)

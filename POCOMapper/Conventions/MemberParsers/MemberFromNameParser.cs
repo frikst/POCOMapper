@@ -9,12 +9,24 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 {
 	internal class MemberFromNameParser
 	{
-		public IMember Parse(NamingConventions conventions, Type type, string name, bool write)
+		private readonly Type aType;
+
+		public MemberFromNameParser(Type type)
 		{
-			return this.CreateMember(conventions, this.ParseMemberString(type, name), write);
+			this.aType = type;
 		}
 
-		private IMember CreateMember(NamingConventions conventions, IEnumerable<MemberInfo> members, bool write)
+		public IMember ParseRead(string name)
+		{
+			return this.CreateMember(this.ParseMemberString(name), false);
+		}
+
+		public IMember ParseWrite(string name)
+		{
+			return this.CreateMember(this.ParseMemberString(name), true);
+		}
+
+		private IMember CreateMember(IEnumerable<MemberInfo> members, bool write)
 		{
 			IMember previousMember = null;
 
@@ -24,16 +36,16 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 				switch (current)
 				{
 					case FieldInfo currentField:
-						currentMember = new FieldMember(previousMember, conventions.Fields.Parse(currentField.Name), currentField, conventions);
+						currentMember = new FieldMember(previousMember, currentField);
 						break;
 					case PropertyInfo currentProperty:
-						currentMember = new PropertyMember(previousMember, conventions.Properties.Parse(currentProperty.Name), currentProperty, conventions);
+						currentMember = new PropertyMember(previousMember, currentProperty);
 						break;
 					case MethodInfo currentMethod:
 						if (write)
-							currentMember = new MethodMember(previousMember, conventions.Methods.Parse(current.Name), null, currentMethod, conventions);
+							currentMember = new MethodMember(previousMember, null, currentMethod);
 						else
-							currentMember = new MethodMember(previousMember, conventions.Methods.Parse(current.Name), currentMethod, null, conventions);
+							currentMember = new MethodMember(previousMember, currentMethod, null);
 						break;
 					default:
 						throw new Exception("Unkown member type");
@@ -45,9 +57,9 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 			return previousMember;
 		}
 
-		private IEnumerable<MemberInfo> ParseMemberString(Type type, string path)
+		private IEnumerable<MemberInfo> ParseMemberString(string path)
 		{
-			var curType = type;
+			var curType = this.aType;
 
 			foreach (var name in path.Split('.'))
 			{
@@ -64,8 +76,6 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 					case MethodInfo curMethod:
 						curType = curMethod.ReturnType;
 						break;
-					case null:
-						throw new InvalidMappingException($"{name} member not found in type {curType.Name}");
 					default:
 						throw new Exception("Unkown member type");
 				}
@@ -84,7 +94,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 					return ret;
 			}
 
-			return null;
+			throw new InvalidMappingException($"{name} member not found in type {type.Name}");
 		}
 	}
 }
