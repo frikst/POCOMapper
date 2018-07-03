@@ -1,5 +1,5 @@
 ﻿using KST.POCOMapper.Definition;
-using KST.POCOMapper.Mapping.Collection;
+using KST.POCOMapper.SpecialRules;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -24,13 +24,9 @@ namespace KST.POCOMapper.Test
 		{
 			private Mapping()
 			{
-				Map<ItemFrom, ItemTo>();
-				Map<ItemFrom[], ItemTo[]>()
-					.CollectionMappingRules()
-					.EntityId<ItemFrom, ItemTo, int>(
-						x => x.id,
-						x => x.id
-					);
+				Map<ItemFrom, ItemTo>()
+					.EqualityRules()
+					.Ids(x => x.id, x => x.id);
 			}
 		}
 

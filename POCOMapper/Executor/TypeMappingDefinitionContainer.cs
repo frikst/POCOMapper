@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Executor.TypeMappingDefinition;
 using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.SpecialRules;
 
 namespace KST.POCOMapper.Executor
 {
@@ -25,7 +26,7 @@ namespace KST.POCOMapper.Executor
 		{
 			foreach (var currentDefinition in this.aTypeMappingDefinitions)
 			{
-				if (currentDefinition.IsDefinedFor(this.aMappingDefinition, @from, to))
+				if (currentDefinition.IsDefinedFor(this.aMappingDefinition, from, to))
 				{
 					mapping = currentDefinition.CreateMapping(this.aMappingDefinition, from, to);
 					return true;
@@ -34,6 +35,22 @@ namespace KST.POCOMapper.Executor
 
 			mapping = null;
 			return false;
+		}
+
+		public TRules GetSpecialRules<TRules>(Type from, Type to)
+			where TRules : class, ISpecialRules
+		{
+			foreach (var currentDefinition in this.aTypeMappingDefinitions)
+			{
+				if (currentDefinition.IsDefinedFor(this.aMappingDefinition, from, to))
+				{
+					var rules = currentDefinition.GetSpecialRules<TRules>();
+					if (rules != null)
+						return rules;
+				}
+			}
+
+			return null;
 		}
 
 		public bool ContainsMapping(Type from, Type to)

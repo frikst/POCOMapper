@@ -18,6 +18,7 @@ namespace KST.POCOMapper.Executor
 
 		    this.Mappings = new MappingContainer(this.aTypeMappingDefinitionContainer);
 		    this.UnresolvedMappings = new UnresolvedMappingContainer(this.Mappings, this.aTypeMappingDefinitionContainer);
+			this.SpecialRules = new SpecialRulesContainer(this.aTypeMappingDefinitionContainer);
 
 		    this.aChildPostprocessings = childPostprocessings.ToList();
 
@@ -31,6 +32,8 @@ namespace KST.POCOMapper.Executor
 	    public MappingContainer Mappings { get; }
 
 	    public UnresolvedMappingContainer UnresolvedMappings { get; }
+
+	    public SpecialRulesContainer SpecialRules { get; }
 
 	    public NamingConventions FromConventions { get; }
 	    public NamingConventions ToConventions { get; }

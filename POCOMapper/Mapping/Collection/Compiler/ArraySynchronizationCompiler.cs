@@ -4,13 +4,14 @@ using KST.POCOMapper.Internal;
 using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.MappingCompilaton;
+using KST.POCOMapper.SpecialRules;
 
 namespace KST.POCOMapper.Mapping.Collection.Compiler
 {
     internal class ArraySynchronizationCompiler<TFrom, TTo> : CollectionSynchronizationCompiler<TFrom, TTo>
     {
-	    public ArraySynchronizationCompiler(IUnresolvedMapping itemMapping, Delegate selectIdFrom, Delegate selectIdTo, Delegate childPostprocessing)
-		    : base(itemMapping, selectIdFrom, selectIdTo, childPostprocessing)
+	    public ArraySynchronizationCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules, Delegate childPostprocessing)
+		    : base(itemMapping, equalityRules, childPostprocessing)
 	    {
 	    }
 

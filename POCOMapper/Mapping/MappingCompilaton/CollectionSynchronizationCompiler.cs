@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.SpecialRules;
 
 namespace KST.POCOMapper.Mapping.MappingCompilaton
 {
@@ -14,11 +15,10 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 		private readonly Delegate aSelectIdTo;
 		private readonly Delegate aChildPostprocessing;
 
-		protected CollectionSynchronizationCompiler(IUnresolvedMapping itemMapping, Delegate selectIdFrom, Delegate selectIdTo, Delegate childPostprocessing)
+		protected CollectionSynchronizationCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules, Delegate childPostprocessing)
 		{
 			this.aItemMapping = itemMapping;
-			this.aSelectIdFrom = selectIdFrom;
-			this.aSelectIdTo = selectIdTo;
+			(this.aSelectIdFrom, this.aSelectIdTo) = equalityRules.GetIdSelectors();
 			this.aChildPostprocessing = childPostprocessing;
 		}
 

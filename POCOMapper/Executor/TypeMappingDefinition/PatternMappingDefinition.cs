@@ -1,5 +1,6 @@
 ﻿using System;
 using KST.POCOMapper.Mapping.Base;
+using KST.POCOMapper.SpecialRules;
 using KST.POCOMapper.TypePatterns.Group;
 
 namespace KST.POCOMapper.Executor.TypeMappingDefinition
@@ -22,6 +23,12 @@ namespace KST.POCOMapper.Executor.TypeMappingDefinition
 				throw new InvalidOperationException($"{from.Name} and {to.Name} does not match required patterns");
 
 			return this.aRules.Create(from, to, mappingDefinition);
+		}
+
+		public TRules GetSpecialRules<TRules>()
+			where TRules : class, ISpecialRules
+		{
+			return this.aRules as TRules;
 		}
 
 		public bool IsDefinedFor(MappingDefinitionInformation mappingDefinition, Type from, Type to)

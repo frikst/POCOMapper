@@ -4,6 +4,7 @@ using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection.Compiler;
 using KST.POCOMapper.Mapping.MappingCompilaton;
+using KST.POCOMapper.SpecialRules;
 
 namespace KST.POCOMapper.Mapping.Collection
 {
@@ -11,7 +12,7 @@ namespace KST.POCOMapper.Mapping.Collection
 	{
 		private readonly CollectionSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 
-		internal CollectionWithSync(MappingDefinitionInformation mappingDefinition, Delegate selectIdFrom, Delegate selectIdTo)
+		internal CollectionWithSync(MappingDefinitionInformation mappingDefinition, IEqualityRules equalityRules)
 			: base(mappingDefinition)
 		{
 			var itemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
@@ -19,7 +20,7 @@ namespace KST.POCOMapper.Mapping.Collection
 			var childPostprocessing = mappingDefinition.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
 			if (typeof(TTo).IsArray)
-				this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(itemMapping, selectIdFrom, selectIdTo, childPostprocessing);
+				this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(itemMapping, equalityRules, childPostprocessing);
 			else
 				throw new NotImplementedException("Only array synchronization supported yet");
 		}
