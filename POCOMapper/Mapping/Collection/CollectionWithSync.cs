@@ -3,21 +3,25 @@ using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection.Compiler;
+using KST.POCOMapper.Mapping.MappingCompilaton;
 
 namespace KST.POCOMapper.Mapping.Collection
 {
-	public class EnumerableToArrayWithSync<TFrom, TTo> : EnumerableToArrayWithMap<TFrom, TTo>, IMappingWithSyncSupport<TFrom, TTo>
+	public class CollectionWithSync<TFrom, TTo> : CollectionWithMap<TFrom, TTo>, IMappingWithSyncSupport<TFrom, TTo>
 	{
-		private readonly ArraySynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
+		private readonly CollectionSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 
-		public EnumerableToArrayWithSync(MappingDefinitionInformation mappingDefinition, Delegate selectIdFrom, Delegate selectIdTo)
+		internal CollectionWithSync(MappingDefinitionInformation mappingDefinition, Delegate selectIdFrom, Delegate selectIdTo)
 			: base(mappingDefinition)
 		{
 			var itemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
 			var childPostprocessing = mappingDefinition.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
-			this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(itemMapping, selectIdFrom, selectIdTo, childPostprocessing);
+			if (typeof(TTo).IsArray)
+				this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(itemMapping, selectIdFrom, selectIdTo, childPostprocessing);
+			else
+				throw new NotImplementedException("Only array synchronization supported yet");
 		}
 
 		public bool SynchronizeCanChangeObject

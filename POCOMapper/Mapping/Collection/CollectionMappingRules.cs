@@ -13,20 +13,11 @@ namespace KST.POCOMapper.Mapping.Collection
 	{
 		private Delegate aSelectIdFrom;
 		private Delegate aSelectIdTo;
-		private CollectionMappingType aMappingType;
 
 		public CollectionMappingRules()
 		{
-			this.aMappingType = CollectionMappingType.Enumerable;
 			this.aSelectIdFrom = null;
 			this.aSelectIdTo = null;
-		}
-
-		public CollectionMappingRules<TFrom, TTo> MapAs(CollectionMappingType type)
-		{
-			this.aMappingType = type;
-
-			return this;
 		}
 
 		public CollectionMappingRules<TFrom, TTo> EntityId<TItemFrom, TItemTo, TItemId>(Func<TItemFrom, TItemId> selectIdFrom, Func<TItemTo, TItemId> selectIdTo)
@@ -46,17 +37,10 @@ namespace KST.POCOMapper.Mapping.Collection
 
 		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			switch (this.aMappingType)
-			{
-				case CollectionMappingType.List:
-					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
-				case CollectionMappingType.Array when this.aSelectIdFrom != null && this.aSelectIdTo != null:
-					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.aSelectIdFrom, this.aSelectIdTo);
-				case CollectionMappingType.Array:
-					return new EnumerableToArrayWithMap<TFrom, TTo>(mappingDefinition);
-				default:
-					return new EnumerableToEnumerable<TFrom, TTo>(mappingDefinition);
-			}
+			if (typeof(TTo).IsArray && this.aSelectIdFrom != null && this.aSelectIdTo != null)
+				return new CollectionWithSync<TFrom, TTo>(mappingDefinition, this.aSelectIdFrom, this.aSelectIdTo);
+			else
+				return new CollectionWithMap<TFrom, TTo>(mappingDefinition);
 		}
 
 		#endregion
@@ -66,20 +50,11 @@ namespace KST.POCOMapper.Mapping.Collection
 	{
 		private Delegate aSelectIdFrom;
 		private Delegate aSelectIdTo;
-		private CollectionMappingType aMappingType;
 
 		public CollectionMappingRules()
 		{
-			this.aMappingType = CollectionMappingType.Enumerable;
 			this.aSelectIdFrom = null;
 			this.aSelectIdTo = null;
-		}
-
-		public CollectionMappingRules MapAs(CollectionMappingType type)
-		{
-			this.aMappingType = type;
-
-			return this;
 		}
 
 		public CollectionMappingRules EntityId<TItemFrom, TItemTo, TItemId>(Func<TItemFrom, TItemId> selectIdFrom, Func<TItemTo, TItemId> selectIdTo)
@@ -105,17 +80,10 @@ namespace KST.POCOMapper.Mapping.Collection
 					throw new InvalidMappingException($"Collection item of {typeof(TTo).Name} is not {itemTo.Name}");
 			}
 
-			switch (this.aMappingType)
-			{
-				case CollectionMappingType.List:
-					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
-				case CollectionMappingType.Array when this.aSelectIdFrom != null && this.aSelectIdTo != null:
-					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.aSelectIdFrom, this.aSelectIdTo);
-				case CollectionMappingType.Array:
-					return new EnumerableToArrayWithMap<TFrom, TTo>(mappingDefinition);
-				default:
-					return new EnumerableToEnumerable<TFrom, TTo>(mappingDefinition);
-			}
+			if (typeof(TTo).IsArray && this.aSelectIdFrom != null && this.aSelectIdTo != null)
+				return new CollectionWithSync<TFrom, TTo>(mappingDefinition, this.aSelectIdFrom, this.aSelectIdTo);
+			else
+				return new CollectionWithMap<TFrom, TTo>(mappingDefinition);
 		}
 
 		#endregion

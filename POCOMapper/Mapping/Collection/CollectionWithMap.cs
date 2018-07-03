@@ -1,25 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection.Compiler;
+using KST.POCOMapper.Mapping.MappingCompilaton;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Collection
 {
-	public class EnumerableToArrayWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, ICollectionMapping
+	public class CollectionWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, ICollectionMapping
 	{
-		private readonly ArrayMappingCompiler<TFrom, TTo> aMappingExpression;
+		private readonly CollectionMappingCompiler<TFrom, TTo> aMappingExpression;
 
 		private readonly IUnresolvedMapping aItemMapping;
 
-		public EnumerableToArrayWithMap(MappingDefinitionInformation mappingDefinition)
+		internal CollectionWithMap(MappingDefinitionInformation mappingDefinition)
 		{
 			this.aItemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
 			var childPostprocessing = mappingDefinition.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
-			this.aMappingExpression = new ArrayMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+			if (typeof(TTo).IsArray)
+				this.aMappingExpression = new ArrayMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+			else if (typeof(TTo).IsGenericType && typeof(TTo).GetGenericTypeDefinition() == typeof(List<>))
+				this.aMappingExpression = new ListMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+			else
+				this.aMappingExpression = new EnumerableMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
 		}
 
 		public void Accept(IMappingVisitor visitor)

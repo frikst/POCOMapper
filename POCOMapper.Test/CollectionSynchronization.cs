@@ -30,8 +30,7 @@ namespace KST.POCOMapper.Test
 					.EntityId<ItemFrom, ItemTo, int>(
 						x => x.id,
 						x => x.id
-					)
-					.MapAs(CollectionMappingType.Array);
+					);
 			}
 		}
 

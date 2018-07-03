@@ -52,16 +52,6 @@ namespace KST.POCOMapper.Definition
 				.SetPriority(int.MaxValue)
 				.CastRules();
 
-			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<GItemTo[]>())
-				.Where(x => x.Mappable<GItemFrom, GItemTo>())
-				.SetPriority(int.MaxValue)
-				.CollectionMappingRules()
-				.MapAs(CollectionMappingType.Array);
-			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<List<GItemTo>>())
-				.Where(x => x.Mappable<GItemFrom, GItemTo>())
-				.SetPriority(int.MaxValue)
-				.CollectionMappingRules()
-				.MapAs(CollectionMappingType.List);
 			this.Map(new Pattern<SubClass<IEnumerable<GItemFrom>>>(), new Pattern<SubClass<IEnumerable<GItemTo>>>())
 				.Where(x => x.Mappable<GItemFrom, GItemTo>())
 				.SetPriority(int.MaxValue)
