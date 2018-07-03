@@ -21,15 +21,18 @@ namespace KST.POCOMapper.Mapping.SubClass
 			public TRules Rules<TRules>() where TRules : class, IMappingRules<TFrom, TTo>, new()
 			{
 				TRules ret = new TRules();
-				this.aSelf.CfgDefaultRules = ret;
+				this.aSelf.aDefaultRules = ret;
 				return ret;
 			}
 		}
 
+		private readonly List<(Type From, Type To)> aMappings;
+		private IMappingRules<TFrom, TTo> aDefaultRules;
+
 		public SubClassMappingRules()
 		{
-			this.CfgDefaultRules = new ObjectMappingRules<TFrom, TTo>();
-			this.CfgMappings = new List<(Type From, Type To)>();
+			this.aDefaultRules = new ObjectMappingRules<TFrom, TTo>();
+			this.aMappings = new List<(Type From, Type To)>();
 		}
 
 		/// <summary>
@@ -42,7 +45,7 @@ namespace KST.POCOMapper.Mapping.SubClass
 			where TSubFrom : TFrom
 			where TSubTo : TTo
 		{
-			this.CfgMappings.Add((typeof(TSubFrom), typeof(TSubTo)));
+			this.aMappings.Add((typeof(TSubFrom), typeof(TSubTo)));
 
 			return this;
 		}
@@ -50,14 +53,11 @@ namespace KST.POCOMapper.Mapping.SubClass
 		public IRulesDefinition<TFrom, TTo> Default
 			=> new DefaultRules(this);
 
-		protected List<(Type From, Type To)> CfgMappings { get; }
-		protected IMappingRules<TFrom, TTo> CfgDefaultRules { get; private set; }
-
 		#region Implementation of IMappingRules
 
 		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			return new SubClassToObject<TFrom, TTo>(mappingDefinition, this.CfgMappings, this.CfgDefaultRules.Create(mappingDefinition));
+			return new SubClassToObject<TFrom, TTo>(mappingDefinition, this.aMappings, this.aDefaultRules.Create(mappingDefinition));
 		}
 
 		#endregion
