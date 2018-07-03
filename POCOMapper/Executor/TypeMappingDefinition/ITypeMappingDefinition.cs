@@ -1,8 +1,7 @@
 ﻿using System;
-using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.Definition.TypeMappingDefinition
+namespace KST.POCOMapper.Executor.TypeMappingDefinition
 {
 	internal interface ITypeMappingDefinition
 	{

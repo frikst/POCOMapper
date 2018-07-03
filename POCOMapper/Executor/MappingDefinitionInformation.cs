@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
-using KST.POCOMapper.Definition.TypeMappingDefinition;
+using KST.POCOMapper.Executor.TypeMappingDefinition;
 
 namespace KST.POCOMapper.Executor
 {

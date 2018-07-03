@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Definition.ChildProcessingDefinition;
-using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Executor.TypeMappingDefinition;
 using KST.POCOMapper.Mapping.Base;
 
 namespace KST.POCOMapper.Executor

@@ -6,7 +6,6 @@ using KST.POCOMapper.Definition.ChildProcessingDefinition;
 using KST.POCOMapper.Definition.Conventions;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Executor;
-using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Standard;
 using KST.POCOMapper.TypePatterns;
@@ -19,13 +18,13 @@ namespace KST.POCOMapper.Definition
 		private abstract class GItemFrom : GenericParameter { }
 		private abstract class GItemTo : GenericParameter { }
 
-		private readonly List<ITypeMappingDefinition> aMappingDefinitions;
+		private readonly List<ITypeMappingDefinitionBuilder> aMappingDefinitions;
 		private readonly List<IChildAssociationPostprocessing> aChildPostprocessings;
 		private bool aFinished;
 
 		public MappingBuilder()
 		{
-			this.aMappingDefinitions = new List<ITypeMappingDefinition>();
+			this.aMappingDefinitions = new List<ITypeMappingDefinitionBuilder>();
 			this.aChildPostprocessings = new List<IChildAssociationPostprocessing>();
 			this.aFinished = false;
 
@@ -85,12 +84,12 @@ namespace KST.POCOMapper.Definition
 		/// <typeparam name="TFrom">Class from the source model.</typeparam>
 		/// <typeparam name="TTo">Class from the destination model.</typeparam>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		public ExactTypeMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
+		public ExactTypeMappingDefinitionBuilder<TFrom, TTo> Map<TFrom, TTo>()
 		{
 			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			ExactTypeMappingDefinition<TFrom, TTo> mappingDefinitionDef = new ExactTypeMappingDefinition<TFrom, TTo>();
+			ExactTypeMappingDefinitionBuilder<TFrom, TTo> mappingDefinitionDef = new ExactTypeMappingDefinitionBuilder<TFrom, TTo>();
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}
@@ -101,12 +100,12 @@ namespace KST.POCOMapper.Definition
 		/// <param name="from">Class from the source model.</param>
 		/// <param name="to">Class from the destination model.</param>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		public UntypedTypeMappingDefinition Map(Type from, Type to)
+		public UntypedTypeMappingDefinitionBuilder Map(Type from, Type to)
 		{
 			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			UntypedTypeMappingDefinition mappingDefinitionDef = new UntypedTypeMappingDefinition(from, to);
+			UntypedTypeMappingDefinitionBuilder mappingDefinitionDef = new UntypedTypeMappingDefinitionBuilder(from, to);
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}
@@ -118,12 +117,12 @@ namespace KST.POCOMapper.Definition
 		/// <param name="patternFrom">Pattern for class from the source model.</param>
 		/// <param name="patternTo">Pattern for class from the destination model.</param>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		public PatternTypeMappingDefinition Map(IPattern patternFrom, IPattern patternTo)
+		public PatternTypeMappingDefinitionBuilder Map(IPattern patternFrom, IPattern patternTo)
 		{
 			if (this.aFinished)
 				throw new Exception("Cannot modify the mapping");
 
-			PatternTypeMappingDefinition mappingDefinitionDef = new PatternTypeMappingDefinition(patternFrom, patternTo);
+			PatternTypeMappingDefinitionBuilder mappingDefinitionDef = new PatternTypeMappingDefinitionBuilder(patternFrom, patternTo);
 			this.aMappingDefinitions.Add(mappingDefinitionDef);
 			return mappingDefinitionDef;
 		}
@@ -142,7 +141,7 @@ namespace KST.POCOMapper.Definition
 		{
 			this.aFinished = true;
 			return new MappingExecutor(
-				this.aMappingDefinitions,
+				this.aMappingDefinitions.Select(x => x.Finish()),
 				this.aChildPostprocessings,
 				this.FromConventions.Finish(),
 				this.ToConventions.Finish()

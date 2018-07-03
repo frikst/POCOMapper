@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KST.POCOMapper.Definition.TypeMappingDefinition
+namespace KST.POCOMapper.Executor.TypeMappingDefinition
 {
 	interface IExactTypeMappingDefinition : ITypeMappingDefinition
 	{

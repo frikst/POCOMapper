@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KST.POCOMapper.Definition.TypeMappingDefinition;
+using KST.POCOMapper.Executor.TypeMappingDefinition;
 using KST.POCOMapper.Mapping.Base;
 
 namespace KST.POCOMapper.Executor

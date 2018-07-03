@@ -5,7 +5,6 @@ using KST.POCOMapper.Definition.Conventions;
 using KST.POCOMapper.Definition.TypeMappingDefinition;
 using KST.POCOMapper.Executor;
 using KST.POCOMapper.TypePatterns;
-using KST.POCOMapper.TypePatterns.DefinitionHelpers;
 
 namespace KST.POCOMapper.Definition
 {
@@ -43,7 +42,7 @@ namespace KST.POCOMapper.Definition
 		/// <typeparam name="TFrom">Class from the source model.</typeparam>
 		/// <typeparam name="TTo">Class from the destination model.</typeparam>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected ExactTypeMappingDefinition<TFrom, TTo> Map<TFrom, TTo>()
+		protected ExactTypeMappingDefinitionBuilder<TFrom, TTo> Map<TFrom, TTo>()
 			=> this.aBuilder.Map<TFrom, TTo>();
 
 		/// <summary>
@@ -52,7 +51,7 @@ namespace KST.POCOMapper.Definition
 		/// <param name="from">Class from the source model.</param>
 		/// <param name="to">Class from the destination model.</param>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected UntypedTypeMappingDefinition Map(Type from, Type to)
+		protected UntypedTypeMappingDefinitionBuilder Map(Type from, Type to)
 			=> this.aBuilder.Map(from, to);
 
 		/// <summary>
@@ -62,7 +61,7 @@ namespace KST.POCOMapper.Definition
 		/// <param name="patternFrom">Pattern for class from the source model.</param>
 		/// <param name="patternTo">Pattern for class from the destination model.</param>
 		/// <returns>Mapping specification object. Can be used to specify special properties of the mapping.</returns>
-		protected PatternTypeMappingDefinition Map(IPattern patternFrom, IPattern patternTo)
+		protected PatternTypeMappingDefinitionBuilder Map(IPattern patternFrom, IPattern patternTo)
 			=> this.aBuilder.Map(patternFrom, patternTo);
 
 		protected ChildAssociationPostprocessing<TParent, TChild> Child<TParent, TChild>()
