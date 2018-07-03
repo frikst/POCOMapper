@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Executor;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
@@ -21,12 +21,14 @@ namespace KST.POCOMapper.Mapping.Collection
 
 			var childPostprocessing = mappingDefinition.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
-			if (typeof(TTo).IsArray)
+			if (ArrayMappingCompiler<TFrom, TTo>.ShouldUse())
 				this.aMappingExpression = new ArrayMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
-			else if (typeof(TTo).IsGenericType && typeof(TTo).GetGenericTypeDefinition() == typeof(List<>))
+			else if (ListMappingCompiler<TFrom, TTo>.ShouldUse())
 				this.aMappingExpression = new ListMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+			else if (ConstructorMappingCompiler<TFrom, TTo>.ShouldUse())
+				this.aMappingExpression = new ConstructorMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
 			else
-				this.aMappingExpression = new EnumerableMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+				throw new InvalidMappingException($"Cannot find proper method to map to a collection of type {typeof(TTo).FullName}");
 		}
 
 		public void Accept(IMappingVisitor visitor)

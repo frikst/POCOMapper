@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using KST.POCOMapper.Internal;
 using KST.POCOMapper.Internal.ReflectionMembers;
@@ -24,6 +25,12 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 				    this.CreateItemMappingExpression(from)
 			    )
 		    );
+	    }
+
+	    public static bool ShouldUse()
+	    {
+		    return typeof(TTo).IsGenericType
+		           && (typeof(TTo).GetGenericTypeDefinition() == typeof(List<>) || typeof(TTo).GetGenericTypeDefinition() == typeof(ICollection<>));
 	    }
     }
 }
