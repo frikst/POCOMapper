@@ -1,7 +1,7 @@
 ﻿using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection;
+using KST.POCOMapper.Mapping.Decorators;
 using KST.POCOMapper.Mapping.Object;
-using KST.POCOMapper.Mapping.Special;
 using KST.POCOMapper.Mapping.SubClass;
 
 namespace KST.POCOMapper.Visitor

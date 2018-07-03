@@ -1,7 +1,7 @@
 ﻿using System;
 using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.Mapping.Special
+namespace KST.POCOMapper.Mapping.Standard
 {
 	public class FuncMappingWithSync<TFrom, TTo> : FuncMappingWithMap<TFrom, TTo>, IMappingWithSyncSupport<TFrom, TTo>
 	{

@@ -1,7 +1,6 @@
-﻿using System;
-using KST.POCOMapper.Mapping.Base;
+﻿using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.Mapping.Special
+namespace KST.POCOMapper.Mapping.Decorators
 {
 	public class NullableWithSync<TFrom, TTo> : NullableWithMap<TFrom, TTo>, IMappingWithSyncSupport<TFrom, TTo>
 		where TFrom : class

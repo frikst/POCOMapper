@@ -2,7 +2,7 @@
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
-namespace KST.POCOMapper.Mapping.Special
+namespace KST.POCOMapper.Mapping.Standard
 {
 	public class FuncMappingWithMap<TFrom, TTo> : IMapping<TFrom, TTo>
 	{

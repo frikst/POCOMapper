@@ -1,5 +1,5 @@
 ﻿using KST.POCOMapper.Definition;
-using KST.POCOMapper.Mapping.Special;
+using KST.POCOMapper.Mapping.Decorators;
 using KST.POCOMapper.Visitor;
 using NUnit.Framework;
 

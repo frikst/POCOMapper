@@ -1,6 +1,6 @@
 ﻿using KST.POCOMapper.Mapping.Base;
 
-namespace KST.POCOMapper.Mapping.Special
+namespace KST.POCOMapper.Mapping.Decorators
 {
     public interface IDecoratorMapping : IMapping
     {

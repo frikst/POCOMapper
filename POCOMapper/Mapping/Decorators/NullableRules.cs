@@ -5,7 +5,7 @@ using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Object;
 
-namespace KST.POCOMapper.Mapping.Special
+namespace KST.POCOMapper.Mapping.Decorators
 {
 	public class NullableRules<TFrom, TTo> : IMappingRules<TFrom, TTo>, IRulesDefinition<TFrom, TTo>
 		where TFrom : class

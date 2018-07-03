@@ -2,7 +2,7 @@
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
-namespace KST.POCOMapper.Mapping.Special
+namespace KST.POCOMapper.Mapping.Decorators
 {
 	public class NullableWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IDecoratorMapping
 		where TFrom : class

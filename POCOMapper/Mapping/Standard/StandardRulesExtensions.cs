@@ -55,5 +55,10 @@ namespace KST.POCOMapper.Mapping.Standard
 		{
 			return definition.Rules<CustomMappingRules>();
 		}
+		public static FuncMappingRules<TFrom, TTo> FuncMappingRules<TFrom, TTo>(this IRulesDefinition<TFrom, TTo> definition)
+		{
+			return definition.Rules<FuncMappingRules<TFrom, TTo>>();
+		}
+
 	}
 }

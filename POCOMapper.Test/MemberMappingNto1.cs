@@ -1,6 +1,6 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Object;
-using KST.POCOMapper.Mapping.Special;
+using KST.POCOMapper.Mapping.Standard;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test

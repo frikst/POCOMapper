@@ -5,8 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection;
+using KST.POCOMapper.Mapping.Decorators;
 using KST.POCOMapper.Mapping.Object;
-using KST.POCOMapper.Mapping.Special;
 using KST.POCOMapper.Mapping.SubClass;
 using KST.POCOMapper.Members;
 
