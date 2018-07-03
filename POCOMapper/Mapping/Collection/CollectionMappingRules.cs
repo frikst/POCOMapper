@@ -11,16 +11,20 @@ namespace KST.POCOMapper.Mapping.Collection
 		where TFrom : IEnumerable
 		where TTo : IEnumerable
 	{
+		private Delegate aSelectIdFrom;
+		private Delegate aSelectIdTo;
+		private CollectionMappingType aMappingType;
+
 		public CollectionMappingRules()
 		{
-			this.CfgType = CollectionMappingType.Enumerable;
-			this.CfgSelectIdFrom = null;
-			this.CfgSelectIdTo = null;
+			this.aMappingType = CollectionMappingType.Enumerable;
+			this.aSelectIdFrom = null;
+			this.aSelectIdTo = null;
 		}
 
 		public CollectionMappingRules<TFrom, TTo> MapAs(CollectionMappingType type)
 		{
-			this.CfgType = type;
+			this.aMappingType = type;
 
 			return this;
 		}
@@ -32,26 +36,22 @@ namespace KST.POCOMapper.Mapping.Collection
 			if (!typeof(IEnumerable<>).MakeGenericType(typeof(TItemTo)).IsAssignableFrom(typeof(TTo)))
 				throw new InvalidMappingException($"Collection item of {typeof(TTo).Name} is not {typeof(TItemTo).Name}");
 
-			this.CfgSelectIdFrom = selectIdFrom;
-			this.CfgSelectIdTo = selectIdTo;
+			this.aSelectIdFrom = selectIdFrom;
+			this.aSelectIdTo = selectIdTo;
 
 			return this;
 		}
-
-		internal Delegate CfgSelectIdFrom { get; private set; }
-		internal Delegate CfgSelectIdTo { get; private set; }
-		internal CollectionMappingType CfgType { get; private set; }
 
 		#region Implementation of IMappingRules
 
 		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			switch (this.CfgType)
+			switch (this.aMappingType)
 			{
 				case CollectionMappingType.List:
 					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
-				case CollectionMappingType.Array when this.CfgSelectIdFrom != null && this.CfgSelectIdTo != null:
-					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
+				case CollectionMappingType.Array when this.aSelectIdFrom != null && this.aSelectIdTo != null:
+					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.aSelectIdFrom, this.aSelectIdTo);
 				case CollectionMappingType.Array:
 					return new EnumerableToArrayWithMap<TFrom, TTo>(mappingDefinition);
 				default:
@@ -64,40 +64,40 @@ namespace KST.POCOMapper.Mapping.Collection
 
 	public class CollectionMappingRules : IMappingRules
 	{
+		private Delegate aSelectIdFrom;
+		private Delegate aSelectIdTo;
+		private CollectionMappingType aMappingType;
+
 		public CollectionMappingRules()
 		{
-			this.CfgType = CollectionMappingType.Enumerable;
-			this.CfgSelectIdFrom = null;
-			this.CfgSelectIdTo = null;
+			this.aMappingType = CollectionMappingType.Enumerable;
+			this.aSelectIdFrom = null;
+			this.aSelectIdTo = null;
 		}
 
 		public CollectionMappingRules MapAs(CollectionMappingType type)
 		{
-			this.CfgType = type;
+			this.aMappingType = type;
 
 			return this;
 		}
 
 		public CollectionMappingRules EntityId<TItemFrom, TItemTo, TItemId>(Func<TItemFrom, TItemId> selectIdFrom, Func<TItemTo, TItemId> selectIdTo)
 		{
-			this.CfgSelectIdFrom = selectIdFrom;
-			this.CfgSelectIdTo = selectIdTo;
+			this.aSelectIdFrom = selectIdFrom;
+			this.aSelectIdTo = selectIdTo;
 
 			return this;
 		}
-
-		internal Delegate CfgSelectIdFrom { get; private set; }
-		internal Delegate CfgSelectIdTo { get; private set; }
-		internal CollectionMappingType CfgType { get; private set; }
 
 		#region Implementation of IMappingRules
 
 		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			if (this.CfgSelectIdFrom != null && this.CfgSelectIdTo != null)
+			if (this.aSelectIdFrom != null && this.aSelectIdTo != null)
 			{
-				Type itemFrom = this.CfgSelectIdFrom.Method.GetParameters()[0].ParameterType;
-				Type itemTo = this.CfgSelectIdTo.Method.GetParameters()[0].ParameterType;
+				Type itemFrom = this.aSelectIdFrom.Method.GetParameters()[0].ParameterType;
+				Type itemTo = this.aSelectIdTo.Method.GetParameters()[0].ParameterType;
 
 				if (!typeof(IEnumerable<>).MakeGenericType(itemFrom).IsAssignableFrom(typeof(TFrom)))
 					throw new InvalidMappingException($"Collection item of {typeof(TFrom).Name} is not {itemFrom.Name}");
@@ -105,12 +105,12 @@ namespace KST.POCOMapper.Mapping.Collection
 					throw new InvalidMappingException($"Collection item of {typeof(TTo).Name} is not {itemTo.Name}");
 			}
 
-			switch (this.CfgType)
+			switch (this.aMappingType)
 			{
 				case CollectionMappingType.List:
 					return new EnumerableToList<TFrom, TTo>(mappingDefinition);
-				case CollectionMappingType.Array when this.CfgSelectIdFrom != null && this.CfgSelectIdTo != null:
-					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.CfgSelectIdFrom, this.CfgSelectIdTo);
+				case CollectionMappingType.Array when this.aSelectIdFrom != null && this.aSelectIdTo != null:
+					return new EnumerableToArrayWithSync<TFrom, TTo>(mappingDefinition, this.aSelectIdFrom, this.aSelectIdTo);
 				case CollectionMappingType.Array:
 					return new EnumerableToArrayWithMap<TFrom, TTo>(mappingDefinition);
 				default:

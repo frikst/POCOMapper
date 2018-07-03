@@ -10,10 +10,13 @@ namespace KST.POCOMapper.Mapping.Object
 {
 	public class ObjectMappingRules : IMappingRules
 	{
+		private bool aUseImplicitMappings;
+		private readonly List<IMemberMappingDefinition> aExplicitMappings;
+
 		public ObjectMappingRules()
 		{
-			this.CfgUseImplicitMappings = true;
-			this.CfgExplicitMappings = new List<IMemberMappingDefinition>();
+			this.aUseImplicitMappings = true;
+			this.aExplicitMappings = new List<IMemberMappingDefinition>();
 		}
 
 		/// <summary>
@@ -23,7 +26,7 @@ namespace KST.POCOMapper.Mapping.Object
 		{
 			get
 			{
-				this.CfgUseImplicitMappings = false;
+				this.aUseImplicitMappings = false;
 				return this;
 			}
 		}
@@ -31,7 +34,7 @@ namespace KST.POCOMapper.Mapping.Object
 		public ObjectMappingRules Member(string from, string to)
 		{
 			SimpleMemberMappingDefinition def = new SimpleMemberMappingDefinition(from, to);
-			this.CfgExplicitMappings.Add(def);
+			this.aExplicitMappings.Add(def);
 
 			return this;
 		}
@@ -40,20 +43,17 @@ namespace KST.POCOMapper.Mapping.Object
 		{
 			MemberMappingDefinition<TFromType, TToType> def = new MemberMappingDefinition<TFromType, TToType>(from, to);
 			mappingDefinition(def);
-			this.CfgExplicitMappings.Add(def);
+			this.aExplicitMappings.Add(def);
 
 			return this;
 		}
-
-		internal bool CfgUseImplicitMappings { get; private set; }
-		internal List<IMemberMappingDefinition> CfgExplicitMappings { get; }
 
 		#region Implementation of IMappingRules
 
 		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			IEnumerable<PairedMembers> members = this.CfgExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
-			return new ObjectToObject<TFrom, TTo>(null, mappingDefinition, members, this.CfgUseImplicitMappings);
+			IEnumerable<PairedMembers> members = this.aExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
+			return new ObjectToObject<TFrom, TTo>(null, mappingDefinition, members, this.aUseImplicitMappings);
 		}
 
 		#endregion
@@ -61,16 +61,20 @@ namespace KST.POCOMapper.Mapping.Object
 
 	public class ObjectMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 	{
+		private bool aUseImplicitMappings;
+		private readonly List<IMemberMappingDefinition> aExplicitMappings;
+		private Func<TFrom, TTo> aFactoryFunction;
+
 		public ObjectMappingRules()
 		{
-			this.UseImplicitMappings = true;
-			this.ExplicitMappings = new List<IMemberMappingDefinition>();
-			this.FactoryFunction = null;
+			this.aUseImplicitMappings = true;
+			this.aExplicitMappings = new List<IMemberMappingDefinition>();
+			this.aFactoryFunction = null;
 		}
 
 		public ObjectMappingRules<TFrom, TTo> Factory(Func<TFrom, TTo> factoryFunction)
 		{
-			this.FactoryFunction = factoryFunction;
+			this.aFactoryFunction = factoryFunction;
 
 			return this;
 		}
@@ -82,7 +86,7 @@ namespace KST.POCOMapper.Mapping.Object
 		{
 			get
 			{
-				this.UseImplicitMappings = false;
+				this.aUseImplicitMappings = false;
 				return this;
 			}
 		}
@@ -90,7 +94,7 @@ namespace KST.POCOMapper.Mapping.Object
 		public ObjectMappingRules<TFrom, TTo> Member(string from, string to)
 		{
 			SimpleMemberMappingDefinition def = new SimpleMemberMappingDefinition(from, to);
-			this.ExplicitMappings.Add(def);
+			this.aExplicitMappings.Add(def);
 
 			return this;
 		}
@@ -99,7 +103,7 @@ namespace KST.POCOMapper.Mapping.Object
 		{
 			MemberMappingDefinition<TFromType, TToType> def = new MemberMappingDefinition<TFromType, TToType>(from, to);
 			mappingDefinition(def);
-			this.ExplicitMappings.Add(def);
+			this.aExplicitMappings.Add(def);
 
 			return this;
 		}
@@ -108,7 +112,7 @@ namespace KST.POCOMapper.Mapping.Object
 		{
 			MemberMappingDefinition<TFromType, TTo> def = new MemberMappingDefinition<TFromType, TTo>(from, null);
 			mappingDefinition(def);
-			this.ExplicitMappings.Add(def);
+			this.aExplicitMappings.Add(def);
 
 			return this;
 		}
@@ -117,21 +121,17 @@ namespace KST.POCOMapper.Mapping.Object
 		{
 			MemberMappingDefinition<TFrom, TToType> def = new MemberMappingDefinition<TFrom, TToType>(null, to);
 			mappingDefinition(def);
-			this.ExplicitMappings.Add(def);
+			this.aExplicitMappings.Add(def);
 
 			return this;
 		}
-
-		internal bool UseImplicitMappings { get; private set; }
-		internal List<IMemberMappingDefinition> ExplicitMappings { get; }
-		internal Func<TFrom, TTo> FactoryFunction { get; private set; }
 
 		#region Implementation of IMappingRules
 
 		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			IEnumerable<PairedMembers> members = this.ExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
-			return new ObjectToObject<TFrom, TTo>(this.FactoryFunction, mappingDefinition, members, this.UseImplicitMappings);
+			IEnumerable<PairedMembers> members = this.aExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
+			return new ObjectToObject<TFrom, TTo>(this.aFactoryFunction, mappingDefinition, members, this.aUseImplicitMappings);
 		}
 
 		#endregion
