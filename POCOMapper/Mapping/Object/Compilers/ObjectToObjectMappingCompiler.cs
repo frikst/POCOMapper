@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Executor;
+using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.MappingCompilaton;
 using KST.POCOMapper.Mapping.Object.Parser;
 
@@ -84,7 +85,7 @@ namespace KST.POCOMapper.Mapping.Object.Compilers
 				return newExpression;
 			}
 			else
-				return Expression.Invoke(Expression.Constant(this.aFactoryFunction), from);
+				return ExpressionHelper.Call(this.aFactoryFunction, from);
 		}
 
 		private static Expression NewExpression(Type type)
