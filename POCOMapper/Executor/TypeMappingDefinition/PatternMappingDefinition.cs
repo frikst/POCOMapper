@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Reflection;
-using KST.POCOMapper.Internal.ReflectionMembers;
 using KST.POCOMapper.Mapping.Base;
-using KST.POCOMapper.TypePatterns;
 using KST.POCOMapper.TypePatterns.Group;
 
 namespace KST.POCOMapper.Executor.TypeMappingDefinition
@@ -24,8 +21,7 @@ namespace KST.POCOMapper.Executor.TypeMappingDefinition
 			if (!this.aPatterns.Matches(mappingDefinition, from, to))
 				throw new InvalidOperationException($"{from.Name} and {to.Name} does not match required patterns");
 
-			MethodInfo mappingCreateMethod = MappingRulesMethods.GetCreate(from, to);
-			return (IMapping) mappingCreateMethod.Invoke(this.aRules, new object[] { mappingDefinition });
+			return this.aRules.Create(from, to, mappingDefinition);
 		}
 
 		public bool IsDefinedFor(MappingDefinitionInformation mappingDefinition, Type from, Type to)
