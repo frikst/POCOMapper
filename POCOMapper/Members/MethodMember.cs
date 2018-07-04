@@ -94,10 +94,7 @@ namespace KST.POCOMapper.Members
 		{
 			unchecked
 			{
-				int result = (this.aGetMethod != null ? this.aGetMethod.GetHashCode() : 0);
-				result = (result*397) ^ (this.aSetMethod != null ? this.aSetMethod.GetHashCode() : 0);
-				result = (result*397) ^ (this.Parent != null ? this.Parent.GetHashCode() : 0);
-				return result;
+				return ((((this.aGetMethod?.GetHashCode() ?? 0) * 397) ^ (this.aSetMethod?.GetHashCode() ?? 0)) * 397) ^ (this.Parent?.GetHashCode() ?? 0);
 			}
 		}
 	}

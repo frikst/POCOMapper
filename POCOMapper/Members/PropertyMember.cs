@@ -91,7 +91,7 @@ namespace KST.POCOMapper.Members
 		{
 			unchecked
 			{
-				return ((this.aProperty != null ? this.aProperty.GetHashCode() : 0)*397) ^ (this.Parent != null ? this.Parent.GetHashCode() : 0);
+				return (this.aProperty.GetHashCode() * 397) ^ (this.Parent?.GetHashCode() ?? 0);
 			}
 		}
 	}

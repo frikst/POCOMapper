@@ -13,7 +13,7 @@ namespace KST.POCOMapper.Executor
 			this.aFrom = from;
 			this.aTo = to;
 
-			this.aHash = (from.GetHashCode() * 397) ^ to.GetHashCode();
+			this.aHash = unchecked((from.GetHashCode() * 397) ^ to.GetHashCode());
 		}
 
 		public Type From

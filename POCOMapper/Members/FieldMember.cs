@@ -83,7 +83,7 @@ namespace KST.POCOMapper.Members
 		{
 			unchecked
 			{
-				return ((this.aField != null ? this.aField.GetHashCode() : 0)*397) ^ (this.Parent != null ? this.Parent.GetHashCode() : 0);
+				return (this.aField.GetHashCode() * 397) ^ (this.Parent?.GetHashCode() ?? 0);
 			}
 		}
 	}
