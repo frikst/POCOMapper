@@ -6,7 +6,7 @@ branches:
         - master
 
 clone_depth: 1
-clone_folder: c:\projects\gfoidl
+clone_folder: C:\projects\pocomapper
 
 before_build:
     - cmd: dotnet --version
