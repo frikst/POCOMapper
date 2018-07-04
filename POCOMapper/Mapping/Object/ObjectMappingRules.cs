@@ -4,19 +4,29 @@ using System.Linq;
 using KST.POCOMapper.Executor;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Object.MemberMappings;
-using KST.POCOMapper.Mapping.Object.Parser;
 
 namespace KST.POCOMapper.Mapping.Object
 {
 	public class ObjectMappingRules : IMappingRules
 	{
+		public delegate object FactoryDelegate(object from, Type toType);
+
 		private bool aUseImplicitMappings;
 		private readonly List<IMemberMappingDefinition> aExplicitMappings;
+		private FactoryDelegate aFactoryFunction;
 
 		public ObjectMappingRules()
 		{
 			this.aUseImplicitMappings = true;
 			this.aExplicitMappings = new List<IMemberMappingDefinition>();
+			this.aFactoryFunction = null;
+		}
+
+		public ObjectMappingRules Factory(FactoryDelegate factoryFunction)
+		{
+			this.aFactoryFunction = factoryFunction;
+
+			return this;
 		}
 
 		/// <summary>
@@ -52,8 +62,16 @@ namespace KST.POCOMapper.Mapping.Object
 
 		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			IEnumerable<PairedMembers> members = this.aExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
-			return new ObjectToObject<TFrom, TTo>(null, mappingDefinition, members, this.aUseImplicitMappings);
+			Func<TFrom, TTo> factoryFunction;
+
+			if (this.aFactoryFunction != null)
+				factoryFunction = from => (TTo) this.aFactoryFunction(from, typeof(TTo));
+			else
+				factoryFunction = null;
+
+			var members = this.aExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
+
+			return new ObjectToObject<TFrom, TTo>(factoryFunction, mappingDefinition, members, this.aUseImplicitMappings);
 		}
 
 		#endregion
@@ -61,9 +79,11 @@ namespace KST.POCOMapper.Mapping.Object
 
 	public class ObjectMappingRules<TFrom, TTo> : IMappingRules<TFrom, TTo>
 	{
+		public delegate TTo FactoryDelegate(TFrom from);
+
 		private bool aUseImplicitMappings;
 		private readonly List<IMemberMappingDefinition> aExplicitMappings;
-		private Func<TFrom, TTo> aFactoryFunction;
+		private FactoryDelegate aFactoryFunction;
 
 		public ObjectMappingRules()
 		{
@@ -72,7 +92,7 @@ namespace KST.POCOMapper.Mapping.Object
 			this.aFactoryFunction = null;
 		}
 
-		public ObjectMappingRules<TFrom, TTo> Factory(Func<TFrom, TTo> factoryFunction)
+		public ObjectMappingRules<TFrom, TTo> Factory(FactoryDelegate factoryFunction)
 		{
 			this.aFactoryFunction = factoryFunction;
 
@@ -130,8 +150,14 @@ namespace KST.POCOMapper.Mapping.Object
 
 		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
 		{
-			IEnumerable<PairedMembers> members = this.aExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
-			return new ObjectToObject<TFrom, TTo>(this.aFactoryFunction, mappingDefinition, members, this.aUseImplicitMappings);
+			Func<TFrom, TTo> factoryFunction;
+			if (this.aFactoryFunction == null)
+				factoryFunction = null;
+			else
+				factoryFunction = new Func<TFrom, TTo>(this.aFactoryFunction);
+
+			var members = this.aExplicitMappings.Select(x => x.CreateMapping(mappingDefinition, typeof(TFrom), typeof(TTo)));
+			return new ObjectToObject<TFrom, TTo>(factoryFunction, mappingDefinition, members, this.aUseImplicitMappings);
 		}
 
 		#endregion
