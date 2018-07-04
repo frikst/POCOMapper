@@ -20,11 +20,11 @@ build_script:
 
 test_script:
     - ps: >-
-        dotnet test -c Release --logger -f net40 "trx;LogFileName=testresult-net40.xml" POCOMapper.Test
+        dotnet test -c Release -f net40 --logger "trx;LogFileName=testresult-net40.xml" POCOMapper.Test
 
         $testExitNet40 = $lastExitCode
 
-        dotnet test -c Release --logger -f netcoreapp2.0 "trx;LogFileName=testresult-netcore.xml" POCOMapper.Test
+        dotnet test -c Release -f netcoreapp2.0 --logger "trx;LogFileName=testresult-netcore.xml" POCOMapper.Test
 
         $testExitNetCore = $lastExitCode
 
