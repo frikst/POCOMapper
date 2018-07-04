@@ -14,9 +14,7 @@
 
 		<StartupObject />
 
-		<AssemblyName>KST.POCOMapper.Test</AssemblyName>
-
-		<RootNamespace>KST.POCOMapper.Test</RootNamespace>
+		<AssemblyName Condition="'$(CI)' != ''">KST.POCOMapper.Test.$(TargetFramework)</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup>
