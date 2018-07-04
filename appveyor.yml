@@ -12,7 +12,7 @@ build_script:
     - cmd: dotnet build -c Release
 
 test_script:
-    -cmd: cd POCOMapper.Test
-    -cmd: dotnet test -c Release
+    - cmd: cd POCOMapper.Test
+    - cmd: dotnet test -c Release
 
 deploy: off
