@@ -36,34 +36,34 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void ParentToParentTest()
+		public void ParentToParentMappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 		}
 
 		[Test]
-		public void SubFrom1ToSubTo1Test()
+		public void SubFrom1ToSubTo1MappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom1());
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
 		[Test]
-		public void SubFrom2ToSubTo1Test()
+		public void SubFrom2ToSubTo1MappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom2());
 			Assert.AreEqual(typeof(SubTo1), ret.GetType());
 		}
 
 		[Test]
-		public void SubFrom3ToSubTo2Test()
+		public void SubFrom3ToSubTo2MappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new SubFrom3());
 			Assert.AreEqual(typeof(SubTo2), ret.GetType());
 		}
 
 		[Test]
-		public void SubFrom4FailTest()
+		public void SubFrom4FailMappingTest()
 		{
 			bool error = false;
 			try
@@ -80,7 +80,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void ToStringTest()
+		public void SubClassMappingToStringTest()
 		{
 			string correct = "SubClassToObject<From, To>\n    SubFrom1 => SubTo1 ObjectToObject<SubFrom1, SubTo1>\n    SubFrom2 => SubTo1 ObjectToObject<SubFrom2, SubTo1>\n    SubFrom3 => SubTo2 ObjectToObject<SubFrom3, SubTo2>\n    From => To ObjectToObject<From, To>\n"
 				+ Constants.SEPARATOR + "ObjectToObject<SubFrom1, SubTo1>\n"

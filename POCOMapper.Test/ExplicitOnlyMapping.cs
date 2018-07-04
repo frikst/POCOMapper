@@ -31,7 +31,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void MapppingTest()
+		public void ExplicitOnlyMemberMappingTest()
 		{
 			From from = new From();
 
@@ -41,7 +41,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void SynchronizationTest()
+		public void ExplicitOnlyMemberMappingSynchronizationTest()
 		{
 			From from = new From();
 			To to = new To();

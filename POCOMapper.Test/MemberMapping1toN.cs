@@ -37,7 +37,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping0Test()
+		public void Mapping0ToBoolBoolTest()
 		{
 			From from = new From { i = 0 };
 
@@ -47,7 +47,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping1Test()
+		public void Mapping1ToBoolBoolTest()
 		{
 			From from = new From { i = 1 };
 
@@ -57,7 +57,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping2Test()
+		public void Mapping2ToBoolBoolTest()
 		{
 			From from = new From { i = 2 };
 
@@ -67,7 +67,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping3Test()
+		public void Mapping3ToBoolBoolTest()
 		{
 			From from = new From { i = 3 };
 
@@ -77,7 +77,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization0Test()
+		public void Synchronization0ToBoolBoolTest()
 		{
 			From from = new From { i = 0 };
 			To to = new To();
@@ -88,7 +88,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization1Test()
+		public void Synchronization1ToBoolBoolTest()
 		{
 			From from = new From { i = 1 };
 			To to = new To();
@@ -99,7 +99,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization2Test()
+		public void Synchronization2ToBoolBoolTest()
 		{
 			From from = new From { i = 2 };
 			To to = new To();
@@ -110,7 +110,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization3Test()
+		public void Synchronization3ToBoolBoolTest()
 		{
 			From from = new From { i = 3 };
 			To to = new To();

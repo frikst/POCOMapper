@@ -53,7 +53,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void MappingTest()
+		public void SubclassAttributesMappingTest()
 		{
 			SubTo to = Mapping.Instance.Map<SubFrom, SubTo>(new SubFrom());
 			Assert.AreEqual("from", to.Value);
@@ -62,7 +62,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void ToStringTest()
+		public void SubClassAttributesToStringTest()
 		{
 			string correct = "ObjectToObject<SubFrom, SubTo>\n    GetValue2 => Value2 Copy<String>\n    GetValue => Value Copy<String>\n    GetValue3 => value3 Copy<String>";
 

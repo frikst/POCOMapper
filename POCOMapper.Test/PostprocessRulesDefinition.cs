@@ -35,7 +35,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void TestPostprocessSnychronize()
+		public void TestPostprocessSynchronize()
 		{
 			To ret = new To();
 			Mapping.Instance.Synchronize(new From(), ref ret);

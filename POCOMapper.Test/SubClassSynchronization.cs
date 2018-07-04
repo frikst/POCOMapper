@@ -35,14 +35,14 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void ParentToParentTest()
+		public void ParentToParentSynchronizationTest()
 		{
 			To ret = new To();
 			Mapping.Instance.Synchronize<From, To>(new From(), ref ret);
 		}
 
 		[Test]
-		public void SubFrom1ToSubTo1Test()
+		public void SubFrom1ToSubTo1SynchronizationTest()
 		{
 			To ret = new SubTo1();
 			Mapping.Instance.Synchronize<From, To>(new SubFrom1(), ref ret);
@@ -50,7 +50,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void SubFrom2ToSubTo1Test()
+		public void SubFrom2ToSubTo1SynchronizationTest()
 		{
 			To ret = new SubTo1();
 			Mapping.Instance.Synchronize<From, To>(new SubFrom2(), ref ret);
@@ -58,7 +58,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void SubFrom3ToSubTo2Test()
+		public void SubFrom3ToSubTo2SynchronizationTest()
 		{
 			To ret = new SubTo2();
 			Mapping.Instance.Synchronize<From, To>(new SubFrom3(), ref ret);
@@ -66,7 +66,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void SubFrom4FailTest()
+		public void SubFrom4FailSynchronizationTest()
 		{
 			bool error = false;
 			try

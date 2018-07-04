@@ -35,7 +35,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void StructuringMapTest()
+		public void StructuringWithMultiplePossiblitiesMappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 			Assert.AreEqual("hello world", ret.DataData);

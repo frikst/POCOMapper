@@ -30,7 +30,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void InnerParentIsParentMap()
+		public void InnerCollectionParentIsParentMap()
 		{
 			List<To> ret = Mapping.Instance.Map<IEnumerable<From>, List<To>>(new List<From> { new From() });
 			Assert.AreSame(ret, ret[0].Parent);

@@ -33,7 +33,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void StructuringMapTest()
+		public void StructuringMappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 			Assert.AreEqual("hello", ret.Inner.Data);

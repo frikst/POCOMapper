@@ -26,13 +26,13 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void CheckCorrectTypeTest()
+		public void NoAttributeUntypedMappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 		}
 
 		[Test]
-		public void ToStringTest()
+		public void UntypedMappingToStringTest()
 		{
 			string correct = "ObjectToObject<From, To>";
 

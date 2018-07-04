@@ -28,14 +28,14 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void TestPostprocessMap()
+		public void TestUntypedPostprocessMap()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From());
 			Assert.AreEqual("Hi", ret.Value);
 		}
 
 		[Test]
-		public void TestPostprocessSnychronize()
+		public void TestUntypedPostprocessSynchronize()
 		{
 			To ret = new To();
 			Mapping.Instance.Synchronize(new From(), ref ret);

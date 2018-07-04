@@ -33,7 +33,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping0Test()
+		public void MappingFalseFalseToIntTest()
 		{
 			From from = new From { i1 = false, i2 = false };
 
@@ -42,7 +42,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping1Test()
+		public void MappingTrueFalseToIntTest()
 		{
 			From from = new From { i1 = true, i2 = false };
 
@@ -51,7 +51,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping2Test()
+		public void MappingFalseTrueToIntTest()
 		{
 			From from = new From { i1 = false, i2 = true };
 
@@ -60,7 +60,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Mappping3Test()
+		public void MappingTrueTrueToIntTest()
 		{
 			From from = new From { i1 = true, i2 = true };
 
@@ -69,7 +69,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization0Test()
+		public void SynchronizationFalseFalseToIntTest()
 		{
 			From from = new From { i1 = false, i2 = false };
 			To to = new To();
@@ -79,7 +79,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization1Test()
+		public void SynchronizationTrueFalseToIntTest()
 		{
 			From from = new From { i1 = true, i2 = false };
 			To to = new To();
@@ -89,7 +89,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization2Test()
+		public void SynchronizationFalseTrueToIntTest()
 		{
 			From from = new From { i1 = false, i2 = true };
 			To to = new To();
@@ -99,7 +99,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void Synchronization3Test()
+		public void SynchronizationTrueTrueToIntTest()
 		{
 			From from = new From { i1 = true, i2 = true };
 			To to = new To();

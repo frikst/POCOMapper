@@ -33,70 +33,70 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void MatchesToAny()
+		public void StaticPatternMatchesToAny()
 		{
 			IPattern pattern = new Pattern<GAny>();
 			Assert.IsTrue(pattern.Matches(typeof(Test1), new TypeChecker()));
 		}
 
 		[Test]
-		public void MatchesToItSelf()
+		public void StaticPatternMatchesToItSelf()
 		{
 			IPattern pattern = new Pattern<Test1>();
 			Assert.IsTrue(pattern.Matches(typeof(Test1), new TypeChecker()));
 		}
 
 		[Test]
-		public void MatchesToItSelfAsBase()
+		public void StaticPatternMatchesToItSelfAsBase()
 		{
 			IPattern pattern = new Pattern<SubClass<Test1>>();
 			Assert.IsTrue(pattern.Matches(typeof(Test1), new TypeChecker()));
 		}
 
 		[Test]
-		public void InvalidMatch()
+		public void StaticPatternInvalidMatch()
 		{
 			IPattern pattern = new Pattern<Test1>();
 			Assert.IsFalse(pattern.Matches(typeof(Test2), new TypeChecker()));
 		}
 
 		[Test]
-		public void MatchesToItsBase()
+		public void StaticPatternMatchesToItsBase()
 		{
 			IPattern pattern = new Pattern<SubClass<Test1>>();
 			Assert.IsTrue(pattern.Matches(typeof(Test2), new TypeChecker()));
 		}
 
 		[Test]
-		public void GenericMatchesToItSelf()
+		public void StaticPatternGenericMatchesToItSelf()
 		{
 			IPattern pattern = new Pattern<Generic<GenericTest<Test2>>.With<GAny>>();
 			Assert.IsTrue(pattern.Matches(typeof(GenericTest<Test1>), new TypeChecker()));
 		}
 
 		[Test]
-		public void ExactGenericDefinitionMatchesToItSelf()
+		public void StaticPatternExactGenericDefinitionMatchesToItSelf()
 		{
 			IPattern pattern = new Pattern<GenericTest<Test1>>();
 			Assert.IsTrue(pattern.Matches(typeof(GenericTest<Test1>), new TypeChecker()));
 		}
 
 		[Test]
-		public void GenericMatchesToItsBase()
+		public void StaticPatternGenericMatchesToItsBase()
 		{
 			IPattern pattern = new Pattern<SubClass<Generic<GenericTest<Test2>>.With<GAny>>>();
 			Assert.IsTrue(pattern.Matches(typeof(GenericTest<Test1>), new TypeChecker()));
 		}
 
 		[Test]
-		public void ExactGenericDefinitionMatchesToItSelfWithBase()
+		public void StaticPatternExactGenericDefinitionMatchesToItSelfWithBase()
 		{
 			IPattern pattern = new Pattern<SubClass<GenericTest<Test1>>>();
 			Assert.IsTrue(pattern.Matches(typeof(GenericTest<Test1>), new TypeChecker()));
 		}
 
 		[Test]
-		public void DictionaryWithSameKeyValue()
+		public void StaticPatternDictionaryWithSameKeyValue()
 		{
 			IPattern pattern = new Pattern<Dictionary<GAny, GAny>>();
 			Assert.IsTrue(pattern.Matches(typeof(Dictionary<string, string>), new TypeChecker()));
@@ -104,7 +104,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void DictionaryWithDifferentKeyAndValue()
+		public void StaticPatternDictionaryWithDifferentKeyAndValue()
 		{
 			IPattern pattern = new Pattern<Dictionary<GAny, GAny2>>();
 			Assert.IsTrue(pattern.Matches(typeof(Dictionary<string, string>), new TypeChecker()));

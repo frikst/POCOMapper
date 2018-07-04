@@ -31,7 +31,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void MappingTest()
+		public void ConflictedMappingTest()
 		{
 			To ret = Mapping.Instance.Map<From, To>(new From { prefix = new FromChild { id = 5 } });
 			Assert.AreEqual(5, ret.prefixId);

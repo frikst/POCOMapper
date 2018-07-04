@@ -44,7 +44,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void MapppingTest()
+		public void FactoryMethodMappingTest()
 		{
 			From from = new From();
 
@@ -53,7 +53,7 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
-		public void UntypedMapppingTest()
+		public void UntypedFactoryMethodMappingTest()
 		{
 			From from = new From();
 
