@@ -20,15 +20,20 @@ build_script:
 
 test_script:
     - ps: >-
-        dotnet test -c Release --logger "trx;LogFileName=testresult.xml" POCOMapper.Test
+        dotnet test -c Release --logger -f net40 "trx;LogFileName=testresult-net40.xml" POCOMapper.Test
 
-        $testExit = $lastExitCode
+        $testExitNet40 = $lastExitCode
+
+        dotnet test -c Release --logger -f netcoreapp2.0 "trx;LogFileName=testresult-netcore.xml" POCOMapper.Test
+
+        $testExitNetCore = $lastExitCode
 
         $wc = New-Object 'System.Net.WebClient'
 
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\POCOMapper.Test\TestResults\testresult.xml")
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\POCOMapper.Test\TestResults\testresult-net40.xml")
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\POCOMapper.Test\TestResults\testresult-netcore.xml")
 
-        if ($testExit) {
+        if ($testExitNet40 -OR $testExitNetCore) {
             exit 1;
         }
 
