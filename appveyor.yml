@@ -9,10 +9,10 @@ before_build:
     - cmd: dotnet restore --verbosity m
 
 build_script:
-    - cmd: dotnet build -c Release
+    - cmd: dotnet build -c Release POCOMapper
+    - cmd: dotnet build -c Release POCOMapper.Test
 
 test_script:
-    - cmd: cd POCOMapper.Test
-    - cmd: dotnet test -c Release
+    - cmd: dotnet test -c Release POCOMapper.Test
 
 deploy: off
