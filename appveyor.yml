@@ -9,10 +9,15 @@ before_build:
     - cmd: dotnet restore --verbosity m
 
 build_script:
-    - cmd: dotnet build -c Release POCOMapper
-    - cmd: dotnet build -c Release POCOMapper.Test
+    - cmd: >-
+        dotnet build -c Release POCOMapper
+        dotnet build -c Release POCOMapper.Test
 
 test_script:
-    - cmd: dotnet test -c Release -l Appveyor POCOMapper.Test
+    - ps: >-
+        dotnet test -c Release --logger "trx;LogFileName=testresult.xml" POCOMapper.Test
+        $testExit = $lastExitCode
+        $wc = New-Object 'System.Net.WebClient'
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\tests\POCOMapper.Test\TestResults\testresult.xml")
 
 deploy: off
