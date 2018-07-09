@@ -6,18 +6,18 @@ using KST.POCOMapper.Mapping.Object;
 
 namespace KST.POCOMapper.SpecialRules
 {
-	public class EqualityRules<TFrom, TTo> : IMappingRules<TFrom, TTo>, IRulesDefinition<TFrom, TTo>, IEqualityRules
+	public class EqualityRules : IMappingRules, IRulesDefinition, IEqualityRules
 	{
-		private IMappingRules<TFrom, TTo> aRules;
+		private IMappingRules aRules;
 		private Delegate aIdFrom;
 		private Delegate aIdTo;
 
 		public EqualityRules()
 		{
-			this.aRules = new ObjectMappingRules<TFrom, TTo>();
+			this.aRules = new ObjectMappingRules();
 		}
 
-		public void Ids<TIdType>(Func<TFrom, TIdType> idFrom, Func<TTo, TIdType> idTo)
+		public void Id(Func<dynamic, dynamic> idFrom, Func<dynamic, dynamic> idTo)
 		{
 			this.aIdFrom = idFrom;
 			this.aIdTo = idTo;
@@ -32,11 +32,11 @@ namespace KST.POCOMapper.SpecialRules
 
 		#endregion
 
-		#region Implementation of IMappingRules<TFrom, TTo>
+		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
+		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			return this.aRules.Create(mappingDefinition);
+			return this.aRules.Create<TFrom, TTo>(mappingDefinition);
 		}
 
 		#endregion
@@ -44,7 +44,7 @@ namespace KST.POCOMapper.SpecialRules
 		#region Implementation of IRulesDefinition
 
 		public TRules Rules<TRules>()
-			where TRules : class, IMappingRules<TFrom, TTo>, new()
+			where TRules : class, IMappingRules, new()
 		{
 			TRules ret = new TRules();
 			this.aRules = ret;

@@ -6,15 +6,16 @@ using KST.POCOMapper.Mapping.Object;
 
 namespace KST.POCOMapper.Mapping.Decorators
 {
-	public class PostprocessRules<TFrom, TTo> : IMappingRules<TFrom, TTo>, IRulesDefinition<TFrom, TTo>
+
+	public class PostprocessRules : IMappingRules, IRulesDefinition
 	{
-		private Action<TFrom, TTo> aPostprocessDelegate;
-		private IMappingRules<TFrom, TTo> aRules;
+		private Action<dynamic, dynamic> aPostprocessDelegate;
+		private IMappingRules aRules;
 
 		public PostprocessRules()
 		{
 			this.aPostprocessDelegate = null;
-			this.aRules = new ObjectMappingRules<TFrom, TTo>();
+			this.aRules = new ObjectMappingRules();
 		}
 
 		/// <summary>
@@ -23,7 +24,7 @@ namespace KST.POCOMapper.Mapping.Decorators
 		/// </summary>
 		/// <param name="postprocessDelegate">The delegate which should be called after the mapping process.</param>
 		/// <returns>The class definition specification object.</returns>
-		public PostprocessRules<TFrom, TTo> Postprocess(Action<TFrom, TTo> postprocessDelegate)
+		public PostprocessRules Postprocess(Action<dynamic, dynamic> postprocessDelegate)
 		{
 			this.aPostprocessDelegate = postprocessDelegate;
 
@@ -33,7 +34,7 @@ namespace KST.POCOMapper.Mapping.Decorators
 		#region Implementation of IRulesDefinition<TFrom,TTo>
 
 		public TRules Rules<TRules>()
-			where TRules : class, IMappingRules<TFrom, TTo>, new()
+			where TRules : class, IMappingRules, new()
 		{
 			TRules ret = new TRules();
 			this.aRules = ret;
@@ -44,13 +45,13 @@ namespace KST.POCOMapper.Mapping.Decorators
 
 		#region Implementation of IMappingRules
 
-		IMapping<TFrom, TTo> IMappingRules<TFrom, TTo>.Create(MappingDefinitionInformation mappingDefinition)
+		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
 		{
-			var mapping = this.aRules.Create(mappingDefinition);
+			var mapping = this.aRules.Create<TFrom, TTo>(mappingDefinition);
 			if (mapping is IMappingWithSyncSupport<TFrom, TTo> mappingWithSync)
-				return new PostprocessWithSync<TFrom, TTo>(mappingWithSync, this.aPostprocessDelegate);
+				return new PostprocessWithSync<TFrom, TTo>(mappingWithSync, (a, b) => this.aPostprocessDelegate(a, b));
 			else
-				return new PostprocessWithMap<TFrom, TTo>(mapping, this.aPostprocessDelegate);
+				return new PostprocessWithMap<TFrom, TTo>(mapping, (a, b) => this.aPostprocessDelegate(a, b));
 		}
 
 		#endregion

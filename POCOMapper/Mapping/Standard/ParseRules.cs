@@ -14,16 +14,4 @@ namespace KST.POCOMapper.Mapping.Standard
 
 		#endregion
 	}
-
-	public class ParseRules : IMappingRules
-	{
-		#region Implementation of IMappingRules
-
-		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
-		{
-			return (IMapping<TFrom, TTo>) new Parse<TTo>();
-		}
-
-		#endregion
-	}
 }
