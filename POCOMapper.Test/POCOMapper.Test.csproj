@@ -19,6 +19,7 @@
 
 	<PropertyGroup>
 	  <NoWarn>1701;1702;649</NoWarn>
+	  <RootNamespace>KST.POCOMapper.Test</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
