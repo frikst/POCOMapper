@@ -36,9 +36,6 @@ namespace KST.POCOMapper.Mapping.Collection
 			visitor.Visit(this);
 		}
 
-		public bool IsDirect
-			=> false;
-
 		public Type From
 			=> typeof(TFrom);
 

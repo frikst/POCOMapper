@@ -22,9 +22,6 @@ namespace KST.POCOMapper.Mapping.Decorators
 			this.aInnerMapping.Accept(visitor);
 		}
 
-		public bool IsDirect
-			=> false;
-
 		public bool SynchronizeCanChangeObject
 			=> false;
 

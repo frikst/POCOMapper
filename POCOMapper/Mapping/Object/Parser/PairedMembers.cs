@@ -34,12 +34,14 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 		{
 			Expression ret = this.From.CreateGetterExpression(from);
 
-			if (!this.Mapping.ResolvedMapping.IsDirect)
+			if (!(this.Mapping.ResolvedMapping is IDirectMapping))
+			{
 				ret = Expression.Call(
 					Expression.Constant(this.Mapping.ResolvedMapping),
 					MappingMethods.Map(this.From.Type, this.To.Type),
 					ret
 				);
+			}
 
 			ret = this.To.CreateSetterExpression(
 				to,
@@ -54,9 +56,6 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 			IMappingWithSyncSupport mappingWithSync = this.Mapping.ResolvedMapping as IMappingWithSyncSupport;
 
 			if (mappingWithSync == null)
-				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
-
-			if (mappingWithSync.IsDirect)
 				return this.CreateMappingAssignmentExpression(from, to, postprocess, parent);
 
 			ParameterExpression tempFromValue = Expression.Parameter(this.From.Type, "tempFrom");

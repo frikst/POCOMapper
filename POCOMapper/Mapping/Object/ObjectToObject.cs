@@ -48,9 +48,6 @@ namespace KST.POCOMapper.Mapping.Object
 			visitor.Visit(this);
 		}
 
-		public bool IsDirect
-			=> false;
-
 		public bool SynchronizeCanChangeObject
 			=> false;
 

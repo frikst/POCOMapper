@@ -19,7 +19,7 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 
 		protected Expression CreateItemMappingExpression(ParameterExpression from)
 		{
-			if (this.aItemMapping.ResolvedMapping.IsDirect)
+			if (this.aItemMapping.ResolvedMapping is IDirectMapping)
 				return from;
 
 			var mapMethod = Delegate.CreateDelegate(

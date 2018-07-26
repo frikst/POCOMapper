@@ -20,9 +20,6 @@ namespace KST.POCOMapper.Mapping.Decorators
 			visitor.Visit(this);
 		}
 
-		public bool IsDirect
-			=> false;
-
 		public Type From
 			=> typeof(TFrom);
 

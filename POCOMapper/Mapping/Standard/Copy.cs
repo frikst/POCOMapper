@@ -4,15 +4,12 @@ using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Standard
 {
-	public class Copy<TFromTo> : IMapping<TFromTo, TFromTo>
+	public class Copy<TFromTo> : IDirectMapping<TFromTo>
 	{
 		public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
-
-		public bool IsDirect
-			=> true;
 
 		public Type From
 			=> typeof(TFromTo);

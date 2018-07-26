@@ -24,7 +24,7 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 
 		protected Expression CreateItemSynchronizationExpression(ParameterExpression from, ParameterExpression to)
 		{
-			if (this.aItemMapping.ResolvedMapping.IsDirect)
+			if (this.aItemMapping.ResolvedMapping is IDirectMapping)
 				return from;
 
 			var idType = this.aSelectIdFrom.Method.ReturnType;

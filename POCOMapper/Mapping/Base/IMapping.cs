@@ -7,8 +7,6 @@ namespace KST.POCOMapper.Mapping.Base
 	{
 		void Accept(IMappingVisitor visitor);
 
-		bool IsDirect { get; }
-
 		Type From { get; }
 		Type To { get; }
 	}
