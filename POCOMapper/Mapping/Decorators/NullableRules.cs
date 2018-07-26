@@ -34,10 +34,15 @@ namespace KST.POCOMapper.Mapping.Decorators
 		{
 			var underlayingMapping = this.aRules.Create(mappingDefinition);
 
-			if (underlayingMapping is IMappingWithSyncSupport<TFrom, TTo> mappingWithSync)
-				return new NullableWithSync<TFrom, TTo>(mappingWithSync);
-			else
-				return new NullableWithMap<TFrom, TTo>(underlayingMapping);
+			switch (underlayingMapping)
+			{
+				case IDirectMapping _:
+					return underlayingMapping;
+				case IMappingWithSyncSupport<TFrom, TTo> mappingWithSync:
+					return new NullableWithSync<TFrom, TTo>(mappingWithSync);
+				default:
+					return new NullableWithMap<TFrom, TTo>(underlayingMapping);
+			}
 		}
 
 		#endregion
