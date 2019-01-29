@@ -1,6 +1,7 @@
 ﻿using KST.POCOMapper.Conventions;
 using KST.POCOMapper.Conventions.SymbolConventions;
 using KST.POCOMapper.Definition;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -94,6 +95,14 @@ namespace KST.POCOMapper.Test
 			To ret = new To();
 			MappingProps.Instance.Synchronize(new From(), ref ret);
 			Assert.AreEqual("prop", ret.Data);
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			MappingFields.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
+			MappingProps.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
+			MappingMethods.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

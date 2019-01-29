@@ -32,6 +32,9 @@ namespace KST.POCOMapper.Members
 			this.aConventions = null;
 		}
 
+		public PropertyInfo Property
+			=> this.aProperty;
+
 		#region Implementation of IMember
 
 		public IMember Parent { get; }

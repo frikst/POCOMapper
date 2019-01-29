@@ -32,6 +32,9 @@ namespace KST.POCOMapper.Members
 			this.aConventions = null;
 		}
 
+		public FieldInfo Field
+			=> this.aField;
+
 		#region Implementation of IMember
 
 		public IMember Parent { get; }

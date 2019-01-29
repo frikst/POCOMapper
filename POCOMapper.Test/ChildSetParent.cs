@@ -1,5 +1,6 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Decorators;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -53,6 +54,12 @@ namespace KST.POCOMapper.Test
 			To ret = new To();
 			Mapping.Instance.Synchronize(new From(), ref ret);
 			Assert.AreSame(ret, ret.Inner.Parent);
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

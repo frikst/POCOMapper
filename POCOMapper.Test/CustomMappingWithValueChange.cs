@@ -2,6 +2,7 @@
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Standard;
+using KST.POCOMapper.Validation;
 using KST.POCOMapper.Visitor;
 using NUnit.Framework;
 
@@ -75,6 +76,12 @@ namespace KST.POCOMapper.Test
 			To to = new To();
 			Mapping.Instance.Synchronize(new From(), ref to);
 			Assert.AreEqual(5, to.child);
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

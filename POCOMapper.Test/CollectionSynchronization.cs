@@ -1,5 +1,6 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.SpecialRules;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -163,6 +164,12 @@ namespace KST.POCOMapper.Test
 			Assert.AreEqual(18, to[2].anotherValue);
 			Assert.AreEqual(1, to[3].value);
 			Assert.AreEqual(19, to[3].anotherValue);
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

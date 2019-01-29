@@ -4,6 +4,7 @@ using System.Text;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Mapping.Standard;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -30,10 +31,15 @@ namespace KST.POCOMapper.Test
 
 			    Map<Enum1, Enum2>()
 				    .CastRules();
+		    }
+	    }
 
+	    private class InvalidMapping : MappingSingleton<InvalidMapping>
+	    {
+		    private InvalidMapping()
+		    {
 			    Map<Enum2, bool>()
 				    .CastRules();
-
 		    }
 	    }
 
@@ -60,7 +66,14 @@ namespace KST.POCOMapper.Test
 	    [Test]
 	    public void Enum2ToBoolInvalid()
 	    {
-		    Assert.Throws<InvalidMappingException>(() => Mapping.Instance.Map<Enum2, bool>(Enum2.B));
+		    Assert.Throws<InvalidMappingException>(() => InvalidMapping.Instance.Map<Enum2, bool>(Enum2.B));
+	    }
+
+	    [Test]
+	    public void ValidateMapping()
+	    {
+		    Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
+		    Assert.Throws<InvalidMappingException>(() => InvalidMapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor()));
 	    }
     }
 }

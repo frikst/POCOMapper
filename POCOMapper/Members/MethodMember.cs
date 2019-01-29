@@ -35,6 +35,12 @@ namespace KST.POCOMapper.Members
 			this.aConventions = null;
 		}
 
+		public MethodInfo GetMethod
+			=> this.aGetMethod;
+
+		public MethodInfo SetMethod
+			=> this.aSetMethod;
+
 		#region Implementation of IMember
 
 		public IMember Parent { get; }

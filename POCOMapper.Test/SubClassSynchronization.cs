@@ -1,6 +1,7 @@
 ﻿using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
 using KST.POCOMapper.Mapping.SubClass;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -81,6 +82,12 @@ namespace KST.POCOMapper.Test
 				Assert.AreEqual(typeof(To), e.To);
 			}
 			Assert.IsTrue(error, "Should throw the UnknownMapping exception");
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

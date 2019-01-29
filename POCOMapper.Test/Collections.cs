@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -75,6 +76,12 @@ namespace KST.POCOMapper.Test
 			{
 				int[] ret = Mapping.Instance.Map<double[], int[]>(new double[] {1, 2, 3});
 			});
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

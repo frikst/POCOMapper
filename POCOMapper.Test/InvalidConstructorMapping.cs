@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Exceptions;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -62,6 +63,12 @@ namespace KST.POCOMapper.Test
 		public void TestInvalidCollectionConstructor()
 		{
 			Assert.Throws<InvalidMappingException>(() => Mapping.Instance.Map<Int32[], ToCollection<Int32>>(new Int32[] { }));
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

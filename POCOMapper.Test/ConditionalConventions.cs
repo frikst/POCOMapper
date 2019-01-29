@@ -3,6 +3,7 @@ using KST.POCOMapper.Conventions.SymbolConventions;
 using KST.POCOMapper.Definition;
 using KST.POCOMapper.Mapping.Decorators;
 using KST.POCOMapper.Mapping.Standard;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -61,6 +62,12 @@ namespace KST.POCOMapper.Test
 
 			Assert.AreEqual(to.aFirst.Cislo, from.aFirstID);
 			Assert.AreEqual(to.aSecondID, from.aSecondID);
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }

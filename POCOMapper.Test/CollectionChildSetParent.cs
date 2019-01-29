@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using KST.POCOMapper.Definition;
+using KST.POCOMapper.Validation;
 using NUnit.Framework;
 
 namespace KST.POCOMapper.Test
@@ -34,6 +35,12 @@ namespace KST.POCOMapper.Test
 		{
 			List<To> ret = Mapping.Instance.Map<IEnumerable<From>, List<To>>(new List<From> { new From() });
 			Assert.AreSame(ret, ret[0].Parent);
+		}
+
+		[Test]
+		public void ValidateMapping()
+		{
+			Mapping.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
 		}
 	}
 }
