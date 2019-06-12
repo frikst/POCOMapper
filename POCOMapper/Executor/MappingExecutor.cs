@@ -55,5 +55,22 @@ namespace KST.POCOMapper.Executor
 			else
 				mapping.Synchronize(from, to);
 		}
+
+        /// <summary>
+        /// Compare two objects for map-equality
+        /// </summary>
+        /// <typeparam name="TFrom">Class from the source model.</typeparam>
+        /// <typeparam name="TTo">Class from the destination model.</typeparam>
+        /// <param name="from">Instance to compare from source model.</param>
+        /// <param name="to">Instance to compare from destination model.</param>
+        public bool MapEqual<TFrom, TTo>(TFrom from, TTo to)
+        {
+            var mapping = this.Mappings.GetMapping<TFrom, TTo>() as IMappingWithComparisionSupport<TFrom, TTo>;
+
+            if (mapping == null)
+                throw new CantMapException($"Can't compares {typeof(TFrom).Name} to {typeof(TTo).Name}, mapping object does not support comparision");
+
+            return mapping.MapEqual(from, to);
+        }
 	}
 }
