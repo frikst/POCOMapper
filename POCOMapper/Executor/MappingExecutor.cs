@@ -65,12 +65,13 @@ namespace KST.POCOMapper.Executor
         /// <param name="to">Instance to compare from destination model.</param>
         public bool MapEqual<TFrom, TTo>(TFrom from, TTo to)
         {
-            var mapping = this.Mappings.GetMapping<TFrom, TTo>() as IMappingWithComparisionSupport<TFrom, TTo>;
+            var mapping = this.Mappings.GetMapping<TFrom, TTo>();
 
-            if (mapping == null)
-                throw new CantMapException($"Can't compares {typeof(TFrom).Name} to {typeof(TTo).Name}, mapping object does not support comparision");
+            if (mapping is IMappingWithSpecialComparision<TFrom, TTo> specialComparision)
+                return specialComparision.MapEqual(from, to);
 
-            return mapping.MapEqual(from, to);
+            var mappedFrom = mapping.Map(from);
+            return EqualityComparer<TTo>.Default.Equals(mappedFrom, to);
         }
 	}
 }
