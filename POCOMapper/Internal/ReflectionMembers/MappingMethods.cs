@@ -15,5 +15,10 @@ namespace KST.POCOMapper.Internal.ReflectionMembers
 		{
 			return typeof(IMappingWithSyncSupport<,>).MakeGenericType(from, to).GetMethod(nameof(IMappingWithSyncSupport<object, object>.Synchronize));
 		}
+
+		public static MethodInfo MapEqual(Type from, Type to)
+		{
+			return typeof(IMappingWithSpecialComparision<,>).MakeGenericType(from, to).GetMethod(nameof(IMappingWithSpecialComparision<object, object>.MapEqual));
+		}
 	}
 }

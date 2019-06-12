@@ -67,5 +67,13 @@ namespace KST.POCOMapper.Mapping.Base
 
 			return factoryFunction(mappingRules, mappingDefinition);
 		}
+
+        public static bool DoMapEqualCheck<TFrom, TTo>(this IMapping<TFrom, TTo> mapping, TFrom from, TTo to)
+        {
+            if (mapping is IMappingWithSpecialComparision<TFrom, TTo> specialComparision)
+                return specialComparision.MapEqual(from, to);
+
+            return EqualityComparer<TTo>.Default.Equals(mapping.Map(from), to);
+        }
 	}
 }

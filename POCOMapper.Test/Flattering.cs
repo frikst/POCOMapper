@@ -54,6 +54,39 @@ namespace KST.POCOMapper.Test
 		}
 
 		[Test]
+		public void MapEqualTest()
+		{
+			From from = new From();
+            To to = new To {InnerData = "hello", Data = "world"};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+
+            Assert.IsTrue(same);
+		}
+
+		[Test]
+		public void MapEqualDifferentUnflatteredTest()
+		{
+			From from = new From();
+            To to = new To {InnerData = "hello", Data = "boo"};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+
+            Assert.IsFalse(same);
+		}
+
+		[Test]
+		public void MapEqualDifferentFlatteredTest()
+		{
+			From from = new From();
+            To to = new To {InnerData = "boo", Data = "world"};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+
+            Assert.IsFalse(same);
+		}
+
+		[Test]
 		public void FlatteringToStringTest()
 		{
 			string correct = "ObjectToObject<From, To>\n    Inner.Data => InnerData Copy<String>\n    Data => Data Copy<String>";

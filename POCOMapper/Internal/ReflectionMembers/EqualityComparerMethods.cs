@@ -10,5 +10,12 @@ namespace KST.POCOMapper.Internal.ReflectionMembers
         {
             return typeof(IEqualityComparer<>).MakeGenericType(type).GetMethod(nameof(IEqualityComparer<object>.Equals));
         }
+
+        public static object GetEqualityComparer(Type type)
+        {
+            return typeof(EqualityComparer<>).MakeGenericType(type)
+                .GetProperty(nameof(EqualityComparer<object>.Default), BindingFlags.Static | BindingFlags.Public)
+                .GetValue(null, null);
+        }
     }
 }

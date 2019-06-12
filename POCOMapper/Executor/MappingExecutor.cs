@@ -67,11 +67,7 @@ namespace KST.POCOMapper.Executor
         {
             var mapping = this.Mappings.GetMapping<TFrom, TTo>();
 
-            if (mapping is IMappingWithSpecialComparision<TFrom, TTo> specialComparision)
-                return specialComparision.MapEqual(from, to);
-
-            var mappedFrom = mapping.Map(from);
-            return EqualityComparer<TTo>.Default.Equals(mappedFrom, to);
+            return mapping.DoMapEqualCheck(from, to);
         }
 	}
 }

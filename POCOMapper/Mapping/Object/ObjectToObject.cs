@@ -10,13 +10,14 @@ using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Object
 {
-	public class ObjectToObject<TFrom, TTo> : IMappingWithSyncSupport<TFrom, TTo>, IObjectMapping
+	public class ObjectToObject<TFrom, TTo> : IMappingWithSyncSupport<TFrom, TTo>, IMappingWithSpecialComparision<TFrom, TTo>, IObjectMapping
 	{
 		private readonly ObjectToObjectMappingCompiler<TFrom, TTo> aMappingExpression;
 		private readonly ObjectToObjectSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 		private readonly IEnumerable<PairedMembers> aMemberPairs;
+        private readonly ObjectToObjectComparisionCompiler<TFrom, TTo> aComparisionExpression;
 
-		public ObjectToObject(Func<TFrom, TTo> factoryFunction, MappingDefinitionInformation mappingDefinition, IEnumerable<PairedMembers> explicitPairs, bool implicitMappings)
+        public ObjectToObject(Func<TFrom, TTo> factoryFunction, MappingDefinitionInformation mappingDefinition, IEnumerable<PairedMembers> explicitPairs, bool implicitMappings)
 		{
 			PairedMembers[] memberPairs;
 
@@ -41,9 +42,10 @@ namespace KST.POCOMapper.Mapping.Object
 
 			this.aMappingExpression = new ObjectToObjectMappingCompiler<TFrom, TTo>(mappingDefinition, factoryFunction, memberPairs);
 			this.aSynchronizationExpression = new ObjectToObjectSynchronizationCompiler<TFrom, TTo>(mappingDefinition, memberPairs);
+            this.aComparisionExpression = new ObjectToObjectComparisionCompiler<TFrom, TTo>(mappingDefinition, memberPairs);
 		}
 
-		public void Accept(IMappingVisitor visitor)
+        public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
@@ -66,6 +68,11 @@ namespace KST.POCOMapper.Mapping.Object
 		{
 			return this.aSynchronizationExpression.Synchronize(from, to);
 		}
+
+        public bool MapEqual(TFrom from, TTo to)
+        {
+            return this.aComparisionExpression.MapEqual(from, to);
+        }
 
 		public IEnumerable<IObjectMemberMapping> Members
 			=> this.aMemberPairs;

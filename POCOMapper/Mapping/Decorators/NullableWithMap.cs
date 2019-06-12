@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Decorators
 {
-	public class NullableWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IDecoratorMapping
+	public class NullableWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IMappingWithSpecialComparision<TFrom, TTo>, IDecoratorMapping
 		where TFrom : class
 		where TTo : class
 	{
@@ -15,7 +16,7 @@ namespace KST.POCOMapper.Mapping.Decorators
 			this.aInnerMapping = innerMapping;
 		}
 
-		public void Accept(IMappingVisitor visitor)
+        public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
@@ -33,6 +34,16 @@ namespace KST.POCOMapper.Mapping.Decorators
 
 			return this.aInnerMapping.Map(from);
 		}
+
+        public bool MapEqual(TFrom from, TTo to)
+        {
+            if (from == null)
+                return to == null;
+            if (to == null)
+                return false;
+
+            return this.aInnerMapping.DoMapEqualCheck(from, to);
+        }
 
 		public IMapping DecoratedMapping
 			=> this.aInnerMapping;

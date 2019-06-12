@@ -111,6 +111,49 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 				synchronize
 			);
 		}
+        
+        public Expression CreateComparisionExpression(ParameterExpression from, ParameterExpression to, LabelTarget end)
+        {
+            if (this.Mapping.ResolvedMapping is IMappingWithSpecialComparision)
+            {
+                return Expression.IfThen(
+                    Expression.Not( 
+                        Expression.Call(
+                            Expression.Constant(this.Mapping.ResolvedMapping),
+                            MappingMethods.MapEqual(this.From.Type, this.To.Type),
+                            this.From.CreateGetterExpression(from),
+                            this.To.CreateGetterExpression(to)
+                        )
+                    ),
+                    Expression.Return(end, Expression.Constant(false))
+                );
+            }
+            else
+            {
+                var fromMapped = this.From.CreateGetterExpression(from);
+
+                if (!(this.Mapping.ResolvedMapping is IDirectMapping))
+                {
+                    fromMapped = Expression.Call(
+                        Expression.Constant(this.Mapping.ResolvedMapping),
+                        MappingMethods.Map(this.From.Type, this.To.Type),
+                        fromMapped
+                    );
+                }
+
+                return Expression.IfThen(
+                    Expression.Not( 
+                        Expression.Call(
+                            Expression.Constant(EqualityComparerMethods.GetEqualityComparer(this.To.Type)),
+                            EqualityComparerMethods.Equals(this.To.Type),
+                            fromMapped,
+                            this.To.CreateGetterExpression(to)
+                        )
+                    ),
+                    Expression.Return(end, Expression.Constant(false))
+                );
+            }
+        }
 
 		private Expression AddPostprocess(Expression assignment, ParameterExpression to, Delegate postprocess, ParameterExpression parent)
 		{
@@ -131,5 +174,5 @@ namespace KST.POCOMapper.Mapping.Object.Parser
 		{
 			return $"{this.From} => {this.To}";
 		}
-	}
+    }
 }

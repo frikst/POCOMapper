@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Decorators
 {
-	public class PostprocessWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IDecoratorMapping
+	public class PostprocessWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IMappingWithSpecialComparision<TFrom, TTo>, IDecoratorMapping
 	{
 		private readonly IMapping<TFrom, TTo> aInnerMapping;
 		private readonly Action<TFrom, TTo> aPostprocessDelegate;
@@ -32,6 +33,11 @@ namespace KST.POCOMapper.Mapping.Decorators
 			this.aPostprocessDelegate(from, ret);
 			return ret;
 		}
+
+        public bool MapEqual(TFrom from, TTo to)
+        {
+            return this.aInnerMapping.DoMapEqualCheck(from, to);
+        }
 
 		#region Implementation of IDecoratorMapping
 

@@ -121,6 +121,56 @@ namespace KST.POCOMapper.Test
 			Assert.IsTrue(to.i2);
 		}
 
+        [Test]
+        public void MapEqual0()
+        {
+            From from = new From { i = 0 };
+            To to = new To { i1 = false, i2 = false};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+            Assert.IsTrue(same);
+        }
+
+        [Test]
+        public void MapEqual1()
+        {
+            From from = new From { i = 1 };
+            To to = new To { i1 = true, i2 = false};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+            Assert.IsTrue(same);
+        }
+
+        [Test]
+        public void MapEqual3()
+        {
+            From from = new From { i = 3 };
+            To to = new To { i1 = true, i2 = true};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+            Assert.IsTrue(same);
+        }
+
+        [Test]
+        public void MapEqual1Different()
+        {
+            From from = new From { i = 1 };
+            To to = new To { i1 = false, i2 = true};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+            Assert.IsFalse(same);
+        }
+
+        [Test]
+        public void MapEqual3Different()
+        {
+            From from = new From { i = 3 };
+            To to = new To { i1 = true, i2 = false};
+
+            var same = Mapping.Instance.MapEqual(from, to);
+            Assert.IsFalse(same);
+        }
+
 		[Test]
 		public void ValidateMapping()
 		{

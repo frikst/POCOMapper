@@ -4,7 +4,7 @@ using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Decorators
 {
-	public class PostprocessWithSync<TFrom, TTo> : IMappingWithSyncSupport<TFrom, TTo>
+	public class PostprocessWithSync<TFrom, TTo> : IMappingWithSyncSupport<TFrom, TTo>, IMappingWithSpecialComparision<TFrom, TTo>, IDecoratorMapping
 	{
 		private readonly IMappingWithSyncSupport<TFrom, TTo> aInnerMapping;
 		private readonly Action<TFrom, TTo> aPostprocessDelegate;
@@ -17,9 +17,9 @@ namespace KST.POCOMapper.Mapping.Decorators
 
 		#region Implementation of IMapping
 
-		public void Accept(IMappingVisitor visitor)
+        public void Accept(IMappingVisitor visitor)
 		{
-			this.aInnerMapping.Accept(visitor);
+            visitor.Visit(this);
 		}
 
 		public bool SynchronizeCanChangeObject
@@ -54,6 +54,18 @@ namespace KST.POCOMapper.Mapping.Decorators
 			return to;
 		}
 
+        public bool MapEqual(TFrom from, TTo to)
+        {
+            return this.aInnerMapping.DoMapEqualCheck(from, to);
+        }
+
 		#endregion
-	}
+
+        #region Implementation of IDecoratorMapping
+
+        public IMapping DecoratedMapping
+            => this.aInnerMapping;
+
+        #endregion
+    }
 }
