@@ -5,7 +5,7 @@ branches:
     only:
         - master
 
-clone_depth: 1
+shallow_clone: true
 clone_folder: C:\projects\pocomapper
 
 before_build:
@@ -13,29 +13,17 @@ before_build:
     - cmd: dotnet restore --verbosity m
 
 build_script:
-    - cmd: >-
-        dotnet build -c Release POCOMapper
-
-        dotnet build -c Release POCOMapper.Test
+    - cmd: dotnet build -c Release POCOMapper
+    - cmd: dotnet build -c Release POCOMapper.Test
 
 test_script:
-    - ps: >-
-        dotnet test -c Release -f net40 --logger "trx;LogFileName=testresult-net40.xml" POCOMapper.Test
+    - cmd: dotnet test -c Release -f net40 --logger "trx;LogFileName=C:\projects\pocomapper\testresult-net40.xml" POCOMapper.Test
+    - cmd: dotnet test -c Release -f netcoreapp2.0 --logger "trx;LogFileName=C:\projects\pocomapper\testresult-netcore.xml" POCOMapper.Test
 
-        $testExitNet40 = $lastExitCode
-
-        dotnet test -c Release -f netcoreapp2.0 --logger "trx;LogFileName=testresult-netcore.xml" POCOMapper.Test
-
-        $testExitNetCore = $lastExitCode
-
+on_finish:
+    - ps: |
         $wc = New-Object 'System.Net.WebClient'
-
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\POCOMapper.Test\TestResults\testresult-net40.xml")
-
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\POCOMapper.Test\TestResults\testresult-netcore.xml")
-
-        if ($testExitNet40 -OR $testExitNetCore) {
-            exit 1;
-        }
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\testresult-net40.xml")
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\testresult-netcore.xml")
 
 deploy: off
