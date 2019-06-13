@@ -23,7 +23,7 @@ test_script:
 on_finish:
     - ps: |
         $wc = New-Object 'System.Net.WebClient'
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\testresult-net40.xml")
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", "C:\projects\pocomapper\testresult-netcore.xml")
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", (Resolve-Path C:\projects\pocomapper\testresult-net40*.xml))
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", (Resolve-Path C:\projects\pocomapper\testresult-netcore*.xml))
 
 deploy: off
