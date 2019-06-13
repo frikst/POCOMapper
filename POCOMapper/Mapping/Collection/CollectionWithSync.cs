@@ -13,7 +13,7 @@ namespace KST.POCOMapper.Mapping.Collection
 		private readonly CollectionSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 
 		internal CollectionWithSync(MappingDefinitionInformation mappingDefinition, IEqualityRules equalityRules)
-			: base(mappingDefinition)
+			: base(mappingDefinition, equalityRules)
 		{
 			var itemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 

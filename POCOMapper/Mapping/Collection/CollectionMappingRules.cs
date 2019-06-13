@@ -19,7 +19,7 @@ namespace KST.POCOMapper.Mapping.Collection
 			if (typeof(TTo).IsArray && equalityRules != null)
 				return new CollectionWithSync<TFrom, TTo>(mappingDefinition, equalityRules);
 			else
-				return new CollectionWithMap<TFrom, TTo>(mappingDefinition);
+				return new CollectionWithMap<TFrom, TTo>(mappingDefinition, null);
 		}
 
 		#endregion

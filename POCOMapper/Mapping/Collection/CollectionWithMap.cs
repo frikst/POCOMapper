@@ -5,17 +5,19 @@ using KST.POCOMapper.Internal;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection.Compiler;
 using KST.POCOMapper.Mapping.MappingCompilaton;
+using KST.POCOMapper.SpecialRules;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Mapping.Collection
 {
-	public class CollectionWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, ICollectionMapping
+	public class CollectionWithMap<TFrom, TTo> : IMapping<TFrom, TTo>, IMappingWithSpecialComparision<TFrom, TTo>, ICollectionMapping
 	{
 		private readonly CollectionMappingCompiler<TFrom, TTo> aMappingExpression;
 
 		private readonly IUnresolvedMapping aItemMapping;
+        private readonly EnumerableComparisionCompiler<TFrom, TTo> aMapEqualityExpression;
 
-		internal CollectionWithMap(MappingDefinitionInformation mappingDefinition)
+        internal CollectionWithMap(MappingDefinitionInformation mappingDefinition, IEqualityRules equalityRules)
 		{
 			this.aItemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
@@ -29,9 +31,11 @@ namespace KST.POCOMapper.Mapping.Collection
 				this.aMappingExpression = new ConstructorMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
 			else
 				throw new InvalidMappingException($"Cannot find proper method to map to a collection of type {typeof(TTo).FullName}");
+
+            this.aMapEqualityExpression = new EnumerableComparisionCompiler<TFrom, TTo>(this.aItemMapping, equalityRules);
 		}
 
-		public void Accept(IMappingVisitor visitor)
+        public void Accept(IMappingVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
@@ -46,6 +50,11 @@ namespace KST.POCOMapper.Mapping.Collection
 		{
 			return this.aMappingExpression.Map(from);
 		}
+
+        public bool MapEqual(TFrom from, TTo to)
+        {
+            return this.aMapEqualityExpression.MapEqual(from, to);
+        }
 
 		public Type ItemFrom
 			=> EnumerableReflection<TFrom>.ItemType;
