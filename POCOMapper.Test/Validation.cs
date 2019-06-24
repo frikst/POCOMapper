@@ -44,6 +44,16 @@ namespace KST.POCOMapper.Test
 			public int Field2;
 		}
 
+        private class ValidToBasePrivateSet
+        {
+            [ShouldBeMapped]
+            public int Field1 { get; private set; }
+        }
+
+        private class ValidToInheritedPrivateSet : ValidToBasePrivateSet
+        {
+        }
+
 		private class ValidMapping : MappingSingleton<ValidMapping>
 		{
 			protected ValidMapping()
@@ -76,6 +86,14 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
+		private class ValidMappingInheritedPrivateSet : MappingSingleton<ValidMappingInheritedPrivateSet>
+		{
+			protected ValidMappingInheritedPrivateSet()
+			{
+				this.Map<From, ValidToInheritedPrivateSet>();
+			}
+		}
+
 		[Test]
 		public void ValidateValidMapping()
 		{
@@ -99,5 +117,11 @@ namespace KST.POCOMapper.Test
 		{
 			Assert.Throws<MappingValidationException>(() => InvalidMappingShouldNot.Instance.Mappings.AcceptForAll(new MappingValidationVisitor()));
 		}
+
+        [Test]
+        public void ValidateValidMappingInheritedPrivateSet()
+        {
+            ValidMappingInheritedPrivateSet.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
+        }
 	}
 }

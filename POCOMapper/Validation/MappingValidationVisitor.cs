@@ -112,10 +112,18 @@ namespace KST.POCOMapper.Validation
 		private ISet<MemberInfo> GetMembersWithAttribute<TAttribute>(Type type)
 			where TAttribute : Attribute
 		{
-			return new HashSet<MemberInfo>(
-				type.GetMembers().Where(x => x.GetCustomAttributes(typeof(TAttribute), false).Any())
-			);
-		}
+            var members = new HashSet<MemberInfo>();
+
+            for (Type current = type; current != null; current = current.BaseType)
+            {
+                members.UnionWith(
+                    type.GetMembers(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                        .Where(x => x.GetCustomAttributes(typeof(TAttribute), false).Any())
+                );
+            }
+
+            return members;
+        }
 
 		private MemberInfo GetMemberInfo(IMember member, bool readAccess)
 		{
