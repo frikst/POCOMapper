@@ -117,7 +117,7 @@ namespace KST.POCOMapper.Validation
             for (Type current = type; current != null; current = current.BaseType)
             {
                 members.UnionWith(
-                    type.GetMembers(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    current.GetMembers(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                         .Where(x => x.GetCustomAttributes(typeof(TAttribute), false).Any())
                 );
             }

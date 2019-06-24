@@ -54,6 +54,26 @@ namespace KST.POCOMapper.Test
         {
         }
 
+        private class ValidToShouldNotBasePrivateSet
+        {
+            [ShouldNotBeMapped]
+            public int Field2 { get; private set; }
+        }
+
+        private class ValidToShouldNotInheritedPrivateSet : ValidToShouldNotBasePrivateSet
+        {
+        }
+
+        private class InvalidToBasePrivateSet
+        {
+            [ShouldBeMapped]
+            public int Field2 { get; private set; }
+        }
+
+        private class InvalidToInheritedPrivateSet : InvalidToBasePrivateSet
+        {
+        }
+
 		private class ValidMapping : MappingSingleton<ValidMapping>
 		{
 			protected ValidMapping()
@@ -94,6 +114,22 @@ namespace KST.POCOMapper.Test
 			}
 		}
 
+		private class ValidMappingShouldNotInheritedPrivateSet : MappingSingleton<ValidMappingShouldNotInheritedPrivateSet>
+		{
+			protected ValidMappingShouldNotInheritedPrivateSet()
+			{
+				this.Map<From, ValidToShouldNotInheritedPrivateSet>();
+			}
+		}
+
+		private class InvalidMappingInheritedPrivateSet : MappingSingleton<InvalidMappingInheritedPrivateSet>
+		{
+			protected InvalidMappingInheritedPrivateSet()
+			{
+				this.Map<From, InvalidToInheritedPrivateSet>();
+			}
+		}
+
 		[Test]
 		public void ValidateValidMapping()
 		{
@@ -122,6 +158,18 @@ namespace KST.POCOMapper.Test
         public void ValidateValidMappingInheritedPrivateSet()
         {
             ValidMappingInheritedPrivateSet.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
+        }
+
+        [Test]
+        public void ValidateValidMappingShouldNotInheritedPrivateSet()
+        {
+            ValidMappingShouldNotInheritedPrivateSet.Instance.Mappings.AcceptForAll(new MappingValidationVisitor());
+        }
+
+        [Test]
+        public void ValidateInvalidMappingInheritedPrivateSet()
+        {
+            Assert.Throws<MappingValidationException>(() => InvalidMappingInheritedPrivateSet.Instance.Mappings.AcceptForAll(new MappingValidationVisitor()));
         }
 	}
 }
