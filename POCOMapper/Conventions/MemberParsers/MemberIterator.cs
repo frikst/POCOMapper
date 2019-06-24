@@ -70,7 +70,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 
 			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
-				foreach (FieldInfo field in current.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+				foreach (FieldInfo field in current.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
 				{
 					if (field.IsSpecialName || field.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any() || field.Name.Contains('.'))
 						continue;
@@ -94,7 +94,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 			{
 				var methodMembers = new Dictionary<(Symbol MemberName, Type MemberType), (MethodInfo Getter, MethodInfo Setter)>();
 
-				foreach (MethodInfo method in current.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+				foreach (MethodInfo method in current.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
 				{
 					if (method.IsSpecialName || method.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any() || method.Name.Contains('.'))
 						continue;
@@ -133,7 +133,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 
 			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
-				foreach (PropertyInfo property in current.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+				foreach (PropertyInfo property in current.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
 				{
 					if (property.IsSpecialName || property.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any() || property.Name.Contains('.'))
 						continue;

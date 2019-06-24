@@ -88,7 +88,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 		{
 			for (var curType = type; curType != null; curType = curType.BaseType)
 			{
-				var ret = curType.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault();
+				var ret = curType.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).FirstOrDefault();
 
 				if (ret != null)
 					return ret;
