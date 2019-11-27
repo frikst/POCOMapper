@@ -66,7 +66,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 
 		private IEnumerable<IMember> GetFields()
 		{
-			HashSet<Symbol> used = new HashSet<Symbol>();
+			HashSet<string> used = new HashSet<string>();
 
 			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
@@ -77,18 +77,16 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 
 					Symbol symbol = this.aConventions.Fields.Parse(field.Name);
 
-					if (!used.Contains(symbol))
-					{
-						yield return new FieldMember(this.aParent, symbol, field, this.aConventions);
-						used.Add(symbol);
-					}
-				}
+					if (used.Add(field.Name))
+                        yield return new FieldMember(this.aParent, symbol, field, this.aConventions);
+                }
 			}
 		}
 
 		private IEnumerable<IMember> GetMethods()
 		{
-			HashSet<Symbol> used = new HashSet<Symbol>();
+			HashSet<string> usedGetters = new HashSet<string>();
+			HashSet<string> usedSetters = new HashSet<string>();
 
 			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
@@ -121,7 +119,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 
 				foreach (var methodPair in methodMembers)
 				{
-					if (used.Add(methodPair.Key.MemberName))
+					if ((methodPair.Value.Getter == null || usedGetters.Add(methodPair.Value.Getter.Name)) && (methodPair.Value.Setter == null || usedSetters.Add(methodPair.Value.Setter.Name)))
 						yield return new MethodMember(this.aParent, methodPair.Key.MemberName, methodPair.Value.Getter, methodPair.Value.Setter, this.aConventions);
 				}
 			}
@@ -129,7 +127,7 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 
 		private IEnumerable<IMember> GetProperties(bool codeProperties = false, bool autoProperties = false)
 		{
-			HashSet<Symbol> used = new HashSet<Symbol>();
+			HashSet<string> used = new HashSet<string>();
 
 			for (Type current = this.aType; current != null && current != typeof(object); current = current.BaseType)
 			{
@@ -140,14 +138,12 @@ namespace KST.POCOMapper.Conventions.MemberParsers
 
 					Symbol symbol = this.aConventions.Properties.Parse(property.Name);
 
-					if (!used.Contains(symbol))
+					if (used.Add(property.Name))
 					{
 						bool isAutoProperty = this.IsAutoProperty(property);
 
 						if ((isAutoProperty && autoProperties) || (!isAutoProperty && codeProperties))
 							yield return new PropertyMember(this.aParent, symbol, property, this.aConventions);
-
-						used.Add(symbol);
 					}
 				}
 			}
