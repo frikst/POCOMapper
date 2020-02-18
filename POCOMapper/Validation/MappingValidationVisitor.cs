@@ -1,145 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using KST.POCOMapper.Mapping.Base;
 using KST.POCOMapper.Mapping.Collection;
 using KST.POCOMapper.Mapping.Decorators;
 using KST.POCOMapper.Mapping.Object;
 using KST.POCOMapper.Mapping.SubClass;
-using KST.POCOMapper.Members;
 using KST.POCOMapper.Visitor;
 
 namespace KST.POCOMapper.Validation
 {
 	public class MappingValidationVisitor : IMappingVisitor
 	{
-		private readonly HashSet<IMapping> aProcessed;
+		private readonly MappingErrorsLoggingVisitor aInnerVisitor;
 
 		public MappingValidationVisitor()
 		{
-			this.aProcessed = new HashSet<IMapping>();
+			this.aInnerVisitor = new MappingErrorsLoggingVisitor(Throw);
+		}
+
+		private void Throw(ValidationError validationError)
+		{
+			switch (validationError)
+			{
+				case ValidationError.ExtraMappingFrom error:
+					throw new MappingValidationException($"{error.TypeFrom.Name}.{error.MemberFrom.Name} should not be mapped (mapping to {error.TypeTo.Name}.{error.MemberTo.Name} found)");
+				case ValidationError.ExtraMappingTo error:
+					throw new MappingValidationException($"{error.TypeTo.Name}.{error.MemberTo.Name} should not be mapped (mapping from {error.TypeFrom.Name}.{error.MemberFrom.Name} found)");
+				case ValidationError.MissingMappingFrom error:
+					throw new MappingValidationException($"{error.TypeFrom.Name}.{error.MemberFrom} should be mapped, but no mapping found (mapping to {error.TypeTo.Name})");
+				case ValidationError.MissingMappingTo error:
+					throw new MappingValidationException($"{error.TypeTo.Name}.{error.MemberTo} should be mapped, but no mapping found (mapping from {error.TypeFrom.Name})");
+				default:
+					throw new InvalidOperationException();
+			}
 		}
 
 		#region Implementation of IMappingVisitor
 
 		public void Begin()
 		{
+			this.aInnerVisitor.Begin();
 		}
 
 		public void Next()
 		{
+			this.aInnerVisitor.Next();
 		}
 
 		public void End()
 		{
+			this.aInnerVisitor.End();
 		}
 
 		public void Visit(ICollectionMapping mapping)
 		{
-			if (this.WasProcessed(mapping))
-				return;
-
-			mapping.ItemMapping.Accept(this);
+			this.aInnerVisitor.Visit(mapping);
 		}
 
 		public void Visit(IObjectMapping mapping)
 		{
-			if (this.WasProcessed(mapping))
-				return;
-
-			var shouldBeMappedFrom = this.GetMembersWithAttribute<ShouldBeMappedAttribute>(mapping.From);
-			var shouldBeMappedTo = this.GetMembersWithAttribute<ShouldBeMappedAttribute>(mapping.To);
-
-			var shouldNotBeMappedFrom = this.GetMembersWithAttribute<ShouldNotBeMappedAttribute>(mapping.From);
-			var shouldNotBeMappedTo = this.GetMembersWithAttribute<ShouldNotBeMappedAttribute>(mapping.To);
-
-			foreach (var memberMapping in mapping.Members)
-			{
-				var fromMember = this.GetMemberInfo(memberMapping.From, true);
-				var toMember = this.GetMemberInfo(memberMapping.To, false);
-
-				if (shouldNotBeMappedFrom.Contains(fromMember))
-					throw new MappingValidationException($"{mapping.From.Name}.{fromMember.Name} should not be mapped (mapping to {mapping.To.Name}.{toMember.Name} found)");
-
-				if (shouldNotBeMappedTo.Contains(toMember))
-					throw new MappingValidationException($"{mapping.To.Name}.{toMember.Name} should not be mapped (mapping from {mapping.From.Name}.{fromMember.Name} found)");
-
-				if (shouldBeMappedFrom.Contains(fromMember))
-					shouldBeMappedFrom.Remove(fromMember);
-
-				if (shouldBeMappedTo.Contains(toMember))
-					shouldBeMappedTo.Remove(toMember);
-			}
-
-			if (shouldBeMappedFrom.Any())
-				throw new MappingValidationException($"{mapping.From.Name}.{shouldBeMappedFrom.First().Name} should be mapped, but no mapping found");
-
-			if (shouldBeMappedTo.Any())
-				throw new MappingValidationException($"{mapping.To.Name}.{shouldBeMappedTo.First().Name} should be mapped, but no mapping found");
+			this.aInnerVisitor.Visit(mapping);
 		}
 
 		public void Visit(ISubClassMapping mapping)
 		{
-			if (this.WasProcessed(mapping))
-				return;
-
-			foreach (var conversion in mapping.Conversions)
-			{
-				conversion.Mapping.Accept(this);
-			}
+			this.aInnerVisitor.Visit(mapping);
 		}
 
 		public void Visit(IDecoratorMapping mapping)
 		{
-			if (this.WasProcessed(mapping))
-				return;
-
-			mapping.DecoratedMapping.Accept(this);
+			this.aInnerVisitor.Visit(mapping);
 		}
 
 		public void Visit(IMapping mapping)
 		{
+			this.aInnerVisitor.Visit(mapping);
 		}
 
 		#endregion
-
-		private bool WasProcessed(IMapping mapping)
-		{
-			return !this.aProcessed.Add(mapping);
-		}
-
-		private ISet<MemberInfo> GetMembersWithAttribute<TAttribute>(Type type)
-			where TAttribute : Attribute
-		{
-            var members = new HashSet<MemberInfo>();
-
-            for (Type current = type; current != null; current = current.BaseType)
-            {
-                members.UnionWith(
-                    current.GetMembers(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Where(x => x.GetCustomAttributes(typeof(TAttribute), false).Any())
-                );
-            }
-
-            return members;
-        }
-
-		private MemberInfo GetMemberInfo(IMember member, bool readAccess)
-		{
-			switch (member)
-			{
-				case PropertyMember property:
-					return property.Property;
-				case MethodMember method when readAccess:
-					return method.GetMethod;
-				case MethodMember method:
-					return method.SetMethod;
-				case FieldMember field:
-					return field.Field;
-				default:
-					return null;
-			}
-		}
 	}
 }
