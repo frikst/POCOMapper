@@ -11,7 +11,7 @@
 		<Product>POCOMapper</Product>
 		<Description>AutoMapper-like library for fast data copying and synchronization between two POCO types</Description>
 		<Copyright>© 2010-2018 Department of Software Technologies</Copyright>
-		<PackageLicenseUrl>https://rawgit.com/frikst/POCOMapper/master/LICENSE</PackageLicenseUrl>
+		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/frikst/POCOMapper</PackageProjectUrl>
 	</PropertyGroup>
 
