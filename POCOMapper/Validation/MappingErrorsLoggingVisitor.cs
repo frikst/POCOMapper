@@ -144,6 +144,7 @@ namespace KST.POCOMapper.Validation
                 members.UnionWith(
                     current.GetMembers(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
 	                    .Where(x => !x.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any())
+	                    .Where(x => !(x is MethodInfo xmi && xmi.IsSpecialName) && !(x is ConstructorInfo))
                         .Where(x => x.GetCustomAttributes(typeof(TAttribute), false).Any())
                 );
             }
@@ -161,6 +162,7 @@ namespace KST.POCOMapper.Validation
                 members.UnionWith(
                     current.GetMembers(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
 	                    .Where(x => !x.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any())
+	                    .Where(x => !(x is MethodInfo xmi && xmi.IsSpecialName) && !(x is ConstructorInfo))
                         .Where(x => !x.GetCustomAttributes(typeof(TAttribute), false).Any())
                 );
             }
