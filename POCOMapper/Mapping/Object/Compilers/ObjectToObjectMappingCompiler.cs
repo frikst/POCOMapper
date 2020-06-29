@@ -77,25 +77,15 @@ namespace KST.POCOMapper.Mapping.Object.Compilers
 
 		private Expression NewExpression(Expression from, Type type)
 		{
-			Expression newExpression = ObjectToObjectMappingCompiler<TFrom, TTo>.NewExpression(type);
-			if (this.aFactoryFunction == null)
-			{
-				if (newExpression == null)
-					throw new InvalidMappingException($"Cannot find constructor for type {typeof(TTo).FullName}");
-				return newExpression;
-			}
-			else
+			if (this.aFactoryFunction != null)
 				return ExpressionHelper.Call(this.aFactoryFunction, from);
-		}
 
-		private static Expression NewExpression(Type type)
-		{
 			var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { }, null);
 
 			if (constructor == null)
-				return null;
+				throw new InvalidMappingException($"Cannot find constructor for type {typeof(TTo).FullName}");
 
 			return Expression.New(constructor);
 		}
-	}
+    }
 }
