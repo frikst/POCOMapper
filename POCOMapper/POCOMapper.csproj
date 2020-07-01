@@ -10,14 +10,14 @@
 		<Company>Department of Software Technologies, Faculty of Management Science and Informatics, University of Žilina</Company>
 		<Product>POCOMapper</Product>
 		<Description>AutoMapper-like library for fast data copying and synchronization between two POCO types</Description>
-		<Copyright>© 2010-2018 Department of Software Technologies</Copyright>
+		<Copyright>© 2010-2020 Department of Software Technologies</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/frikst/POCOMapper</PackageProjectUrl>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\POCOMapper.xml</DocumentationFile>
-		<Version>1.2.6</Version>
+		<Version>1.2.7</Version>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='net40'">
