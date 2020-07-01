@@ -10,21 +10,19 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 {
     internal class ArrayMappingCompiler<TFrom, TTo> : CollectionMappingCompiler<TFrom, TTo>
     {
-	    public ArrayMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing)
-		    : base(itemMapping, childPostprocessing)
+	    public ArrayMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing, bool mapNullToEmpty)
+		    : base(itemMapping, childPostprocessing, mapNullToEmpty)
 	    {
 	    }
 
-	    protected override Expression<Func<TFrom, TTo>> CompileToExpression()
+	    protected override Expression CreateCollectionInstantiationExpression(Expression itemMappingExpression)
 	    {
-		    var from = Expression.Parameter(typeof(TFrom), "from");
+		    return Expression.Call(null, LinqMethods.ToArray(EnumerableReflection<TTo>.ItemType), itemMappingExpression);
+	    }
 
-		    return this.CreateMappingEnvelope(
-			    from,
-			    Expression.Call(null, LinqMethods.ToArray(EnumerableReflection<TTo>.ItemType),
-				    this.CreateItemMappingExpression(from)
-			    )
-		    );
+	    protected override Expression CreateEmptyCollectionExpression()
+	    {
+		    return Expression.Constant(Array.CreateInstance(EnumerableReflection<TTo>.ItemType, 0), typeof(TTo));
 	    }
 
 	    public static bool ShouldUse()

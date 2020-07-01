@@ -11,21 +11,19 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 {
     internal class ConstructorMappingCompiler<TFrom, TTo> : CollectionMappingCompiler<TFrom, TTo>
     {
-	    public ConstructorMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing)
-		    : base(itemMapping, childPostprocessing)
+	    public ConstructorMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing, bool mapNullToEmpty)
+		    : base(itemMapping, childPostprocessing, mapNullToEmpty)
 	    {
 	    }
 
-	    protected override Expression<Func<TFrom, TTo>> CompileToExpression()
+	    protected override Expression CreateCollectionInstantiationExpression(Expression itemMappingExpression)
 	    {
-		    ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
+		    return Expression.New(ConstructorMappingCompiler<TFrom, TTo>.GetConstructor(), itemMappingExpression);
+	    }
 
-		    return this.CreateMappingEnvelope(
-			    from,
-			    Expression.New(ConstructorMappingCompiler<TFrom, TTo>.GetConstructor(),
-				    this.CreateItemMappingExpression(from)
-			    )
-		    );
+	    protected override Expression CreateEmptyCollectionExpression()
+	    {
+		    return Expression.New(ConstructorMappingCompiler<TFrom, TTo>.GetDefaultConstructor());
 	    }
 
 	    private static ConstructorInfo GetConstructor()
@@ -34,6 +32,17 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 			    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
 			    null,
 			    new Type[] {typeof(IEnumerable<>).MakeGenericType(EnumerableReflection<TTo>.ItemType)},
+			    null
+		    );
+		    return constructTo;
+	    }
+
+	    private static ConstructorInfo GetDefaultConstructor()
+	    {
+		    ConstructorInfo constructTo = typeof(TTo).GetConstructor(
+			    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+			    null,
+			    new Type[] {},
 			    null
 		    );
 		    return constructTo;

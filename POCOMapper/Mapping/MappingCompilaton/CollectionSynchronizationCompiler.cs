@@ -14,13 +14,33 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 		private readonly Delegate aSelectIdFrom;
 		private readonly Delegate aSelectIdTo;
 		private readonly Delegate aChildPostprocessing;
+		private readonly bool aMapNullToEmpty;
 
-		protected CollectionSynchronizationCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules, Delegate childPostprocessing)
+		protected CollectionSynchronizationCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules, Delegate childPostprocessing, bool mapNullToEmpty)
 		{
 			this.aItemMapping = itemMapping;
 			(this.aSelectIdFrom, this.aSelectIdTo) = equalityRules.GetIdSelectors();
 			this.aChildPostprocessing = childPostprocessing;
+			this.aMapNullToEmpty = mapNullToEmpty;
 		}
+		protected override Expression<Func<TFrom, TTo, TTo>> CompileToExpression()
+		{
+			var from = Expression.Parameter(typeof(TFrom), "from");
+			var to = Expression.Parameter(typeof(TTo), "to");
+
+			return Expression.Lambda<Func<TFrom, TTo, TTo>>(
+				this.CreateChildPostprocessingExpression(
+					this.CreateCollectionInstantiationExpression(
+						this.CreateItemSynchronizationExpression(from, to)
+					)
+				),
+				from,
+				to
+			);
+		}
+
+		protected abstract Expression CreateCollectionInstantiationExpression(Expression itemSynchronizationExpression);
+		protected abstract Expression CreateEmptyCollectionExpression();
 
 		protected Expression CreateItemSynchronizationExpression(ParameterExpression from, ParameterExpression to)
 		{
@@ -52,30 +72,37 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 			);
 		}
 
-		protected Expression<Func<TFrom, TTo, TTo>> CreateSynchronizationEnvelope(ParameterExpression from, ParameterExpression to, Expression body)
+		protected Expression CreateChildPostprocessingExpression(Expression body)
 		{
-			ParameterExpression item = Expression.Parameter(EnumerableReflection<TTo>.ItemType, "item");
 			if (this.aChildPostprocessing == null)
-			{
-				return Expression.Lambda<Func<TFrom, TTo, TTo>>(body, from, to);
-			}
-			else
-			{
-				return Expression.Lambda<Func<TFrom, TTo, TTo>>(
-					Expression.Block(
-						new[] { to },
+				return body;
 
-						Expression.Assign(to, body),
-						ExpressionHelper.ForEach(
-							item,
-							to,
-							ExpressionHelper.Call(this.aChildPostprocessing, to, item)
-						),
-						to
-					),
-					from, to
-				);
-			}
+			var ret = Expression.Parameter(EnumerableReflection<TTo>.ItemType, "ret");
+			var item = Expression.Parameter(EnumerableReflection<TTo>.ItemType, "item");
+
+			return Expression.Block(
+				new[] {ret},
+
+				Expression.Assign(ret, body),
+				ExpressionHelper.ForEach(
+					item,
+					ret,
+					ExpressionHelper.Call(this.aChildPostprocessing, ret, item)
+				),
+				ret
+			);
+		}
+
+		private Expression CreateNullHandlingExpression(ParameterExpression from, Expression body)
+		{
+			if (!this.aMapNullToEmpty)
+				return body;
+
+			return Expression.IfThenElse(
+				Expression.Equal(from, Expression.Constant(null, from.Type)),
+				this.CreateEmptyCollectionExpression(),
+				body
+			);
 		}
 	}
 }

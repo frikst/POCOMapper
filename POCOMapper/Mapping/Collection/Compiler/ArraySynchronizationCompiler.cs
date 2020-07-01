@@ -10,22 +10,19 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 {
     internal class ArraySynchronizationCompiler<TFrom, TTo> : CollectionSynchronizationCompiler<TFrom, TTo>
     {
-	    public ArraySynchronizationCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules, Delegate childPostprocessing)
-		    : base(itemMapping, equalityRules, childPostprocessing)
+	    public ArraySynchronizationCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules, Delegate childPostprocessing, bool mapNullToEmpty)
+		    : base(itemMapping, equalityRules, childPostprocessing, mapNullToEmpty)
 	    {
 	    }
-
-	    protected override Expression<Func<TFrom, TTo, TTo>> CompileToExpression()
+		
+	    protected override Expression CreateCollectionInstantiationExpression(Expression itemSynchronizationExpression)
 	    {
-		    ParameterExpression from = Expression.Parameter(typeof(TFrom), "from");
-		    ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
+		    return Expression.Call(null, LinqMethods.ToArray(EnumerableReflection<TTo>.ItemType), itemSynchronizationExpression);
+	    }
 
-		    return this.CreateSynchronizationEnvelope(
-			    from, to,
-			    Expression.Call(null, LinqMethods.ToArray(EnumerableReflection<TTo>.ItemType),
-				    this.CreateItemSynchronizationExpression(from, to)
-			    )
-		    );
+	    protected override Expression CreateEmptyCollectionExpression()
+	    {
+		    return Expression.Constant(Array.CreateInstance(EnumerableReflection<TTo>.ItemType, 0), typeof(TTo));
 	    }
     }
 }

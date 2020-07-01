@@ -7,6 +7,19 @@ namespace KST.POCOMapper.Mapping.Collection
 {
 	public class CollectionMappingRules : IMappingRules
 	{
+		private bool aMapNullToEmpty;
+
+		public CollectionMappingRules()
+		{
+			this.aMapNullToEmpty = false;
+		}
+
+		public CollectionMappingRules MapNullToEmpty()
+		{
+			this.aMapNullToEmpty = true;
+			return this;
+		}
+
 		#region Implementation of IMappingRules
 
 		IMapping<TFrom, TTo> IMappingRules.Create<TFrom, TTo>(MappingDefinitionInformation mappingDefinition)
@@ -14,9 +27,9 @@ namespace KST.POCOMapper.Mapping.Collection
 			var equalityRules = mappingDefinition.SpecialRules.GetRules<IEqualityRules>(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
 			if (typeof(TTo).IsArray && equalityRules != null)
-				return new CollectionWithSync<TFrom, TTo>(mappingDefinition, equalityRules);
+				return new CollectionWithSync<TFrom, TTo>(mappingDefinition, equalityRules, this.aMapNullToEmpty);
 			else
-				return new CollectionWithMap<TFrom, TTo>(mappingDefinition, null);
+				return new CollectionWithMap<TFrom, TTo>(mappingDefinition, null, this.aMapNullToEmpty);
 		}
 
 		#endregion

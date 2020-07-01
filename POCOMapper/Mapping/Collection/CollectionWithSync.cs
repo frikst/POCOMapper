@@ -12,15 +12,15 @@ namespace KST.POCOMapper.Mapping.Collection
 	{
 		private readonly CollectionSynchronizationCompiler<TFrom, TTo> aSynchronizationExpression;
 
-		internal CollectionWithSync(MappingDefinitionInformation mappingDefinition, IEqualityRules equalityRules)
-			: base(mappingDefinition, equalityRules)
+		internal CollectionWithSync(MappingDefinitionInformation mappingDefinition, IEqualityRules equalityRules, bool mapNullToEmpty)
+			: base(mappingDefinition, equalityRules, mapNullToEmpty)
 		{
 			var itemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
 			var childPostprocessing = mappingDefinition.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
 			if (typeof(TTo).IsArray)
-				this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(itemMapping, equalityRules, childPostprocessing);
+				this.aSynchronizationExpression = new ArraySynchronizationCompiler<TFrom, TTo>(itemMapping, equalityRules, childPostprocessing, mapNullToEmpty);
 			else
 				throw new NotImplementedException("Only array synchronization supported yet");
 		}

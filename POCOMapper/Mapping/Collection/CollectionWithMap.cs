@@ -17,22 +17,22 @@ namespace KST.POCOMapper.Mapping.Collection
 		private readonly IUnresolvedMapping aItemMapping;
         private readonly EnumerableComparisionCompiler<TFrom, TTo> aMapEqualityExpression;
 
-        internal CollectionWithMap(MappingDefinitionInformation mappingDefinition, IEqualityRules equalityRules)
+        internal CollectionWithMap(MappingDefinitionInformation mappingDefinition, IEqualityRules equalityRules, bool mapNullToEmpty)
 		{
 			this.aItemMapping = mappingDefinition.UnresolvedMappings.GetUnresolvedMapping(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType);
 
 			var childPostprocessing = mappingDefinition.GetChildPostprocessing(typeof(TTo), EnumerableReflection<TTo>.ItemType);
 
 			if (ArrayMappingCompiler<TFrom, TTo>.ShouldUse())
-				this.aMappingExpression = new ArrayMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+				this.aMappingExpression = new ArrayMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing, mapNullToEmpty);
 			else if (ListMappingCompiler<TFrom, TTo>.ShouldUse())
-				this.aMappingExpression = new ListMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+				this.aMappingExpression = new ListMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing, mapNullToEmpty);
 			else if (ConstructorMappingCompiler<TFrom, TTo>.ShouldUse())
-				this.aMappingExpression = new ConstructorMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing);
+				this.aMappingExpression = new ConstructorMappingCompiler<TFrom, TTo>(this.aItemMapping, childPostprocessing, mapNullToEmpty);
 			else
 				throw new InvalidMappingException($"Cannot find proper method to map to a collection of type {typeof(TTo).FullName}");
 
-            this.aMapEqualityExpression = new EnumerableComparisionCompiler<TFrom, TTo>(this.aItemMapping, equalityRules);
+            this.aMapEqualityExpression = new EnumerableComparisionCompiler<TFrom, TTo>(this.aItemMapping, equalityRules, mapNullToEmpty);
 		}
 
         public void Accept(IMappingVisitor visitor)

@@ -10,14 +10,34 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 	{
 		private readonly IUnresolvedMapping aItemMapping;
 		private readonly Delegate aChildPostprocessing;
+		private readonly bool aMapNullToEmpty;
 
-		protected CollectionMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing)
+		protected CollectionMappingCompiler(IUnresolvedMapping itemMapping, Delegate childPostprocessing, bool mapNullToEmpty)
 		{
 			this.aItemMapping = itemMapping;
 			this.aChildPostprocessing = childPostprocessing;
+			this.aMapNullToEmpty = mapNullToEmpty;
 		}
 
-		protected Expression CreateItemMappingExpression(ParameterExpression from)
+		protected override Expression<Func<TFrom, TTo>> CompileToExpression()
+		{
+			var from = Expression.Parameter(typeof(TFrom), "from");
+
+			return Expression.Lambda<Func<TFrom, TTo>>(
+				this.CreateNullHandlingExpression(
+					from,
+					this.CreateChildPostprocessingExpression(
+						this.CreateCollectionInstantiationExpression(this.CreateItemMappingExpression(from))
+					)
+				),
+				from
+			);
+		}
+
+		protected abstract Expression CreateCollectionInstantiationExpression(Expression itemMappingExpression);
+		protected abstract Expression CreateEmptyCollectionExpression();
+
+		private Expression CreateItemMappingExpression(ParameterExpression from)
 		{
 			if (this.aItemMapping.ResolvedMapping is IDirectMapping)
 				return from;
@@ -34,32 +54,38 @@ namespace KST.POCOMapper.Mapping.MappingCompilaton
 			);
 		}
 
-		protected Expression<Func<TFrom, TTo>> CreateMappingEnvelope(ParameterExpression from, Expression body)
+		private Expression CreateChildPostprocessingExpression(Expression body)
 		{
 			if (this.aChildPostprocessing == null)
-			{
-				return Expression.Lambda<Func<TFrom, TTo>>(body, from);
-			}
-			else
-			{
-				ParameterExpression to = Expression.Parameter(typeof(TTo), "to");
-				ParameterExpression item = Expression.Parameter(EnumerableReflection<TTo>.ItemType, "item");
+				return body;
 
-				return Expression.Lambda<Func<TFrom, TTo>>(
-					Expression.Block(
-						new ParameterExpression[] { to },
+			var ret = Expression.Parameter(typeof(TTo), "ret");
+			var item = Expression.Parameter(EnumerableReflection<TTo>.ItemType, "item");
 
-						Expression.Assign(to, body),
-						ExpressionHelper.ForEach(
-							item,
-							to,
-							ExpressionHelper.Call(this.aChildPostprocessing, to, item)
-						),
-						to
-					),
-					from
-				);
-			}
+			return Expression.Block(
+				new ParameterExpression[] {ret},
+
+				Expression.Assign(ret, body),
+				ExpressionHelper.ForEach(
+					item,
+					ret,
+					ExpressionHelper.Call(this.aChildPostprocessing, ret, item)
+				),
+				ret
+			);
+		}
+
+		private Expression CreateNullHandlingExpression(ParameterExpression from, Expression body)
+		{
+			if (!this.aMapNullToEmpty)
+				return body;
+
+			return Expression.Condition(
+				Expression.Equal(from, Expression.Constant(null, from.Type)),
+				this.CreateEmptyCollectionExpression(),
+				body,
+				typeof(TTo)
+			);
 		}
 	}
 }

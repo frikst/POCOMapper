@@ -14,11 +14,13 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
     {
         private readonly IUnresolvedMapping aItemMapping;
         private readonly IEqualityRules aEqualityRules;
+        private readonly bool aMapNullToEmpty;
 
-        public EnumerableComparisionCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules)
+        public EnumerableComparisionCompiler(IUnresolvedMapping itemMapping, IEqualityRules equalityRules, bool mapNullToEmpty)
         {
             this.aItemMapping = itemMapping;
             this.aEqualityRules = equalityRules;
+            this.aMapNullToEmpty = mapNullToEmpty;
         }
 
         protected override Expression<Func<TFrom, TTo, bool>> CompileToExpression()
@@ -32,67 +34,35 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
             var hasFromVariable = Expression.Parameter(typeof(bool), "hasFrom");
             var hasToVariable = Expression.Parameter(typeof(bool), "hasTo");
 
-            Expression itemsAreMapEqual;
+            var end = Expression.Label(typeof(bool));
 
-            var fromCurrent = Expression.Property(fromEnumeratorVariable, EnumerableMethods.Current(EnumerableReflection<TFrom>.ItemType));
-            var toCurrent = Expression.Property(toEnumeratorVariable, EnumerableMethods.Current(EnumerableReflection<TTo>.ItemType));
+            Expression nullHandling;
 
-            if (this.aItemMapping.ResolvedMapping is IMappingWithSpecialComparision)
+            if (this.aMapNullToEmpty)
             {
-                itemsAreMapEqual = Expression.Call(
-                    Expression.Constant(this.aItemMapping.ResolvedMapping),
-                    MappingMethods.MapEqual(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType),
-                    fromCurrent,
-                    toCurrent
-                );
+	            nullHandling = Expression.IfThen(
+		            Expression.Equal(from, Expression.Constant(null, from.Type)),
+		            Expression.Return(
+			            end,
+			            Expression.Not(
+				            Expression.Call(LinqMethods.Any(EnumerableReflection<TTo>.ItemType), to)
+			            )
+		            )
+	            );
             }
             else
             {
-                Expression fromMapped = fromCurrent;
-
-                if (!(this.aItemMapping.ResolvedMapping is IDirectMapping))
-                {
-                    fromMapped = Expression.Call(
-                        Expression.Constant(this.aItemMapping.ResolvedMapping),
-                        MappingMethods.Map(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType),
-                        fromMapped
-                    );
-                }
-
-                itemsAreMapEqual = Expression.Call(
-                    Expression.Constant(EqualityComparerMethods.GetEqualityComparer(EnumerableReflection<TTo>.ItemType)),
-                    EqualityComparerMethods.Equals(EnumerableReflection<TTo>.ItemType),
-                    fromMapped,
-                    toCurrent
-                );
+	            nullHandling = Expression.Empty();
             }
-
-            if (this.aEqualityRules != null)
-            {
-                var (selectIdFrom, selectIdTo) = this.aEqualityRules.GetIdSelectors();
-                itemsAreMapEqual = Expression.AndAlso(
-                    Expression.Equal(
-                        ExpressionHelper.Call(
-                            selectIdFrom,
-                            fromCurrent
-                        ),
-                        ExpressionHelper.Call(
-                            selectIdTo,
-                            toCurrent
-                        )
-                    ), 
-                    itemsAreMapEqual
-                );
-            }
-
-            var end = Expression.Label(typeof(bool));
 
             return Expression.Lambda<Func<TFrom, TTo, bool>>(
                 Expression.Block(
                     new[] {fromEnumeratorVariable, toEnumeratorVariable, hasFromVariable, hasToVariable},
+
+                    nullHandling,
+
                     Expression.Assign(fromEnumeratorVariable, Expression.Call(from, EnumerableMethods.GetEnumerable(EnumerableReflection<TFrom>.ItemType))),
                     Expression.Assign(toEnumeratorVariable, Expression.Call(to, EnumerableMethods.GetEnumerable(EnumerableReflection<TTo>.ItemType))),
-
                     Expression.Loop(
                         Expression.Block(
                             Expression.Assign(hasFromVariable, Expression.Call(fromEnumeratorVariable, EnumerableMethods.MoveNext(EnumerableReflection<TFrom>.ItemType))),
@@ -115,7 +85,12 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
                             ),
 
                             Expression.IfThen(
-                                Expression.Not(itemsAreMapEqual),
+                                Expression.Not(
+	                                this.CreateItemEqualityExpression(
+		                                Expression.Property(fromEnumeratorVariable, EnumerableMethods.Current(EnumerableReflection<TFrom>.ItemType)),
+		                                Expression.Property(toEnumeratorVariable, EnumerableMethods.Current(EnumerableReflection<TTo>.ItemType))
+		                            )
+	                            ),
                                 Expression.Return(end, Expression.Constant(false))
                             )
                         )
@@ -124,6 +99,61 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
                 ),
                 from, to
             );
+        }
+
+        private Expression CreateItemEqualityExpression(MemberExpression fromItem, MemberExpression toItem)
+        {
+	        Expression itemsAreMapEqual;
+
+	        if (this.aItemMapping.ResolvedMapping is IMappingWithSpecialComparision)
+	        {
+		        itemsAreMapEqual = Expression.Call(
+			        Expression.Constant(this.aItemMapping.ResolvedMapping),
+			        MappingMethods.MapEqual(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType),
+			        fromItem,
+			        toItem
+		        );
+	        }
+	        else
+	        {
+		        Expression fromMapped = fromItem;
+
+		        if (!(this.aItemMapping.ResolvedMapping is IDirectMapping))
+		        {
+			        fromMapped = Expression.Call(
+				        Expression.Constant(this.aItemMapping.ResolvedMapping),
+				        MappingMethods.Map(EnumerableReflection<TFrom>.ItemType, EnumerableReflection<TTo>.ItemType),
+				        fromMapped
+			        );
+		        }
+
+		        itemsAreMapEqual = Expression.Call(
+			        Expression.Constant(EqualityComparerMethods.GetEqualityComparer(EnumerableReflection<TTo>.ItemType)),
+			        EqualityComparerMethods.Equals(EnumerableReflection<TTo>.ItemType),
+			        fromMapped,
+			        toItem
+		        );
+	        }
+
+	        if (this.aEqualityRules != null)
+	        {
+		        var (selectIdFrom, selectIdTo) = this.aEqualityRules.GetIdSelectors();
+		        itemsAreMapEqual = Expression.AndAlso(
+			        Expression.Equal(
+				        ExpressionHelper.Call(
+					        selectIdFrom,
+					        fromItem
+				        ),
+				        ExpressionHelper.Call(
+					        selectIdTo,
+					        toItem
+				        )
+			        ),
+			        itemsAreMapEqual
+		        );
+	        }
+
+	        return itemsAreMapEqual;
         }
     }
 }

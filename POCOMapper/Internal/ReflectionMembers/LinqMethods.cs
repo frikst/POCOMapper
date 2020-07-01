@@ -11,6 +11,7 @@ namespace KST.POCOMapper.Internal.ReflectionMembers
 		private static readonly MethodInfo aToList = GetLinqMethod(x => x.ToList());
 		private static readonly MethodInfo aToArray = GetLinqMethod(x => x.ToArray());
 		private static readonly MethodInfo aSelect = GetLinqMethod(x => x.Select(obj => obj));
+		private static readonly MethodInfo aAny = GetLinqMethod(x => x.Any());
 
 		private static MethodInfo GetLinqMethod<TItem>(Expression<Func<IEnumerable<int>, TItem>> expression)
 		{
@@ -30,6 +31,11 @@ namespace KST.POCOMapper.Internal.ReflectionMembers
 		public static MethodInfo Select(Type itemFrom, Type itemTo)
 		{
 			return aSelect.MakeGenericMethod(itemFrom, itemTo);
+		}
+
+		public static MethodInfo Any(Type itemType)
+		{
+			return aAny.MakeGenericMethod(itemType);
 		}
 	}
 }
