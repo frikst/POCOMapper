@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using KST.POCOMapper.Exceptions;
@@ -23,7 +24,14 @@ namespace KST.POCOMapper.Mapping.Collection.Compiler
 
 	    protected override Expression CreateEmptyCollectionExpression()
 	    {
-		    return Expression.New(ConstructorMappingCompiler<TFrom, TTo>.GetDefaultConstructor());
+		    var defaultConstructor = ConstructorMappingCompiler<TFrom, TTo>.GetDefaultConstructor();
+			if (defaultConstructor != null)
+				return Expression.New(defaultConstructor);
+			else
+			{
+				var constructor = ConstructorMappingCompiler<TFrom, TTo>.GetConstructor();
+				return Expression.New(constructor, Expression.Constant(Array.CreateInstance(EnumerableReflection<TTo>.ItemType, 0)));
+			}
 	    }
 
 	    private static ConstructorInfo GetConstructor()

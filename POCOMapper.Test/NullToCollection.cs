@@ -12,6 +12,13 @@ namespace KST.POCOMapper.Test
 {
 	public class NullToCollection
 	{
+		private class NoDefaultConstructorMapping<T> : List<T>
+		{
+			public NoDefaultConstructorMapping(IEnumerable<T> collection) : base(collection)
+			{
+			}
+		}
+
 		private class Mapping : MappingSingleton<Mapping>
 		{
 			private Mapping()
@@ -26,6 +33,9 @@ namespace KST.POCOMapper.Test
 					.CollectionMappingRules()
 					.MapNullToEmpty();
 				Map<int[], IEnumerable<int>>()
+					.CollectionMappingRules()
+					.MapNullToEmpty();
+				Map<int[], NoDefaultConstructorMapping<int>>()
 					.CollectionMappingRules()
 					.MapNullToEmpty();
 			}
@@ -56,6 +66,16 @@ namespace KST.POCOMapper.Test
 		{
 			HashSet<int> ret = Mapping.Instance.Map<int[], HashSet<int>>(new int[] { 1, 2, 3 });
 			Assert.AreEqual(ret.Count, 3);
+			Assert.IsTrue(ret.Contains(1));
+			Assert.IsTrue(ret.Contains(2));
+			Assert.IsTrue(ret.Contains(3));
+		}
+
+		[Test]
+		public void ToNoDefaultConstructorMapping()
+		{
+			IEnumerable<int> ret = Mapping.Instance.Map<int[], NoDefaultConstructorMapping<int>>(new int[] { 1, 2, 3 });
+			Assert.AreEqual(ret.Count(), 3);
 			Assert.IsTrue(ret.Contains(1));
 			Assert.IsTrue(ret.Contains(2));
 			Assert.IsTrue(ret.Contains(3));
@@ -99,6 +119,14 @@ namespace KST.POCOMapper.Test
 		public void NullToIEnumerable()
 		{
 			IEnumerable<int> ret = Mapping.Instance.Map<int[], IEnumerable<int>>(null);
+			Assert.NotNull(ret);
+			Assert.IsEmpty(ret);
+		}
+
+		[Test]
+		public void NullNoDefaultConstructorMapping()
+		{
+			IEnumerable<int> ret = Mapping.Instance.Map<int[], NoDefaultConstructorMapping<int>>(null);
 			Assert.NotNull(ret);
 			Assert.IsEmpty(ret);
 		}
