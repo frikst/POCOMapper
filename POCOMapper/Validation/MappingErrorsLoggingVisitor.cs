@@ -17,13 +17,13 @@ namespace KST.POCOMapper.Validation
 	{
 		private readonly HashSet<IMapping> aProcessed;
 		private readonly LogErrorInMappingDelegate aLogErrorInMapping;
-		private readonly ValidationDefaultHandling aDefaultHandling;
+		private readonly ValidationSettings aSettings;
 
-		public MappingErrorsLoggingVisitor(LogErrorInMappingDelegate logErrorInMapping, ValidationDefaultHandling defaultHandling = ValidationDefaultHandling.Default)
+		public MappingErrorsLoggingVisitor(LogErrorInMappingDelegate logErrorInMapping, ValidationSettings settings = null)
 		{
 			this.aProcessed = new HashSet<IMapping>();
 			this.aLogErrorInMapping = logErrorInMapping;
-			this.aDefaultHandling = defaultHandling;
+			this.aSettings = settings ?? new ValidationSettings();
 		}
 
 		#region Implementation of IMappingVisitor
@@ -58,27 +58,25 @@ namespace KST.POCOMapper.Validation
 			ISet<MemberInfo> shouldNotBeMappedFrom;
 			ISet<MemberInfo> shouldNotBeMappedTo;
 
-			if (this.aDefaultHandling == ValidationDefaultHandling.ShouldNotBeMapped)
-			{
+			if (this.aSettings.DefaultFromHandling == ValidationDefaultHandling.ShouldNotBeMapped)
 				shouldNotBeMappedFrom = this.GetMembersWithoutAttribute<ShouldBeMappedAttribute>(mapping.From);
-				shouldNotBeMappedTo = this.GetMembersWithoutAttribute<ShouldBeMappedAttribute>(mapping.To);
-			}
 			else
-			{
 				shouldNotBeMappedFrom = this.GetMembersWithAttribute<ShouldNotBeMappedAttribute>(mapping.From);
-				shouldNotBeMappedTo = this.GetMembersWithAttribute<ShouldNotBeMappedAttribute>(mapping.To);
-			}
 
-			if (this.aDefaultHandling == ValidationDefaultHandling.ShouldBeMapped)
-			{
-				shouldBeMappedFrom = this.GetMembersWithoutAttribute<ShouldNotBeMappedAttribute>(mapping.From);
-				shouldBeMappedTo = this.GetMembersWithoutAttribute<ShouldNotBeMappedAttribute>(mapping.To);
-			}
+			if (this.aSettings.DefaultToHandling == ValidationDefaultHandling.ShouldNotBeMapped)
+				shouldNotBeMappedTo = this.GetMembersWithoutAttribute<ShouldBeMappedAttribute>(mapping.To);
 			else
-			{
+				shouldNotBeMappedTo = this.GetMembersWithAttribute<ShouldNotBeMappedAttribute>(mapping.To);
+
+			if (this.aSettings.DefaultFromHandling == ValidationDefaultHandling.ShouldBeMapped)
+				shouldBeMappedFrom = this.GetMembersWithoutAttribute<ShouldNotBeMappedAttribute>(mapping.From);
+			else
 				shouldBeMappedFrom = this.GetMembersWithAttribute<ShouldBeMappedAttribute>(mapping.From);
+
+			if (this.aSettings.DefaultToHandling == ValidationDefaultHandling.ShouldBeMapped)
+				shouldBeMappedTo = this.GetMembersWithoutAttribute<ShouldNotBeMappedAttribute>(mapping.To);
+			else
 				shouldBeMappedTo = this.GetMembersWithAttribute<ShouldBeMappedAttribute>(mapping.To);
-			}
 
 			foreach (var memberMapping in mapping.Members)
 			{
