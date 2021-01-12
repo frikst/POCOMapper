@@ -8,5 +8,10 @@ namespace KST.POCOMapper.Mapping.SubClass
 		{
 			return definition.Rules<SubClassMappingRules<TFrom, TTo>>();
 		}
+
+		public static SubClassMappingRules SubClassMappingRules(this IRulesDefinition definition)
+		{
+			return definition.Rules<SubClassMappingRules>();
+		}
 	}
 }
